@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,8 +29,6 @@ public class TasksFragment extends Fragment {
     public TasksFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static TasksFragment newInstance(int columnCount) {
         TasksFragment fragment = new TasksFragment();
         Bundle args = new Bundle();
@@ -50,7 +49,7 @@ public class TasksFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tasks_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_tasks, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -62,6 +61,8 @@ public class TasksFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(new TaskRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
+                                                                    DividerItemDecoration.VERTICAL));
         }
         return view;
     }
