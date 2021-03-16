@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Tasks And Habits</string>
+    <string name="tab_tasks">Tasks</string>
+    <string name="tab_habits">Habits</string>
+</resources>
