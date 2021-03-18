@@ -28,4 +28,10 @@ public class TaskRepository {
             taskDao.insert(task);
         });
     }
+
+    public void delete(Task task){
+        TaskDatabase.databaseWriteExecutor.execute(() -> {
+            taskDao.delete(task);
+        });
+    }
 }

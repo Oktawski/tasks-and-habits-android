@@ -1,61 +1,84 @@
 package com.example.tah.ui.task;
 
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.tah.R;
-import com.example.tah.ui.main.dummy.DummyContent.DummyItem;
+import com.example.tah.models.Task;
+import com.example.tah.models.TaskViewModel;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Replace the implementation with code for your data type.
- */
+
 public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Task> tasks;
+    private final Context context;
+    private final TaskViewModel viewModel;
 
-    public TaskRecyclerViewAdapter(List<DummyItem> items) {
-        mValues = items;
+    public TaskRecyclerViewAdapter(List<Task> items, Context context, TaskViewModel viewModel) {
+        tasks = items;
+        this.context = context;
+        this.viewModel = viewModel;
+    }
+
+    public void update(List<Task> tasks){
+        this.tasks.clear();
+        this.tasks.addAll(tasks);
+        this.notifyDataSetChanged();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_task, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, viewModel);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
+        holder.bind(position);
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return tasks.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public DummyItem mItem;
 
-        public ViewHolder(View view) {
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final TextView nameTV;
+        final CheckBox checkBox;
+        private final TaskViewModel viewModel;
+
+        Task task;
+
+        public ViewHolder(View view, TaskViewModel viewModel) {
             super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_name);
+            this.viewModel = viewModel;
+            nameTV = (TextView) view.findViewById(R.id.item_name);
+            checkBox = (CheckBox) view.findViewById(R.id.item_check_box);
         }
 
-        @Override
-        public String toString() {
-            return super.toString();
+        public void bind(int position) {
+            task = tasks.get(position);
+            nameTV.setText(task.getName());
+
+            setOnClickListeners();
+        }
+
+
+        private void setOnClickListeners() {
+            itemView.setOnClickListener(v -> {
+                //temp
+                viewModel.insert(new Task("DUMMY", "DESC", false));
+            });
         }
     }
 }

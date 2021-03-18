@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tasks")
 class Task(
-        @PrimaryKey(autoGenerate = true) val id: Int,
+        @PrimaryKey(autoGenerate = true) val id: Int?,
 
         @ColumnInfo(name = "name")
         @NonNull
@@ -16,4 +16,7 @@ class Task(
         @ColumnInfo(name = "description") val description: String?,
 
         @ColumnInfo(name = "is_complete") val isComplete: Boolean = false
-)
+){
+        constructor(name: String, description: String?, isComplete: Boolean)
+        :this(null, name, description, isComplete)
+}
