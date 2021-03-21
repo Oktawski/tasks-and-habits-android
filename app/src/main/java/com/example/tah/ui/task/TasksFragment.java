@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.tah.R;
 import com.example.tah.models.Task;
@@ -32,6 +33,7 @@ public class TasksFragment extends Fragment {
     private TaskViewModel viewModel;
     private List<Task> tasks;
     private TaskRecyclerViewAdapter adapter;
+    private ImageView deleteIcon;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -57,7 +59,7 @@ public class TasksFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
 
-        viewModel = new TaskViewModel(requireActivity().getApplication());
+        viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
     }
 
     @Override
@@ -66,6 +68,8 @@ public class TasksFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tasks, container, false);
 
         tasks = new ArrayList<>();
+
+        deleteIcon = view.findViewById(R.id.delete_icon);
 
         // Set the adapter
         if (view instanceof RecyclerView) {

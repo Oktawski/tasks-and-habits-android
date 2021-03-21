@@ -7,9 +7,12 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.TasksAndHabits.AppBarOverlay">
+        android:backgroundTint="@color/purple_200"
+        android:theme="@style/Theme.TasksAndHabits">
+
 
         <TextView
             android:id="@+id/title"
@@ -25,7 +28,8 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary" />
+            android:background="?attr/colorPrimary"
+            app:tabSelectedTextColor="@color/black" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
@@ -41,4 +45,18 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_menu_add" />
+
+    <ImageView
+        android:id="@+id/delete_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_24px"
+        app:layout_anchor="@+id/appBarLayout"
+        app:layout_anchorGravity="top|end"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/black"
+        android:foregroundTint="@color/black"
+        android:visibility="gone"
+        android:elevation="4dp"
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

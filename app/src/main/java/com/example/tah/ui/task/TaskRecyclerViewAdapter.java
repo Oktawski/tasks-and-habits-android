@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,11 +20,13 @@ import java.util.List;
 public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder> {
 
     private final List<Task> tasks;
+    private final List<Integer> checkedTasks;
     private final Context context;
     private final TaskViewModel viewModel;
 
     public TaskRecyclerViewAdapter(List<Task> items, Context context, TaskViewModel viewModel) {
         tasks = items;
+        checkedTasks = new ArrayList<>();
         this.context = context;
         this.viewModel = viewModel;
     }
@@ -34,6 +35,10 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         this.tasks.clear();
         this.tasks.addAll(tasks);
         this.notifyDataSetChanged();
+    }
+
+    public List<Integer> getCheckedTasks(){
+        return checkedTasks;
     }
 
     @Override
@@ -79,6 +84,16 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
             /* TODO item onClick -> details
                     item onLongClick -> context menu with delete/edit options
              */
+
+            checkBox.setOnClickListener(v -> {
+                if(checkBox.isChecked()){
+                    checkedTasks.add(task.getId());
+                }
+                else{
+                    checkedTasks.remove(task.getId());
+                }
+                viewModel.addSelectedTask(checkedTasks);
+            });
         }
     }
 }
