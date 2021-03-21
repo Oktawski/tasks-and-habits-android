@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +14,7 @@ import com.example.tah.R;
 import com.example.tah.models.Task;
 import com.example.tah.models.TaskViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -73,12 +75,10 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
             setOnClickListeners();
         }
 
-
         private void setOnClickListeners() {
-            itemView.setOnClickListener(v -> {
-                //temp
-                viewModel.insert(new Task("DUMMY", "DESC", false));
-            });
+            /* TODO item onClick -> details
+                    item onLongClick -> context menu with delete/edit options
+             */
         }
     }
 }

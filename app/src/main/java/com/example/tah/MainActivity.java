@@ -2,22 +2,20 @@ package com.example.tah;
 
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
+import com.example.tah.models.Task;
+import com.example.tah.models.TaskViewModel;
 import com.example.tah.ui.main.SectionsPagerAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
+    
+    private int page;
+    private TaskViewModel taskViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +25,18 @@ public class MainActivity extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab_add);
+
+        taskViewModel = new TaskViewModel(this.getApplication());
 
         new TabLayoutMediator(tabs, viewPager, (tab, position) -> {
             tab.setText(getResources().getString(sectionsPagerAdapter.getTabTitleId(position)));
         }).attach();
 
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        // temp
+        fab.setOnClickListener(v -> {
+            // TODO new item activity/fragment, Task or Habit
+            taskViewModel.insert(new Task("DUMMY", "Desc", false));
+        });
     }
 }

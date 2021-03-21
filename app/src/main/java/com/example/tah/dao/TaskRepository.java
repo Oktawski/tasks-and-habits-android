@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.tah.models.Task;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 public class TaskRepository {
@@ -32,6 +33,12 @@ public class TaskRepository {
     public void delete(Task task){
         TaskDatabase.databaseWriteExecutor.execute(() -> {
             taskDao.delete(task);
+        });
+    }
+
+    public void deleteAll(){
+        TaskDatabase.databaseWriteExecutor.execute(() -> {
+            taskDao.deleteAll();
         });
     }
 }
