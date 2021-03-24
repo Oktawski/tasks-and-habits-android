@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.tah.models.Task;
 import com.example.tah.models.TaskViewModel;
 import com.example.tah.ui.main.SectionsPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -40,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
         // temp
         fab.setOnClickListener(v -> {
             // TODO new item activity/fragment, Task or Habit
-            taskViewModel.insert(new Task("DUMMY", "Desc", false));
+
         });
 
-        taskViewModel.getCheckedTasksLD().observe(this, checkedTasks -> {
+        taskViewModel.getCheckedItemsLD().observe(this, checkedTasks -> {
             if(checkedTasks.isEmpty()){
                 deleteIcon.setVisibility(View.GONE);
             }

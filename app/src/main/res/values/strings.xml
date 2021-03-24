@@ -4,4 +4,8 @@
     <string name="tab_habits">Habits</string>
 
     <string name="placeholder">PLACEHOLDER</string>
+
+
+    <string name="name">Name</string>
+    <string name="description">Description</string>
 </resources>

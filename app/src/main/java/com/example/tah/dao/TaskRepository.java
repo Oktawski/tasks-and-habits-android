@@ -24,7 +24,7 @@ public class TaskRepository {
         return tasksLD;
     }
 
-    public void insert(Task task){
+    public void add(Task task){
         TaskDatabase.databaseWriteExecutor.execute(() -> {
             taskDao.insert(task);
         });

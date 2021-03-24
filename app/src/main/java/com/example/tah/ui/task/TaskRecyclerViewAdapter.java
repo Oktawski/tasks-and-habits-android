@@ -92,7 +92,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
                 else{
                     checkedTasks.remove(task.getId());
                 }
-                viewModel.addSelectedTask(checkedTasks);
+                viewModel.addToCheckedItems(checkedTasks);
             });
         }
     }
