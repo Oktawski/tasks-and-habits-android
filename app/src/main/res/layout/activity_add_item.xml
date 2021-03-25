@@ -19,8 +19,8 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/appbar_padding_top"
-                android:layout_margin="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/appbar_padding_top"
+                android:layout_margin="5dp"
                 android:id="@+id/back_arrow"
                 android:src="@drawable/ic_add_24px"
                 />
@@ -29,9 +29,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/placeholder"
-                android:padding="@dimen/appbar_padding_top"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_toEndOf="@id/back_arrow"
+                android:paddingTop="@dimen/appbar_padding_top"
+                android:layout_marginTop="5dp"
+                android:layout_centerInParent="true"
                 />
         </RelativeLayout>
 

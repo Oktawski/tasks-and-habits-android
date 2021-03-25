@@ -16,10 +16,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewInits {
     
-    private int page;
     private TaskViewModel taskViewModel;
+    private ImageView deleteIcon;
+    private FloatingActionButton fabAdd;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,21 +31,40 @@ public class MainActivity extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
-        FloatingActionButton fab = findViewById(R.id.fab_add);
-        ImageView deleteIcon = findViewById(R.id.delete_icon);
+        fabAdd = findViewById(R.id.fab_add);
+        deleteIcon = findViewById(R.id.delete_icon);
 
-        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+
+        intent = new Intent(this, AddItemActivity.class);
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                intent.putExtra("fragmentId", sectionsPagerAdapter.getTabTitleId(position));
+            }
+        });
 
         new TabLayoutMediator(tabs, viewPager, (tab, position) -> {
             tab.setText(getResources().getString(sectionsPagerAdapter.getTabTitleId(position)));
         }).attach();
 
+        initOnClickListeners();
+        initViewModelObservables();
+    }
+
+    @Override
+    public void initOnClickListeners(){
         // temp
-        fab.setOnClickListener(v -> {
+        fabAdd.setOnClickListener(v -> {
             // TODO new item activity/fragment, Task or Habit
-            startActivity(new Intent(this, AddItemActivity.class));
+            startActivity(intent);
 
         });
+    }
+
+    @Override
+    public void initViewModelObservables(){
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         taskViewModel.getCheckedItemsLD().observe(this, checkedTasks -> {
             if(checkedTasks.isEmpty()){
@@ -53,7 +74,5 @@ public class MainActivity extends AppCompatActivity {
                 deleteIcon.setVisibility(View.VISIBLE);
             }
         });
-
-
     }
 }
