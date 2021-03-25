@@ -8,11 +8,12 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
+import com.example.tah.ViewInits
 import com.example.tah.models.Task
 import com.example.tah.models.TaskViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class TaskAddFragment: Fragment(R.layout.add_task_fragment){
+class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits{
 
     private lateinit var viewModel: TaskViewModel
     private lateinit var nameET: EditText
@@ -40,11 +41,19 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initOnClickListeners()
+    }
+
+    override fun initOnClickListeners() {
         addFab.setOnClickListener{
             val name = nameET.text.toString()
             val description = descriptionET.text.toString()
 
             viewModel.add(Task(name, description, false))
         }
+    }
+
+    override fun initViewModelObservables() {
+        TODO("Not yet implemented")
     }
 }
