@@ -1,5 +1,6 @@
 package com.example.tah;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.tah.models.TaskViewModel;
+import com.example.tah.ui.main.AddItemActivity;
 import com.example.tah.ui.main.SectionsPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         // temp
         fab.setOnClickListener(v -> {
             // TODO new item activity/fragment, Task or Habit
+            startActivity(new Intent(this, AddItemActivity.class));
 
         });
 

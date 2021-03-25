@@ -10,4 +10,7 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.task.TasksFragment"
-    tools:listitem="@layout/item_task" />
+    tools:listitem="@layout/item_task"
+    android:paddingBottom="64dp"
+    android:clipToPadding="false"
+    />
