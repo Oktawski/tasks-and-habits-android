@@ -9,8 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.tah.models.Task;
 import com.example.tah.models.TaskViewModel;
-import com.example.tah.ui.main.AddItemActivity;
+import com.example.tah.ui.main.AddAndDetailsActivity;
 import com.example.tah.ui.main.SectionsPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -35,12 +36,22 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
         deleteIcon = findViewById(R.id.delete_icon);
 
 
-        intent = new Intent(this, AddItemActivity.class);
+        intent = new Intent(this, AddAndDetailsActivity.class);
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 intent.putExtra("fragmentId", sectionsPagerAdapter.getTabTitleId(position));
+                int layoutRes;
+                switch(position){
+                    case 1:
+                        //layoutRes = Habit.Companion.getAddView();
+                        //break;
+                    default:
+                        layoutRes = Task.Companion.getAddView();
+                        break;
+                }
+                intent.putExtra("fragmentId", layoutRes);
             }
         });
 
