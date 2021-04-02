@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
         fabAdd = findViewById(R.id.fab_add);
         deleteIcon = findViewById(R.id.delete_icon);
 
-
         intent = new Intent(this, AddAndDetailsActivity.class);
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

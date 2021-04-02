@@ -17,7 +17,7 @@ class Task(
         @ColumnInfo(name = "description") val description: String?,
 
         @ColumnInfo(name = "is_complete") val isComplete: Boolean = false
-){
+): ViewType{
         constructor(name: String, description: String?, isComplete: Boolean)
         :this(null, name, description, isComplete)
 
