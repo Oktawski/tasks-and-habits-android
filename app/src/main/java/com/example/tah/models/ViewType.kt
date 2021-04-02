@@ -5,7 +5,7 @@ import androidx.annotation.LayoutRes
 interface ViewType {
 
     @LayoutRes
-    fun getBasicView(): Int
+    fun getDetailsView(): Int
 
     @LayoutRes
     fun getAddView(): Int

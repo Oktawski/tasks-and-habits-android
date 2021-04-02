@@ -6,11 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.tah.R
 import com.example.tah.ViewInits
+import com.example.tah.models.Task
 import com.example.tah.ui.habit.HabitsFragment
 import com.example.tah.ui.task.TaskAddFragment
 import com.example.tah.ui.task.TasksFragment
 
-class AddItemActivity: AppCompatActivity(), ViewInits{
+class AddAndDetailsActivity: AppCompatActivity(), ViewInits{
 
     lateinit var backArrow: ImageButton
 
@@ -21,11 +22,12 @@ class AddItemActivity: AppCompatActivity(), ViewInits{
         backArrow = findViewById(R.id.back_arrow)
 
         val fragmentId: Int = intent.getIntExtra("fragmentId", R.layout.fragment_habits)
-        var fragment: Fragment = TasksFragment()
 
-        when(fragmentId){
-            R.string.tab_tasks -> fragment = TaskAddFragment()
-            R.string.tab_habits -> fragment = HabitsFragment() //TODO implement AddHabitFragment
+        var fragment = when(fragmentId){
+            Task.getAddView() -> TaskAddFragment()
+            //Task.getDetailsView() -> TaskDetailsFragment()    // TODO implement TaskDetailsFragment
+            //Habit.getAddView() -> fragment = HabitsFragment() //TODO implement HabitAddFragment
+            else -> PlaceholderFragment()
         }
 
         supportFragmentManager.beginTransaction()

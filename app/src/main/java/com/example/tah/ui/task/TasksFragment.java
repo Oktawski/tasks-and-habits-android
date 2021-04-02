@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import com.example.tah.R;
 import com.example.tah.models.Task;
 import com.example.tah.models.TaskViewModel;
-import com.example.tah.ui.main.dummy.DummyContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ public class TasksFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private int columnCount = 1;
 
     public TasksFragment() {
     }
@@ -56,7 +55,7 @@ public class TasksFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            columnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
 
         viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
@@ -75,15 +74,13 @@ public class TasksFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
+            if (columnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                recyclerView.setLayoutManager(new GridLayoutManager(context, columnCount));
             }
             adapter = new TaskRecyclerViewAdapter(tasks, requireActivity(), viewModel);
             recyclerView.setAdapter(adapter);
-            recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
-                                                                    DividerItemDecoration.VERTICAL));
         }
         return view;
     }
@@ -92,8 +89,7 @@ public class TasksFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel.getItemsLD().observe(getViewLifecycleOwner(), taskList -> {
-            adapter.update(taskList);
-        });
+        viewModel.getItemsLD().observe(getViewLifecycleOwner(), taskList ->
+                adapter.update(taskList));
     }
 }
