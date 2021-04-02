@@ -1,6 +1,7 @@
 package com.example.tah.ui.task;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tah.R;
 import com.example.tah.models.Task;
 import com.example.tah.models.TaskViewModel;
+import com.example.tah.ui.main.AddAndDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,9 +83,11 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         }
 
         private void setOnClickListeners() {
-            /* TODO item onClick -> details
-                    item onLongClick -> context menu with delete/edit options
-             */
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, AddAndDetailsActivity.class);
+                intent.putExtra("fragmentId", Task.Companion.getDetailsView());
+                context.startActivity(intent);
+            });
 
             checkBox.setOnClickListener(v -> {
                 if(checkBox.isChecked()){
