@@ -1,15 +1,21 @@
 package com.example.tah.ui.task;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.Intent;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tah.MainActivity;
 import com.example.tah.R;
 import com.example.tah.models.Task;
 import com.example.tah.models.TaskViewModel;
@@ -72,7 +78,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
             super(view);
             this.viewModel = viewModel;
             nameTV = (TextView) view.findViewById(R.id.item_name);
-            checkBox = (CheckBox) view.findViewById(R.id.item_check_box);
+            checkBox = (CheckBox) view.findViewById(R.id.check_box);
         }
 
         public void bind(int position) {
@@ -80,6 +86,8 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
             nameTV.setText(task.getName());
 
             setOnClickListeners();
+
+            checkBox.setVisibility(viewModel.getCheckBoxVisibility().getValue());
         }
 
         private void setOnClickListeners() {
@@ -87,6 +95,12 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
                 Intent intent = new Intent(context, AddAndDetailsActivity.class);
                 intent.putExtra("fragmentId", Task.Companion.getDetailsView());
                 context.startActivity(intent);
+            });
+
+            itemView.setOnLongClickListener(v -> {
+                int visibility = checkBox.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+                viewModel.setCheckBoxVisibility(visibility);
+                return true;
             });
 
             checkBox.setOnClickListener(v -> {
