@@ -1,6 +1,7 @@
 package com.example.tah.ui.task;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tah.R;
 import com.example.tah.models.Task;
 import com.example.tah.models.TaskViewModel;
+import com.example.tah.ui.main.AddAndDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +72,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
             super(view);
             this.viewModel = viewModel;
             nameTV = (TextView) view.findViewById(R.id.item_name);
-            checkBox = (CheckBox) view.findViewById(R.id.item_check_box);
+            checkBox = (CheckBox) view.findViewById(R.id.check_box);
         }
 
         public void bind(int position) {
@@ -78,12 +80,22 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
             nameTV.setText(task.getName());
 
             setOnClickListeners();
+
+            checkBox.setVisibility(viewModel.getCheckBoxVisibility().getValue());
         }
 
         private void setOnClickListeners() {
-            /* TODO item onClick -> details
-                    item onLongClick -> context menu with delete/edit options
-             */
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, AddAndDetailsActivity.class);
+                intent.putExtra("fragmentId", Task.Companion.getDetailsView());
+                context.startActivity(intent);
+            });
+
+            itemView.setOnLongClickListener(v -> {
+                int visibility = checkBox.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+                viewModel.setCheckBoxVisibility(visibility);
+                return true;
+            });
 
             checkBox.setOnClickListener(v -> {
                 if(checkBox.isChecked()){

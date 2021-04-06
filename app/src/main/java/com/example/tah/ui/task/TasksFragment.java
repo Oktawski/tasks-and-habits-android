@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,5 +92,9 @@ public class TasksFragment extends Fragment {
 
         viewModel.getItemsLD().observe(getViewLifecycleOwner(), taskList ->
                 adapter.update(taskList));
+
+        viewModel.getCheckBoxVisibility().observe(getViewLifecycleOwner(), integer -> {
+            adapter.notifyDataSetChanged();
+        });
     }
 }

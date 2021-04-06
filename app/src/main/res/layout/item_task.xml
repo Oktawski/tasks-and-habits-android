@@ -2,27 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:id="@+id/linear_layout"
+    >
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_margin="4dp"
+        android:layout_weight="1"
+        android:id="@+id/card_view"
         >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/item_check_box"
-                android:layout_gravity="center_vertical"
-                />
-
             <TextView
                 android:id="@+id/item_name"
                 android:layout_width="wrap_content"
@@ -31,23 +21,17 @@
                 android:text="@string/placeholder"
                 android:maxLines="1"
                 android:layout_weight="1"
+                android:layout_margin="10dp"
                 android:layout_gravity="center_vertical"
                 />
-
-            <!--<CheckBox
-                android:id="@+id/item_check_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                />
-        -->
-
-        </LinearLayout>
-
-
-
     </androidx.cardview.widget.CardView>
 
-
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/check_box"
+        android:layout_gravity="center_vertical"
+        android:visibility="gone"
+        />
 
 </LinearLayout>

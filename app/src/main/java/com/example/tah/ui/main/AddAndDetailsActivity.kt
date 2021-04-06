@@ -9,6 +9,7 @@ import com.example.tah.ViewInits
 import com.example.tah.models.Task
 import com.example.tah.ui.habit.HabitsFragment
 import com.example.tah.ui.task.TaskAddFragment
+import com.example.tah.ui.task.TaskDetailsFragment
 import com.example.tah.ui.task.TasksFragment
 
 class AddAndDetailsActivity: AppCompatActivity(), ViewInits{
@@ -25,8 +26,9 @@ class AddAndDetailsActivity: AppCompatActivity(), ViewInits{
 
         var fragment = when(fragmentId){
             Task.getAddView() -> TaskAddFragment()
-            //Task.getDetailsView() -> TaskDetailsFragment()    // TODO implement TaskDetailsFragment
-            //Habit.getAddView() -> fragment = HabitsFragment() //TODO implement HabitAddFragment
+            Task.getDetailsView() -> TaskDetailsFragment()
+            //Habit.getAddView() -> HabitAddFragment() //TODO implement HabitAddFragment
+            //Habit.getDetailsView() -> HabitDetailsFragment()  // TODO implement HabitDetailsFragment
             else -> PlaceholderFragment()
         }
 

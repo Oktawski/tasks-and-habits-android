@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
                     case 1:
                         //layoutRes = Habit.Companion.getAddView();
                         //break;
+                        layoutRes = 42;
+                        break;
                     default:
                         layoutRes = Task.Companion.getAddView();
                         break;
