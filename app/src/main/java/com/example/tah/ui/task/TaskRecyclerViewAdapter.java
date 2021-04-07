@@ -78,6 +78,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         public void bind(int position) {
             task = tasks.get(position);
             nameTV.setText(task.getName());
+            checkBox.setChecked(false);
 
             setOnClickListeners();
 
@@ -94,6 +95,12 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
             itemView.setOnLongClickListener(v -> {
                 int visibility = checkBox.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
                 viewModel.setCheckBoxVisibility(visibility);
+
+                if(visibility == View.GONE){
+                    checkedTasks.clear();
+                    viewModel.addToCheckedItems(checkedTasks);
+                }
+
                 return true;
             });
 

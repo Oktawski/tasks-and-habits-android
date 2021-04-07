@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.tah.dao.TaskRepository;
 
+
 public class TaskViewModel extends BaseViewModel<Task>{
 
     private TaskRepository repository;
@@ -45,4 +46,10 @@ public class TaskViewModel extends BaseViewModel<Task>{
     public void deleteAll() {
         repository.deleteAll();
     }
+
+    @Override
+    public void deleteSelected(){
+        repository.deleteSelected(getCheckedItemsLD().getValue());
+    }
+
 }

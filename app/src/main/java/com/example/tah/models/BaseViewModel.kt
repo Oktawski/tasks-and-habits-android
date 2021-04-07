@@ -19,4 +19,5 @@ abstract class BaseViewModel<T>(application: Application)
     abstract fun add(t: T)
     abstract fun delete(t: T)
     abstract fun deleteAll()
+    abstract fun deleteSelected()
 }

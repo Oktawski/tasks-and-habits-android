@@ -17,6 +17,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.Collections;
+
 public class MainActivity extends AppCompatActivity implements ViewInits {
     
     private TaskViewModel taskViewModel;
@@ -72,6 +74,12 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
             // TODO new item activity/fragment, Task or Habit
             startActivity(intent);
 
+        });
+
+        deleteIcon.setOnClickListener(v -> {
+            taskViewModel.deleteSelected();
+            taskViewModel.setCheckBoxVisibility(View.GONE);
+            taskViewModel.getCheckedItemsLD().setValue(Collections.emptyList());
         });
     }
 

@@ -11,6 +11,9 @@ interface TaskDao: BaseDao<Task>{
     @Query("SELECT * FROM tasks ORDER BY id ASC")
     fun getAll(): LiveData<List<Task>>
 
+    @Query("DELETE FROM tasks WHERE id in (:idList)")
+    fun deleteSelected(idList: List<Int>)
+
     @Query("DELETE FROM tasks")
     fun deleteAll()
 }
