@@ -7,6 +7,7 @@ data class State(
     enum class Status{
         LOADING,
         SUCCESS,
+        REMOVED,
         ERROR
     }
 
@@ -17,6 +18,10 @@ data class State(
 
         fun success(message: String? = null): State{
             return State(Status.SUCCESS, message)
+        }
+
+        fun removed(message: String? = null): State{
+            return State(Status.REMOVED, message)
         }
 
         fun error(message: String?): State{

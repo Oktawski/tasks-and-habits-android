@@ -6,6 +6,7 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tah.dao.TaskRepository
+import io.reactivex.Single
 
 class TaskViewModel(@NonNull application: Application)
     :BaseViewModel<Task>(application)
@@ -28,6 +29,10 @@ class TaskViewModel(@NonNull application: Application)
 
     override fun add(t: Task) {
         repository.add(t)
+    }
+
+    fun getById(id: Int?): Single<Task> {
+        return repository.getById(id)
     }
 
     override fun delete(t: Task) {

@@ -22,9 +22,7 @@ class AddAndDetailsActivity: AppCompatActivity(), ViewInits{
 
         backArrow = findViewById(R.id.back_arrow)
 
-        val fragmentId: Int = intent.getIntExtra("fragmentId", R.layout.fragment_habits)
-
-        var fragment = when(fragmentId){
+        var fragment = when(intent.getIntExtra("fragmentId", R.layout.fragment_habits)){
             Task.getAddView() -> TaskAddFragment()
             Task.getDetailsView() -> TaskDetailsFragment()
             //Habit.getAddView() -> HabitAddFragment() //TODO implement HabitAddFragment

@@ -12,5 +12,5 @@ public interface BaseDao<T> {
     Completable insert(T t);
 
     @Delete
-    void delete(T t);
+    Completable delete(T t);
 }
