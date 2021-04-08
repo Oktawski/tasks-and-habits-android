@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.ViewInits
 import com.example.tah.models.Task
 import com.example.tah.models.TaskViewModel
+import com.example.tah.utilities.State
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits{
@@ -42,6 +44,7 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits{
         super.onViewCreated(view, savedInstanceState)
 
         initOnClickListeners()
+        initViewModelObservables()
     }
 
     override fun initOnClickListeners() {
@@ -54,6 +57,30 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits{
     }
 
     override fun initViewModelObservables() {
-        TODO("Not yet implemented")
+        viewModel.state.observe(viewLifecycleOwner){
+            when(it.status){
+                State.Status.LOADING -> hideViews()
+                State.Status.SUCCESS -> {
+                    showViews()
+                    toast(it.message)
+                }
+            }
+        }
+    }
+
+    private fun hideViews(){
+        addFab.hide()
+        // show progressBar
+    }
+
+    private fun showViews(){
+        addFab.show()
+        // hide progressBar
+    }
+
+    private fun toast(message: String?){
+        if(!message.isNullOrEmpty()){
+            Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+        }
     }
 }

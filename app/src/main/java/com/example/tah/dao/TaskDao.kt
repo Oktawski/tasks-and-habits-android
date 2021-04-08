@@ -4,9 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.example.tah.models.Task
+import io.reactivex.Completable
 
 @Dao
-interface TaskDao: BaseDao<Task>{
+interface TaskDao: BaseDao<Task> {
 
     @Query("SELECT * FROM tasks ORDER BY id ASC")
     fun getAll(): LiveData<List<Task>>

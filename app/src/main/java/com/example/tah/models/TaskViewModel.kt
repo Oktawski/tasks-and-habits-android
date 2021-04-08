@@ -11,11 +11,11 @@ class TaskViewModel(@NonNull application: Application)
     :BaseViewModel<Task>(application)
 {
     private var repository: TaskRepository = TaskRepository(application)
-
     private val checkBoxVisibility: MutableLiveData<Int> = MutableLiveData(View.GONE)
 
     init {
         itemsLD = repository.getTasksLD()
+        state = repository.getState()
     }
 
     fun setCheckBoxVisibility(visibility: Int){
