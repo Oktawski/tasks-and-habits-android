@@ -63,6 +63,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     class ViewHolder extends RecyclerView.ViewHolder {
         final TextView nameTV;
+        final TextView descriptionTV;
         final CheckBox checkBox;
         private final TaskViewModel viewModel;
 
@@ -72,6 +73,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
             super(view);
             this.viewModel = viewModel;
             nameTV = (TextView) view.findViewById(R.id.item_name);
+            descriptionTV  = (TextView) view.findViewById(R.id.description);
             checkBox = (CheckBox) view.findViewById(R.id.check_box);
         }
 
@@ -79,6 +81,13 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
             task = tasks.get(position);
             nameTV.setText(task.getName());
             checkBox.setChecked(false);
+
+            if(task.getDescription().isEmpty()){
+                descriptionTV.setVisibility(View.GONE);
+            }else{
+                descriptionTV.setVisibility(View.VISIBLE);
+                descriptionTV.setText(task.getDescription());
+            }
 
             setOnClickListeners();
 
