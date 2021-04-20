@@ -18,18 +18,30 @@ import io.reactivex.schedulers.Schedulers
 
 class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInits {
 
-    private lateinit var viewModel: TaskViewModel
     private lateinit var name: EditText
     private lateinit var description: EditText
     private lateinit var saveButton: Button
     private lateinit var deleteButton: Button
     private var taskId: Int? = null
 
+    private lateinit var taskViewModel: TaskViewModel
+
+    companion object {
+        fun newInstance(name: String?, description: String?): TaskDetailsFragment{
+            val fragment = TaskDetailsFragment()
+            val args = Bundle()
+            args.putString("name", name)
+            args.putString("description", description)
+            fragment.arguments = args
+            return fragment
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
+        taskViewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
 
         taskId = requireActivity().intent.getIntExtra("taskId", -1);
+
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -48,6 +60,9 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInits {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        name.setText(arguments?.getString("name"))
+        description.setText(arguments?.getString("description"))
+
         initOnClickListeners()
         initViewModelObservables()
     }
@@ -58,16 +73,16 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInits {
         }
 
         deleteButton.setOnClickListener {
-            viewModel.getById(taskId)
+            taskViewModel.getById(taskId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({viewModel.delete(it)},
+                    .subscribe({taskViewModel.delete(it)},
                             {toast("Something went wrong")})
         }
     }
 
     override fun initViewModelObservables() {
-        viewModel.state.observe(viewLifecycleOwner){
+        taskViewModel.state.observe(viewLifecycleOwner){
             when(it.status){
                 State.Status.REMOVED -> requireActivity().finish()
                 else -> toast(it.message)

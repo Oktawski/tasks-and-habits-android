@@ -1,6 +1,7 @@
 package com.example.tah.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -22,9 +23,14 @@ class AddAndDetailsActivity: AppCompatActivity(), ViewInits{
 
         backArrow = findViewById(R.id.back_arrow)
 
-        var fragment = when(intent.getIntExtra("fragmentId", R.layout.fragment_habits)){
+        val fragment = when(intent.getIntExtra("fragmentId", R.layout.fragment_habits)){
             Task.getAddView() -> TaskAddFragment()
-            Task.getDetailsView() -> TaskDetailsFragment()
+            Task.getDetailsView() -> {
+                val name = intent.getStringExtra("name")
+                val description = intent.getStringExtra("description")
+                Log.i("TAG", "onCreate: $name $description")
+                TaskDetailsFragment.newInstance(name, description)
+            }
             //Habit.getAddView() -> HabitAddFragment() //TODO implement HabitAddFragment
             //Habit.getDetailsView() -> HabitDetailsFragment()  // TODO implement HabitDetailsFragment
             else -> PlaceholderFragment()

@@ -90,6 +90,8 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
                 Intent intent = new Intent(context, AddAndDetailsActivity.class);
                 intent.putExtra("fragmentId", Task.Companion.getDetailsView());
                 intent.putExtra("taskId", task.getId());
+                intent.putExtra("name", task.getName());
+                intent.putExtra("description", task.getDescription());
                 context.startActivity(intent);
             });
 

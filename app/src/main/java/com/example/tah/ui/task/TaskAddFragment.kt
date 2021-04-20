@@ -59,21 +59,22 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits{
     override fun initViewModelObservables() {
         viewModel.state.observe(viewLifecycleOwner){
             when(it.status){
-                State.Status.LOADING -> hideViews()
+                State.Status.LOADING -> viewsLoading()
                 State.Status.SUCCESS -> {
-                    showViews()
+                    viewsNotLoading()
                     toast(it.message)
                 }
+                else -> viewsNotLoading()
             }
         }
     }
 
-    private fun hideViews(){
+    private fun viewsLoading(){
         addFab.hide()
         // show progressBar
     }
 
-    private fun showViews(){
+    private fun viewsNotLoading(){
         addFab.show()
         // hide progressBar
     }
