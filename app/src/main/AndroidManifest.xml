@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.AddAndDetailsActivity"/>
+        <activity android:name=".ui.main.AddAndDetailsActivity"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>
