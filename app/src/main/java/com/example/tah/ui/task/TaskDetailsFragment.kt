@@ -84,7 +84,10 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInits {
     override fun initViewModelObservables() {
         taskViewModel.state.observe(viewLifecycleOwner){
             when(it.status){
-                State.Status.REMOVED -> requireActivity().finish()
+                State.Status.REMOVED -> {
+                    toast(it.message)
+                    requireActivity().finish()
+                }
                 else -> toast(it.message)
             }
         }

@@ -56,7 +56,11 @@ class TaskRepository(application: Application) {
     }
 
     fun deleteSelected(idList: List<Int>){
-        TaskDatabase.databaseWriteExecutor.execute { taskDao.deleteSelected(idList) }
+        disposable.add(taskDao.deleteSelected(idList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({state.value = State.removed("Tasks removed")},
+                        {state.value = State.error("Error")}))
     }
 
     fun deleteAll(){

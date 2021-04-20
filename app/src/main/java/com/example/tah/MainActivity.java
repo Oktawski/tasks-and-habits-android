@@ -13,6 +13,7 @@ import com.example.tah.models.Task;
 import com.example.tah.models.TaskViewModel;
 import com.example.tah.ui.main.AddAndDetailsActivity;
 import com.example.tah.ui.main.SectionsPagerAdapter;
+import com.example.tah.utilities.State;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
         fabAdd = findViewById(R.id.fab_add);
         deleteIcon = findViewById(R.id.delete_icon);
 
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         intent = new Intent(this, AddAndDetailsActivity.class);
 
@@ -78,21 +80,26 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
 
         deleteIcon.setOnClickListener(v -> {
             taskViewModel.deleteSelected();
-            taskViewModel.setCheckBoxVisibility(View.GONE);
-            taskViewModel.getCheckedItemsLD().setValue(Collections.emptyList());
         });
     }
 
     @Override
     public void initViewModelObservables(){
-        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-
         taskViewModel.getCheckedItemsLD().observe(this, checkedTasks -> {
             if(checkedTasks.isEmpty()){
                 deleteIcon.setVisibility(View.GONE);
             }
             else{
                 deleteIcon.setVisibility(View.VISIBLE);
+            }
+        });
+
+        taskViewModel.state.observe(this, state -> {
+            switch(state.getStatus()){
+                case REMOVED:
+                    taskViewModel.setCheckBoxVisibility(View.GONE);
+                    taskViewModel.getCheckedItemsLD().setValue(Collections.emptyList());
+                    break;
             }
         });
     }

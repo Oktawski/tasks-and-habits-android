@@ -4,14 +4,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.example.tah.R
 import com.example.tah.ViewInits
 import com.example.tah.models.Task
-import com.example.tah.ui.habit.HabitsFragment
 import com.example.tah.ui.task.TaskAddFragment
 import com.example.tah.ui.task.TaskDetailsFragment
-import com.example.tah.ui.task.TasksFragment
 
 class AddAndDetailsActivity: AppCompatActivity(), ViewInits{
 
