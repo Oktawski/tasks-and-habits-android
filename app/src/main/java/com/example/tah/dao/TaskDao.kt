@@ -20,5 +20,5 @@ interface TaskDao: BaseDao<Task> {
     fun deleteSelected(idList: List<Int>): Single<Int>
 
     @Query("DELETE FROM tasks")
-    fun deleteAll()
+    fun deleteAll(): Single<Int>
 }

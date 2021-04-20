@@ -1,6 +1,7 @@
 package com.example.tah.dao
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tah.models.Task
@@ -64,6 +65,18 @@ class TaskRepository(application: Application) {
     }
 
     fun deleteAll(){
-        TaskDatabase.databaseWriteExecutor.execute { taskDao.deleteAll() }
+        //TaskDatabase.databaseWriteExecutor.execute { taskDao.deleteAll() }
+        disposable.add(taskDao.deleteAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe())
+    }
+
+    fun update(task: Task){
+        disposable.add(taskDao.update(task)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({state.value = State.success("Task updated")},
+                        {state.value = State.error("Task not updated")}))
     }
 }

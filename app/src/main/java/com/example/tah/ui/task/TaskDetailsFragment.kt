@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.ViewInits
+import com.example.tah.models.Task
 import com.example.tah.models.TaskViewModel
 import com.example.tah.utilities.State
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -69,7 +70,14 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInits {
 
     override fun initOnClickListeners() {
         saveButton.setOnClickListener {
-            toast("Not yet implemented")
+            taskViewModel.getById(taskId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        it.name = name.text.toString()
+                        it.description = description.text.toString()
+                        taskViewModel.update(it)
+                    },{})
         }
 
         deleteButton.setOnClickListener {
@@ -85,11 +93,10 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInits {
         taskViewModel.state.observe(viewLifecycleOwner){
             when(it.status){
                 State.Status.REMOVED -> {
-                    toast(it.message)
                     requireActivity().finish()
                 }
-                else -> toast(it.message)
             }
+            toast(it.message)
         }
     }
 

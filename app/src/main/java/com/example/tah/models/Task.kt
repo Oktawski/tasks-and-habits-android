@@ -12,9 +12,9 @@ class Task(
 
         @ColumnInfo(name = "name")
         @NonNull
-        val name: String,
+        var name: String,
 
-        @ColumnInfo(name = "description") val description: String?,
+        @ColumnInfo(name = "description") var description: String?,
 
         @ColumnInfo(name = "is_complete") val isComplete: Boolean = false
 ){

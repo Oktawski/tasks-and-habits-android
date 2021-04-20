@@ -23,4 +23,5 @@ abstract class BaseViewModel<T>(application: Application)
     abstract fun delete(t: T)
     abstract fun deleteAll()
     abstract fun deleteSelected()
+    abstract fun update(t: T)
 }

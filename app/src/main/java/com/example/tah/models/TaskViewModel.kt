@@ -46,4 +46,9 @@ class TaskViewModel(@NonNull application: Application)
     override fun deleteSelected() {
         repository.deleteSelected(checkedItemsLD.value!!)
     }
+
+    override fun update(t: Task) {
+        repository.update(t)
+    }
+
 }
