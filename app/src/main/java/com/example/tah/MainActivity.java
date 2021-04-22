@@ -10,10 +10,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.tah.models.Task;
-import com.example.tah.models.TaskViewModel;
+import com.example.tah.utilities.ViewInits;
+import com.example.tah.viewModels.TaskViewModel;
 import com.example.tah.ui.main.AddAndDetailsActivity;
 import com.example.tah.ui.main.SectionsPagerAdapter;
-import com.example.tah.utilities.State;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;

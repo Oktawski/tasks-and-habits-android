@@ -1,4 +1,4 @@
-package com.example.tah.models
+package com.example.tah.viewModels
 
 import android.app.Application
 import android.view.View
@@ -6,10 +6,11 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tah.dao.TaskRepository
+import com.example.tah.models.Task
 import io.reactivex.Single
 
 class TaskViewModel(@NonNull application: Application)
-    :BaseViewModel<Task>(application)
+    : BaseViewModel<Task>(application)
 {
     private var repository: TaskRepository = TaskRepository(application)
     private val checkBoxVisibility: MutableLiveData<Int> = MutableLiveData(View.GONE)

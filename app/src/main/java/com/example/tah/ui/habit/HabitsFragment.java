@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tah.R;
-import com.example.tah.ui.main.dummy.DummyContent;
+import com.example.tah.ui.main.placeholder.DummyContent;
 
 /**
  * A fragment representing a list of Items.

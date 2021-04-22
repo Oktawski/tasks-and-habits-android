@@ -1,11 +1,10 @@
-package com.example.tah.models
+package com.example.tah.viewModels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tah.utilities.State
-import java.util.*
 
 abstract class BaseViewModel<T>(application: Application)
     : AndroidViewModel(application) {

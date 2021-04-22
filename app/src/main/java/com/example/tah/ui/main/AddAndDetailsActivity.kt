@@ -5,12 +5,13 @@ import android.util.Log
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tah.R
-import com.example.tah.ViewInits
+import com.example.tah.utilities.ViewInits
 import com.example.tah.models.Task
+import com.example.tah.ui.main.placeholder.PlaceholderFragment
 import com.example.tah.ui.task.TaskAddFragment
 import com.example.tah.ui.task.TaskDetailsFragment
 
-class AddAndDetailsActivity: AppCompatActivity(), ViewInits{
+class AddAndDetailsActivity: AppCompatActivity(), ViewInits {
 
     lateinit var backArrow: ImageButton
 

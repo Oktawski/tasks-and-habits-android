@@ -1,4 +1,4 @@
-package com.example.tah
+package com.example.tah.utilities
 
 interface ViewInits {
 

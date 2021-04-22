@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.tah.R;
-import com.example.tah.ui.main.dummy.DummyContent.DummyItem;
+import com.example.tah.ui.main.placeholder.DummyContent.DummyItem;
 
 import java.util.List;
 

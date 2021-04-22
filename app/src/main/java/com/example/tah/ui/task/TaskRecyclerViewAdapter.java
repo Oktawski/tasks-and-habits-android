@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tah.R;
 import com.example.tah.models.Task;
-import com.example.tah.models.TaskViewModel;
+import com.example.tah.viewModels.TaskViewModel;
 import com.example.tah.ui.main.AddAndDetailsActivity;
 
 import java.util.ArrayList;
