@@ -1,9 +1,15 @@
 package com.example.tah.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.annotation.NonNull
+import androidx.lifecycle.LiveData
 import com.example.tah.dao.TodoRepository
 import com.example.tah.models.Todo
+import com.example.tah.utilities.State
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class TodoViewModel(@NonNull application: Application)
     :BaseViewModel<Todo>(application) {
@@ -28,12 +34,10 @@ class TodoViewModel(@NonNull application: Application)
     }
 
     override fun deleteSelected() {
-        TODO("Not yet implemented")
+        repository.deleteCompleted()
     }
 
     override fun update(t: Todo) {
-        TODO("Not yet implemented")
+        repository.update(t)
     }
-
-
 }

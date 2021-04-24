@@ -18,8 +18,7 @@
         android:clipToPadding="false"
         />
 
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/todos_recycler_view"
@@ -32,23 +31,40 @@
         android:background="@color/cardview_light_background"
         >
 
-        <EditText
-            android:id="@+id/add_text"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/add_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="textAutoComplete"
+                android:hint="@string/add"
+                android:layout_weight="1"/>
+
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/add_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_24px"
+                android:layout_alignParentEnd="true"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/text_delete_completed"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:inputType="textAutoComplete"
-            android:hint="@string/add"
+            android:layout_below="@id/linear_layout"
+            android:paddingBottom="8dp"
+            android:text="Delete completed"
+            android:textAlignment="center"
             />
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/add_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_24px"/>
-
-    </LinearLayout>
-
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -4,10 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.R
-import com.example.tah.models.Task
 import com.example.tah.models.Todo
 import com.example.tah.viewModels.TodoViewModel
 
@@ -16,7 +16,6 @@ class TodoRecyclerViewAdapter(
         private val context: Context,
         private val viewModel: TodoViewModel
 ): RecyclerView.Adapter<TodoRecyclerViewAdapter.ViewHolder>() {
-
 
     fun update(todos: List<Todo>){
         this.todos = todos
@@ -44,12 +43,30 @@ class TodoRecyclerViewAdapter(
             private val viewModel: TodoViewModel
     ): RecyclerView.ViewHolder(itemView){
 
-        val name: TextView = itemView.findViewById(R.id.name)
+        private val name: TextView = itemView.findViewById(R.id.name)
+        private val okIcon: ImageButton = itemView.findViewById(R.id.ok_icon)
 
-        val todo: Todo? = null
+        var todo: Todo? = null
 
         fun bind(todo: Todo){
+            this.todo = todo
             this.name.text = todo.name
+
+            if(this.todo!!.isComplete){
+                okIcon.visibility = View.VISIBLE
+            }
+            else
+                okIcon.visibility = View.GONE
+
+            initOnClickListeners()
+        }
+
+        private fun initOnClickListeners(){
+            itemView.setOnClickListener {
+                todo?.isComplete = !todo?.isComplete!!
+
+                viewModel.update(todo!!)
+            }
         }
     }
 }
