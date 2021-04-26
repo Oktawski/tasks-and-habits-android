@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
                         //break;
                         layoutRes = 42;
                         break;
+                    case 2:
+                        fabAdd.hide();
                     default:
                         layoutRes = Task.Companion.getAddView();
                         break;
