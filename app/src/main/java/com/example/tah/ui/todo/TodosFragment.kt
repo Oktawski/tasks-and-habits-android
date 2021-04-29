@@ -49,8 +49,8 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
 
     private fun initViewModelObservables(){
         todoViewModel.itemsLD.observe(requireActivity()){
-            Log.i("TAG", "initViewModelObservables: new item")
             adapter.update(it)
+            recyclerViewTodos.scrollToPosition(it.size-1)
         }
     }
 
@@ -67,6 +67,5 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
 
     private fun initAdapter(){
         recyclerViewTodos.adapter = adapter
-
     }
 }
