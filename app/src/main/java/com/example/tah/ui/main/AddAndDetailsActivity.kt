@@ -5,8 +5,10 @@ import android.util.Log
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tah.R
+import com.example.tah.models.Habit
 import com.example.tah.utilities.ViewInits
 import com.example.tah.models.Task
+import com.example.tah.ui.habit.HabitAddFragment
 import com.example.tah.ui.main.placeholder.PlaceholderFragment
 import com.example.tah.ui.task.TaskAddFragment
 import com.example.tah.ui.task.TaskDetailsFragment
@@ -29,7 +31,7 @@ class AddAndDetailsActivity: AppCompatActivity(), ViewInits {
                 Log.i("TAG", "onCreate: $name $description")
                 TaskDetailsFragment.newInstance(name, description)
             }
-            //Habit.getAddView() -> HabitAddFragment() //TODO implement HabitAddFragment
+            Habit.getAddView() -> HabitAddFragment()
             //Habit.getDetailsView() -> HabitDetailsFragment()  // TODO implement HabitDetailsFragment
             else -> PlaceholderFragment()
         }

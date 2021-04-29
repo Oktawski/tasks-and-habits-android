@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.tah.models.Habit;
 import com.example.tah.models.Task;
 import com.example.tah.utilities.ViewInits;
 import com.example.tah.viewModels.TaskViewModel;
@@ -46,20 +47,21 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
             @Override
             public void onPageSelected(int position) {
                 intent.putExtra("fragmentId", sectionsPagerAdapter.getTabTitleId(position));
-                int layoutRes;
+                Integer layoutRes = null;
                 switch(position){
+                    case 0:
+                        fabAdd.show();
+                        layoutRes = Task.Companion.getAddView();
+                        break;
                     case 1:
-                        //layoutRes = Habit.Companion.getAddView();
-                        //break;
-                        layoutRes = 42;
+                        fabAdd.show();
+                        layoutRes = Habit.Companion.getAddView();
                         break;
                     case 2:
                         fabAdd.hide();
-                    default:
-                        layoutRes = Task.Companion.getAddView();
                         break;
                 }
-                intent.putExtra("fragmentId", layoutRes);
+                if(layoutRes != null) intent.putExtra("fragmentId", layoutRes);
             }
         });
 
@@ -73,12 +75,7 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
 
     @Override
     public void initOnClickListeners(){
-        // temp
-        fabAdd.setOnClickListener(v -> {
-            // TODO new item activity/fragment, Task or Habit
-            startActivity(intent);
-
-        });
+        fabAdd.setOnClickListener(v -> startActivity(intent));
 
         deleteIcon.setOnClickListener(v -> {
             taskViewModel.deleteSelected();
