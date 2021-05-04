@@ -41,13 +41,11 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         initAdapter()
         initOnClickListeners()
         initViewModelObservables()
-
     }
 
     private fun initViewModelObservables(){
         todoViewModel.itemsLD.observe(requireActivity()){
             adapter.update(it)
-            recyclerViewTodos.scrollToPosition(it.size-1)
         }
 
         todoViewModel.state.observe(requireActivity()){
@@ -57,6 +55,12 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
                 State.Status.SUCCESS -> {
                     addEditText.text.clear()
                     addIcon.visibility = View.VISIBLE
+                }
+
+                State.Status.ADDED -> {
+                    addEditText.text.clear()
+                    addIcon.visibility = View.VISIBLE
+                    recyclerViewTodos.smoothScrollToPosition(recyclerViewTodos.bottom)
                 }
 
                 else -> addIcon.visibility  = View.VISIBLE

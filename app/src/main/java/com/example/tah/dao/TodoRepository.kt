@@ -35,7 +35,7 @@ class TodoRepository(application: Application) {
         disposable.add(todoDao.insert(todo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({state.value = State.success("Todo added")},
+                .subscribe({state.value = State.added()},
                         {state.value = State.error("Error")}))
     }
 

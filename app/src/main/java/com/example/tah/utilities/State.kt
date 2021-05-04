@@ -8,6 +8,7 @@ data class State(
         LOADING,
         SUCCESS,
         REMOVED,
+        ADDED,
         ERROR
     }
 
@@ -22,6 +23,10 @@ data class State(
 
         fun removed(message: String? = null): State{
             return State(Status.REMOVED, message)
+        }
+
+        fun added(): State{
+            return State(Status.ADDED, null)
         }
 
         fun error(message: String?): State{
