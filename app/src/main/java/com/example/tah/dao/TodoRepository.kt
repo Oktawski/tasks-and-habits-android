@@ -37,8 +37,6 @@ class TodoRepository(application: Application) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({state.value = State.success("Todo added")},
                         {state.value = State.error("Error")}))
-
-        disposable.clear()
     }
 
     fun getById(id: Int): Single<Todo> {

@@ -7,7 +7,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.R
 import com.example.tah.models.Todo
@@ -22,9 +21,6 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
     private lateinit var deleteCompletedText: TextView
     private lateinit var recyclerViewTodos: RecyclerView
     private lateinit var adapter: TodoRecyclerViewAdapter
-
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,15 +59,12 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
                     addIcon.visibility = View.VISIBLE
                 }
 
-                State.Status.ERROR -> addIcon.visibility  = View.VISIBLE
+                else -> addIcon.visibility  = View.VISIBLE
             }
         }
-
     }
 
-
-
-private fun initOnClickListeners(){
+    private fun initOnClickListeners(){
         addIcon.setOnClickListener {
             val name: String = addEditText.text.toString()
             todoViewModel.add(Todo(null, name = name, isComplete = false))

@@ -33,9 +33,7 @@ public class HabitRecyclerViewAdapter extends RecyclerView.Adapter<HabitRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+
     }
 
     @Override
@@ -52,7 +50,7 @@ public class HabitRecyclerViewAdapter extends RecyclerView.Adapter<HabitRecycler
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
+            mIdView = (TextView) view.findViewById(R.id.description);
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 
