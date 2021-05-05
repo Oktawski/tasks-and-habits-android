@@ -1,8 +1,9 @@
-package com.example.tah.dao
+package com.example.tah.dao.todo
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
+import com.example.tah.dao.BaseDao
 import com.example.tah.models.Todo
 import io.reactivex.Completable
 import io.reactivex.Single

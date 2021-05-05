@@ -1,4 +1,4 @@
-package com.example.tah.dao;
+package com.example.tah.dao.habit;
 
 import android.content.Context;
 

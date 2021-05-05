@@ -5,7 +5,7 @@ import android.view.View
 import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.tah.dao.TaskRepository
+import com.example.tah.dao.task.TaskRepository
 import com.example.tah.models.Task
 import io.reactivex.Single
 

@@ -1,7 +1,6 @@
-package com.example.tah.dao
+package com.example.tah.dao.task
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tah.models.Task
