@@ -18,6 +18,10 @@ abstract class BaseViewModel<T>(application: Application)
         checkedItemsLD.value = idList
     }
 
+    fun clearCheckedItems(){
+        checkedItemsLD.value = emptyList()
+    }
+
     abstract fun add(t: T)
     abstract fun delete(t: T)
     abstract fun deleteAll()

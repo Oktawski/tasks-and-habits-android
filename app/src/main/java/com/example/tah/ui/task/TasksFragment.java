@@ -92,4 +92,11 @@ public class TasksFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        viewModel.clearCheckedItems();
+        adapter.notifyDataSetChanged();
+    }
 }
