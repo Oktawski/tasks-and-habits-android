@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:tooltipText="OK"
             android:src="@drawable/outline_done_24"
-            android:backgroundTint="#00000000"/>
+            android:backgroundTint="@color/transparent"/>
 
     </LinearLayout>
 
