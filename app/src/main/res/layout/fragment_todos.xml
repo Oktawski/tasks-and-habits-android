@@ -18,6 +18,7 @@
         tools:listitem="@layout/item_todo" />
 
     <RelativeLayout
+        android:id="@+id/parentRelative"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/todos_recycler_view"
@@ -42,17 +43,9 @@
                 android:maxLines="1"
                 android:inputType="textAutoComplete"
                 android:hint="@string/add"
+                android:layout_marginRight="50dp"
                 android:layout_weight="1"/>
-
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/add_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_24px"
-                android:layout_alignParentEnd="true"/>
         </LinearLayout>
-
 
         <TextView
             android:id="@+id/text_delete_completed"
@@ -66,4 +59,15 @@
 
     </RelativeLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_24px"
+        app:fabSize="mini"
+        android:layout_alignParentEnd="true"
+        app:layout_anchor="@id/linear_layout"
+        app:layout_anchorGravity="end|center_vertical"
+        android:layout_marginEnd="8dp"
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

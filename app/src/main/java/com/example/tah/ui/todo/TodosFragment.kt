@@ -3,7 +3,6 @@ package com.example.tah.ui.todo
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -12,12 +11,13 @@ import com.example.tah.R
 import com.example.tah.models.Todo
 import com.example.tah.utilities.State
 import com.example.tah.viewModels.TodoViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class TodosFragment: Fragment(R.layout.fragment_todos) {
 
     private lateinit var todoViewModel: TodoViewModel
     private lateinit var addEditText: EditText
-    private lateinit var addIcon: ImageButton
+    private lateinit var addIcon: FloatingActionButton
     private lateinit var deleteCompletedText: TextView
     private lateinit var recyclerViewTodos: RecyclerView
     private lateinit var adapter: TodoRecyclerViewAdapter
