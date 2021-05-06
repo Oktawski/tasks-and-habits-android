@@ -27,9 +27,9 @@
             android:id="@+id/ok_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_24px"
             android:tooltipText="OK"
-            tools:src="@drawable/ic_add_24px" />
+            android:src="@drawable/outline_done_24"
+            android:backgroundTint="#00000000"/>
 
     </LinearLayout>
 
