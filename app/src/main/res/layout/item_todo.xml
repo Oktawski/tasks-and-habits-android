@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add_24px"
             android:tooltipText="OK"
-            tools:src="@drawable/ok_icon" />
+            tools:src="@drawable/ic_add_24px" />
 
     </LinearLayout>
 
