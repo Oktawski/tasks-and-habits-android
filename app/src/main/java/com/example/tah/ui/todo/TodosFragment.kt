@@ -53,12 +53,12 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
                 State.Status.LOADING -> addIcon.visibility = View.GONE
 
                 State.Status.SUCCESS -> {
-                    addEditText.text.clear()
+                    addEditText.setText("")
                     addIcon.visibility = View.VISIBLE
                 }
 
                 State.Status.ADDED -> {
-                    addEditText.text.clear()
+                    addEditText.setText("")
                     addIcon.visibility = View.VISIBLE
                     recyclerViewTodos.smoothScrollToPosition(recyclerViewTodos.bottom)
                 }
