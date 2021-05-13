@@ -1,6 +1,11 @@
 package com.example.tah;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
         initViewModelObservables();
     }
 
+
     public void initViews(){
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
         tabs = findViewById(R.id.tabs);
@@ -68,6 +74,13 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
 
     @Override
     public void initViewModelObservables(){
+        taskViewModel.itemsLD.observe(this, items -> {
+            if(items.size() > 0){
+                createNotificationChannel();
+                initNotifications();
+            }
+        });
+
         taskViewModel.getCheckedItemsLD().observe(this, checkedTasks -> {
             if(checkedTasks.isEmpty()){
                 deleteIcon.setVisibility(View.GONE);
@@ -85,6 +98,32 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
                     break;
             }
         });
+    }
+
+    private void createNotificationChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "ReminderChannel";
+            String description = "Channel Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("testNot", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void initNotifications(){
+        Intent intent = new Intent(MainActivity.this, NotificationBroadcast.class);
+        PendingIntent pendingIntent = PendingIntent
+                .getBroadcast(MainActivity.this, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        long currentTime = System.currentTimeMillis();
+        long tenSecondsInMillis = 1000 * 10;
+        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                currentTime + tenSecondsInMillis,
+                pendingIntent);
+
     }
 
     private final ViewPager2.OnPageChangeCallback onPageChangeCallback

@@ -21,6 +21,8 @@
         </activity>
         <activity android:name=".ui.main.AddAndDetailsActivity"
             android:windowSoftInputMode="adjustResize"/>
+
+        <receiver android:name=".NotificationBroadcast"/>
     </application>
 
 </manifest>
