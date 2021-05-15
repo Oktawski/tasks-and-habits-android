@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,12 +13,13 @@ import com.example.tah.models.Task
 import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.utilities.State
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
 
 class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits {
 
     private lateinit var viewModel: TaskViewModel
-    private lateinit var nameET: EditText
-    private lateinit var descriptionET: EditText
+    private lateinit var name: TextInputEditText
+    private lateinit var description: TextInputEditText
     private lateinit var addFab: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +33,8 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits {
                               savedInstanceState: Bundle?): View? {
 
         val view: View = inflater.inflate(R.layout.add_task_fragment, container, false)
-        nameET = view.findViewById(R.id.name)
-        descriptionET = view.findViewById(R.id.description)
+        name = view.findViewById(R.id.name)
+        description = view.findViewById(R.id.description)
         addFab = view.findViewById(R.id.add);
 
         return view
@@ -49,8 +49,8 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits {
 
     override fun initOnClickListeners() {
         addFab.setOnClickListener{
-            val name = nameET.text.toString()
-            val description = descriptionET.text.toString()
+            val name = name.text.toString()
+            val description = description.text.toString()
 
             viewModel.add(Task(name, description, false))
         }
