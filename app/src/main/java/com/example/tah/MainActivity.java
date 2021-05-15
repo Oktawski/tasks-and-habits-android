@@ -24,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.Calendar;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements ViewInits {
@@ -118,12 +119,17 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
         PendingIntent pendingIntent = PendingIntent
                 .getBroadcast(MainActivity.this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long currentTime = System.currentTimeMillis();
-        long tenSecondsInMillis = 1000 * 10;
-        alarmManager.set(AlarmManager.RTC_WAKEUP,
-                currentTime + tenSecondsInMillis,
-                pendingIntent);
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 1);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent);
     }
 
     private final ViewPager2.OnPageChangeCallback onPageChangeCallback
