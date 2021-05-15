@@ -36,9 +36,8 @@ class TaskRepository(application: Application) {
         disposable.add(taskDao.insert(task)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({state.value = State.success("Task added")},
+                .subscribe({state.value = State.added()},
                         {state.value = State.error("Error")}))
-
     }
 
     fun getById(id: Int?): Single<Task> {

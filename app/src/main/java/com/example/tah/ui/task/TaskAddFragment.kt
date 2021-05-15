@@ -64,6 +64,7 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits {
                     viewsNotLoading()
                     toast(it.message)
                 }
+                State.Status.ADDED -> activity?.finish()
                 else -> viewsNotLoading()
             }
         }
