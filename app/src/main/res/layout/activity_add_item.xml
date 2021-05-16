@@ -17,13 +17,12 @@
             >
 
             <ImageButton
+                android:id="@+id/back_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/appbar_padding_top"
                 android:layout_margin="5dp"
-                android:id="@+id/back_arrow"
-                android:src="@drawable/ic_add_24px"
-                />
+                android:paddingTop="@dimen/appbar_padding_top"
+                android:src="@drawable/outline_arrow_back_24" />
 
             <TextView
                 android:layout_width="wrap_content"
