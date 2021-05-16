@@ -47,16 +47,13 @@
         app:srcCompat="@drawable/ic_add_24px" />
 
     <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         android:id="@+id/delete_icon"
-        android:layout_width="98dp"
-        android:layout_height="84dp"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/black"
         android:elevation="4dp"
-        android:foregroundTint="@color/black"
-        android:src="@drawable/ic_add_24px"
         android:visibility="gone"
         app:layout_anchor="@+id/appBarLayout"
         app:layout_anchorGravity="top|end"
-        app:srcCompat="@drawable/outline_delete_24" />
+        android:src="@drawable/outline_delete_24"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
