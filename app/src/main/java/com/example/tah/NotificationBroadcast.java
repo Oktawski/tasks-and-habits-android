@@ -13,7 +13,7 @@ public class NotificationBroadcast extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder
                 = new NotificationCompat.Builder(context, "task")
-                .setSmallIcon(R.drawable.ic_add_24px)
+                .setSmallIcon(R.drawable.outline_schedule_24)
                 .setContentTitle("Tasks waiting")
                 .setContentText("You have not completed tasks!!!!!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
