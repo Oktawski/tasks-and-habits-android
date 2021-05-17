@@ -58,8 +58,12 @@ class TaskRepository(application: Application) {
         disposable.add(taskDao.deleteSelected(idList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({state.value = State.removed("Tasks removed")},
-                        {state.value = State.error("Error")}))
+                .subscribe(
+                    {
+                        if (idList.size > 1) state.value = State.removed("Tasks removed")
+                        else state.value = State.removed("Task removed")
+                    },
+                    {state.value = State.error("Error")}))
     }
 
     fun deleteAll(){

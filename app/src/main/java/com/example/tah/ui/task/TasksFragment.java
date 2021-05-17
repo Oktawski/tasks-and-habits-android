@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tah.R;
 import com.example.tah.models.Task;
+import com.example.tah.utilities.State;
 import com.example.tah.viewModels.TaskViewModel;
 
 import java.util.ArrayList;
@@ -30,18 +32,11 @@ public class TasksFragment extends Fragment {
     private TaskRecyclerViewAdapter adapter;
     private ImageView deleteIcon;
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int columnCount = 1;
 
-    public TasksFragment() {
-    }
 
     public static TasksFragment newInstance(int columnCount) {
         TasksFragment fragment = new TasksFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,9 +45,6 @@ public class TasksFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            columnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
 
         viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
     }
@@ -70,11 +62,7 @@ public class TasksFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (columnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, columnCount));
-            }
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
             adapter = new TaskRecyclerViewAdapter(tasks, requireActivity(), viewModel);
             recyclerView.setAdapter(adapter);
         }
@@ -90,6 +78,12 @@ public class TasksFragment extends Fragment {
 
         viewModel.getCheckBoxVisibility().observe(getViewLifecycleOwner(), integer -> {
             adapter.notifyDataSetChanged();
+        });
+
+        viewModel.getState().observe(getViewLifecycleOwner(), state -> {
+            if(state.getStatus().equals(State.Status.REMOVED)){
+                Toast.makeText(requireActivity(), state.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
