@@ -94,6 +94,9 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInits {
                 State.Status.REMOVED -> {
                     requireActivity().finish()
                 }
+                State.Status.UPDATED -> {
+                    requireActivity().finish()
+                }
             }
             toast(it.message)
         }

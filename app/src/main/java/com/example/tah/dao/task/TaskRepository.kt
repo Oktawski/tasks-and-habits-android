@@ -74,7 +74,7 @@ class TaskRepository(application: Application) {
         disposable.add(taskDao.update(task)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({state.value = State.success("Task updated")},
+                .subscribe({state.value = State.updated("Task updated")},
                         {state.value = State.error("Task not updated")}))
     }
 }

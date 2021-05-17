@@ -9,6 +9,7 @@ data class State(
         SUCCESS,
         REMOVED,
         ADDED,
+        UPDATED,
         ERROR
     }
 
@@ -28,6 +29,8 @@ data class State(
         fun added(): State{
             return State(Status.ADDED, null)
         }
+
+        fun updated(message: String? = null): State = State(Status.UPDATED, message)
 
         fun error(message: String?): State{
             return State(Status.ERROR, message)
