@@ -26,7 +26,7 @@ class HabitRepository(application: Application) {
 
     fun getState(): MutableLiveData<State> = state;
 
-    fun getHabitLD(): LiveData<List<Habit>>{
+    fun getHabitsLD(): LiveData<List<Habit>>{
         return habitsLD
     }
 
@@ -36,7 +36,7 @@ class HabitRepository(application: Application) {
         disposable.add(habitDao.insert(habit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({state.value = State.success("Habit added")},
+                .subscribe({state.value = State.added("Habit added")},
                         {state.value = State.error("Error")}))
     }
 
@@ -74,7 +74,7 @@ class HabitRepository(application: Application) {
         disposable.add(habitDao.update(habit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ state.value = State.success("Habit updated") },
+                .subscribe({ state.value = State.updated("Habit updated") },
                         { state.value = State.error("Error") }))
     }
 }

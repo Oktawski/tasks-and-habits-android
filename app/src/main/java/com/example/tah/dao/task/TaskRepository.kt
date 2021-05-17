@@ -36,7 +36,7 @@ class TaskRepository(application: Application) {
         disposable.add(taskDao.insert(task)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({state.value = State.added()},
+                .subscribe({state.value = State.added("Task added")},
                         {state.value = State.error("Error")}))
     }
 
@@ -63,7 +63,6 @@ class TaskRepository(application: Application) {
     }
 
     fun deleteAll(){
-        //TaskDatabase.databaseWriteExecutor.execute { taskDao.deleteAll() }
         disposable.add(taskDao.deleteAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

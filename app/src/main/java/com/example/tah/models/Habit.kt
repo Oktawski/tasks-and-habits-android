@@ -16,7 +16,7 @@ class Habit(
 
     @ColumnInfo(name = "description") var description: String?,
 
-    @ColumnInfo(name = "timesInWeek") var timesInWeek: Int?,
+    @ColumnInfo(name = "timesInWeek") var timesInWeek: Int? = 1,
 
     @ColumnInfo(name = "timesDone") var timesDone: Int? = 0,
 

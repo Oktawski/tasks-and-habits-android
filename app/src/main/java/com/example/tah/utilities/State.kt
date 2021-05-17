@@ -26,8 +26,8 @@ data class State(
             return State(Status.REMOVED, message)
         }
 
-        fun added(): State{
-            return State(Status.ADDED, null)
+        fun added(message: String? = null): State{
+            return State(Status.ADDED, message)
         }
 
         fun updated(message: String? = null): State = State(Status.UPDATED, message)
