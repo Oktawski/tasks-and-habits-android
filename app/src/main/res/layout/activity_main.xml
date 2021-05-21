@@ -10,9 +10,8 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/purple_200"
-        android:theme="@style/Theme.TasksAndHabits">
-
+        style="@style/Theme.TasksAndHabits.Dark"
+        >
 
         <TextView
             android:id="@+id/title"

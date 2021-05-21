@@ -28,7 +28,6 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         app:layout_anchor="@id/todos_recycler_view"
         app:layout_anchorGravity="bottom|center"
-        android:background="@color/cardview_light_background"
         >
 
         <LinearLayout
