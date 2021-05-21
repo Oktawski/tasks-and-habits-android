@@ -12,10 +12,11 @@ import com.example.tah.utilities.ViewInits
 import com.example.tah.models.Task
 import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.utilities.State
+import com.example.tah.utilities.ViewHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 
-class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits {
+class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits, ViewHelper {
 
     private lateinit var viewModel: TaskViewModel
     private lateinit var name: TextInputEditText
@@ -56,7 +57,7 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits {
                 viewModel.add(Task(nameText, descriptionText, false))
             }
             else{
-                name.error = "Cannot be blank"
+                showErrorMessages(name)
             }
         }
     }

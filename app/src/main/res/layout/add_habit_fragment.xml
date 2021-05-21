@@ -101,6 +101,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchorGravity="end|bottom"
-        app:layout_anchor="@id/scrollView"/>
+        app:layout_anchor="@id/scrollView"
+        android:src="@drawable/ic_add_24px"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import com.example.tah.R
 
 @Entity(tableName = "Habits")
-class Habit(
+data class Habit(
     @PrimaryKey(autoGenerate = true) val id: Long?,
 
     @ColumnInfo(name = "name")
@@ -24,8 +24,6 @@ class Habit(
 
     @ColumnInfo(name = "isComplete") val isComplete: Boolean = false
 ) {
-    constructor(name: String, description: String?, timesInWeek: Int?, timesDone: Int?, sessionLength: Int?, isComplete: Boolean)
-    :this(null, name, description, timesInWeek, timesDone, sessionLength, isComplete )
 
     companion object: ViewType{
         override  fun getAddView(): Int{

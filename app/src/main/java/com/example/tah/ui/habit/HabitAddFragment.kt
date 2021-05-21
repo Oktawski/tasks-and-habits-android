@@ -10,10 +10,12 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.tah.R
+import com.example.tah.utilities.ViewHelper
+import com.example.tah.utilities.ViewInits
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 
-class HabitAddFragment : Fragment() {
+class HabitAddFragment : Fragment(), ViewInits, ViewHelper {
 
     private lateinit var name: TextInputEditText
     private lateinit var description: TextInputEditText
@@ -43,14 +45,24 @@ class HabitAddFragment : Fragment() {
         return view
     }
 
-    private fun initOnClickListeners(){
+    override fun initOnClickListeners(){
         hourSpinner.onItemSelectedListener = createOnItemSelectedListener(hours)
         minuteSpinner.onItemSelectedListener = createOnItemSelectedListener(minutes)
 
         fabAdd.setOnClickListener {
-            val text = "Hour: $hour \n Minute: $minute"
-            Toast.makeText(requireActivity(), text, Toast.LENGTH_SHORT).show()
+            if(name.text.isNullOrEmpty()){
+                showErrorMessages(name)
+            }
+            else {
+                val text = "Hour: $hour \n Minute: $minute"
+                Toast.makeText(requireActivity(), text, Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    override fun initViewModelObservables() {
+
+
     }
 
     private fun initSpinnerAdapters(){
