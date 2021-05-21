@@ -12,6 +12,7 @@ import com.example.tah.models.Todo
 import com.example.tah.utilities.State
 import com.example.tah.viewModels.TodoViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.Collections.emptyList
 
 class TodosFragment: Fragment(R.layout.fragment_todos) {
 
@@ -71,7 +72,13 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
     private fun initOnClickListeners(){
         addIcon.setOnClickListener {
             val name: String = addEditText.text.toString()
-            todoViewModel.add(Todo(null, name = name, isComplete = false))
+
+            if(name.isNotEmpty()) {
+                todoViewModel.add(Todo(null, name = name, isComplete = false))
+            }
+            else{
+                addEditText.error = "Cannot be blank"
+            }
         }
 
         deleteCompletedText.setOnClickListener {

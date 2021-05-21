@@ -49,10 +49,15 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits {
 
     override fun initOnClickListeners() {
         addFab.setOnClickListener{
-            val name = name.text.toString()
-            val description = description.text.toString()
+            val nameText = name.text.toString()
+            val descriptionText = description.text.toString()
 
-            viewModel.add(Task(name, description, false))
+            if(nameText.isNotEmpty()){
+                viewModel.add(Task(nameText, descriptionText, false))
+            }
+            else{
+                name.error = "Cannot be blank"
+            }
         }
     }
 

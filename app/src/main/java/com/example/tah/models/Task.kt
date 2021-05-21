@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import com.example.tah.R
 
 @Entity(tableName = "tasks")
-class Task(
+data class Task(
         @PrimaryKey(autoGenerate = true) val id: Int?,
 
         @ColumnInfo(name = "name")
