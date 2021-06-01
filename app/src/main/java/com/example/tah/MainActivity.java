@@ -4,10 +4,12 @@ import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -138,6 +140,15 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
         public void onPageSelected(int position) {
             intent.putExtra("fragmentId", sectionsPagerAdapter.getTabTitleId(position));
             Integer layoutRes = null;
+
+            // hide soft keyboard
+            View view = getCurrentFocus();
+            if(view != null){
+                InputMethodManager imm = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+
             switch(position) {
                 case 0:
                     fabAdd.show();
