@@ -50,45 +50,46 @@
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/description_layout"
                 android:layout_centerHorizontal="true">
 
-                <TextView
-                    android:id="@+id/hour_text"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/hours_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/hour" />
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/text_margin"
+                    android:hint="@string/hour">
 
-                <Spinner
-                    android:id="@+id/hour_spinner"
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:padding="16dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/minutes_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/hour_text"
-                    android:dropDownWidth="50dp"
-                    android:spinnerMode="dropdown"/>
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:hint="@string/minute"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_toEndOf="@id/hours_layout">
 
-                <TextView
-                    android:id="@+id/minute_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
-                    android:layout_toEndOf="@id/hour_text"
-                    android:text="@string/minute" />
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:padding="16dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <Spinner
-                    android:id="@+id/minute_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/minute_text"
-                    android:dropDownWidth="50dp"
-                    android:spinnerMode="dropdown"
-                    android:layout_alignLeft="@id/minute_text"/>
-
-
-            </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
 
     </ScrollView>

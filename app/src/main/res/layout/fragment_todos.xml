@@ -24,16 +24,18 @@
         android:layout_below="@id/todos_recycler_view"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
         app:layout_anchor="@id/todos_recycler_view"
         app:layout_anchorGravity="bottom|center"
+        android:background="?colorOnSecondary"
+        android:elevation="2dp"
         >
 
         <LinearLayout
             android:id="@+id/linear_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
             <EditText
                 android:id="@+id/add_text"

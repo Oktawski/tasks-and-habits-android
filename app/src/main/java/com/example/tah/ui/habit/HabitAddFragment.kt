@@ -5,29 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import com.example.tah.R
+import com.example.tah.models.Habit
 import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInits
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class HabitAddFragment : Fragment(), ViewInits, ViewHelper {
 
     private lateinit var name: TextInputEditText
     private lateinit var description: TextInputEditText
-    private lateinit var hourSpinner: Spinner
-    private lateinit var minuteSpinner: Spinner
+    private lateinit var hoursInput: TextInputLayout
+    private lateinit var minutesInput: TextInputLayout
     private lateinit var fabAdd: FloatingActionButton
 
     private val hours = Array(10){it}
     private val minutes = Array(60){it}
-
-    private var hour: Int = 0
-    private var minute: Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -35,8 +31,8 @@ class HabitAddFragment : Fragment(), ViewInits, ViewHelper {
 
         name = view.findViewById(R.id.name)
         description = view.findViewById(R.id.description)
-        hourSpinner = view.findViewById(R.id.hour_spinner)
-        minuteSpinner = view.findViewById(R.id.minute_spinner)
+        hoursInput = view.findViewById(R.id.hours_layout)
+        minutesInput = view.findViewById(R.id.minutes_layout)
         fabAdd = view.findViewById(R.id.fab_add)
 
         initSpinnerAdapters()
@@ -46,56 +42,50 @@ class HabitAddFragment : Fragment(), ViewInits, ViewHelper {
     }
 
     override fun initOnClickListeners(){
-        hourSpinner.onItemSelectedListener = createOnItemSelectedListener(hours)
-        minuteSpinner.onItemSelectedListener = createOnItemSelectedListener(minutes)
 
         fabAdd.setOnClickListener {
             if(name.text.isNullOrEmpty()){
                 showErrorMessages(name)
             }
             else {
-                val text = "Hour: $hour \n Minute: $minute"
-                Toast.makeText(requireActivity(), text, Toast.LENGTH_SHORT).show()
+                val habit = Habit.new(
+                    name.text.toString(), 
+                    description.text.toString(), 
+                    hoursInput.editText?.text.toString().toIntOrNull() ?: 0,
+                    minutesInput.editText?.text.toString().toIntOrNull() ?: 0)
+
+                if(habit.sessionLength == 0L) Toast.makeText(
+                    requireActivity(),
+                    "Session length cannot be less than 1 minute",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                else Toast.makeText(
+                    requireActivity(),
+                    "${habit.name}, ${habit.description}, ${habit.sessionLength}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
+
     }
 
     override fun initViewModelObservables() {
 
-
     }
 
     private fun initSpinnerAdapters(){
-        createSpinnerAdapter(hourSpinner, hours)
-        createSpinnerAdapter(minuteSpinner, minutes)
+        createSpinnerAdapter(minutesInput, minutes)
+        createSpinnerAdapter(hoursInput, hours)
     }
 
-    private fun createSpinnerAdapter(spinner: Spinner, array: Array<Int>){
+    private fun createSpinnerAdapter(layout: TextInputLayout, array: Array<Int>){
         ArrayAdapter(
             requireActivity(),
             android.R.layout.simple_spinner_item,
             array
         ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = adapter
-        }
-    }
-
-    private fun createOnItemSelectedListener(array: Array<Int>): AdapterView.OnItemSelectedListener {
-        return object: AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if(array.size > 24) minute = array[position]
-                else hour = array[position]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                Toast.makeText(requireActivity(), "Nothing selected", Toast.LENGTH_SHORT).show()
-            }
+            (layout.editText as AutoCompleteTextView).setAdapter(adapter)
         }
     }
 }

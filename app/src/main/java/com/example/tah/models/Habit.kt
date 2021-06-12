@@ -20,12 +20,19 @@ data class Habit(
 
     @ColumnInfo(name = "timesDone") var timesDone: Int? = 0,
 
-    @ColumnInfo(name = "sessionLength") var sessionLength: Int?,
+    @ColumnInfo(name = "sessionLength") var sessionLength: Long,
 
     @ColumnInfo(name = "isComplete") val isComplete: Boolean = false
 ) {
 
     companion object: ViewType{
+
+        fun new(name: String, description: String?, hours: Int, minutes: Int): Habit{
+            val habit = Habit(null, name, description, 0, 0, 0, false)
+            habit.sessionLength = (hours * 60 * 60 + minutes * 60).toLong()
+            return habit
+        }
+
         override  fun getAddView(): Int{
             return R.layout.add_habit_fragment
         }
