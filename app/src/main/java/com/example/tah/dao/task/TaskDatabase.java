@@ -11,7 +11,7 @@ import com.example.tah.models.Task;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Task.class}, version = 1, exportSchema = false)
+@Database(entities = {Task.class}, version = 2, exportSchema = false)
 public abstract class TaskDatabase extends RoomDatabase {
 
     public abstract TaskDao taskDao();
@@ -26,7 +26,8 @@ public abstract class TaskDatabase extends RoomDatabase {
             synchronized (TaskDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            TaskDatabase.class, "word_database")
+                            TaskDatabase.class, "task_database")
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

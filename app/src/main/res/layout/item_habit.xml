@@ -30,11 +30,21 @@
 
             <TextView
                 android:id="@+id/description"
+                android:text="@string/placeholder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_gravity="bottom"
                 android:layout_below="@id/item_name"/>
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="bottom"
+                android:layout_below="@id/description"
+                android:text="@string/time_placeholder"/>
 
         </RelativeLayout>
 

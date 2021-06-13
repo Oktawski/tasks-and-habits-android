@@ -2,53 +2,41 @@ package com.example.tah.ui.habit;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tah.R;
-import com.example.tah.ui.main.placeholder.DummyContent;
+import com.example.tah.models.Habit;
+import com.example.tah.utilities.ViewInits;
+import com.example.tah.viewModels.HabitViewModel;
 
-/**
- * A fragment representing a list of Items.
- */
-public class HabitsFragment extends Fragment {
+import org.jetbrains.annotations.NotNull;
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public HabitsFragment() {
-    }
+public class HabitsFragment extends Fragment implements ViewInits {
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static HabitsFragment newInstance(int columnCount) {
-        HabitsFragment fragment = new HabitsFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private HabitViewModel viewModel;
+    private List<Habit> habits;
+    private HabitRecyclerViewAdapter adapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+        viewModel = new ViewModelProvider(requireActivity()).get(HabitViewModel.class);
     }
 
     @Override
@@ -56,17 +44,32 @@ public class HabitsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_habits, container, false);
 
+        habits = new ArrayList<>();
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new HabitRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            adapter = new HabitRecyclerViewAdapter(habits);
+            recyclerView.setAdapter(adapter);
         }
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        initViewModelObservables();
+    }
+
+    @Override
+    public void initOnClickListeners() {
+    }
+
+    @Override
+    public void initViewModelObservables() {
+        viewModel.itemsLD.observe(getViewLifecycleOwner(), items -> adapter.update(items));
     }
 }

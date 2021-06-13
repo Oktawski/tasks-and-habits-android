@@ -1,27 +1,29 @@
 package com.example.tah.ui.habit;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.tah.R;
-import com.example.tah.ui.main.placeholder.DummyContent.DummyItem;
+import com.example.tah.models.Habit;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class HabitRecyclerViewAdapter extends RecyclerView.Adapter<HabitRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Habit> habits;
 
-    public HabitRecyclerViewAdapter(List<DummyItem> items) {
-        mValues = items;
+    public HabitRecyclerViewAdapter(List<Habit> items) {
+        habits = items;
+    }
+
+    public void update(List<Habit> habits){
+        this.habits.clear();
+        this.habits.addAll(habits);
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -33,30 +35,38 @@ public class HabitRecyclerViewAdapter extends RecyclerView.Adapter<HabitRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-
+        holder.bind(habits.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return habits.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        final View mView;
+        final TextView name;
+        final TextView description;
+        final TextView time;
+
+
+        public Habit habit;
+
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.description);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            name = view.findViewById(R.id.item_name);
+            description = view.findViewById(R.id.description);
+            time = view.findViewById(R.id.time);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+        private void bind(Habit habit){
+            this.habit = habit;
+
+            name.setText(habit.getName());
+            description.setText(habit.getDescription());
+            time.setText(String.valueOf(habit.getSessionLength()));
         }
     }
 }

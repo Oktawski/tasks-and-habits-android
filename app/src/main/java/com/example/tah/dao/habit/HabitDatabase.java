@@ -11,7 +11,7 @@ import com.example.tah.models.Habit;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Habit.class}, version = 1, exportSchema = false )
+@Database(entities = {Habit.class}, version = 3, exportSchema = false )
 public abstract class HabitDatabase extends RoomDatabase {
 
     public abstract HabitDao habitDao();
@@ -26,7 +26,8 @@ public abstract class HabitDatabase extends RoomDatabase {
             synchronized(HabitDatabase.class){
                 if(INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                        HabitDatabase.class, "word_database")
+                        HabitDatabase.class, "habit_database")
+                            .fallbackToDestructiveMigration()
                         .build();
                 }
             }

@@ -29,7 +29,7 @@ public class SectionsPagerAdapter extends FragmentStateAdapter {
             case 0:
                 return TasksFragment.newInstance(1);
             case 1:
-                return HabitsFragment.newInstance(1);
+                return new HabitsFragment();
             default:
                 return new TodosFragment();
         }

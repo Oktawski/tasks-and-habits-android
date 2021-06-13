@@ -5,6 +5,7 @@
     <string name="tab_todos">Todos</string>
 
     <string name="placeholder">PLACEHOLDER</string>
+    <string name="time_placeholder">--:--:-- / --:--:--</string>
 
     <string name="add">Add</string>
     <string name="delete">Delete</string>

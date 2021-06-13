@@ -6,16 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.models.Habit
+import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInits
+import com.example.tah.viewModels.HabitViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-class HabitAddFragment : Fragment(), ViewInits, ViewHelper {
+class HabitAddFragment : Fragment(R.layout.add_habit_fragment), ViewInits, ViewHelper {
 
+    private lateinit var viewModel: HabitViewModel
     private lateinit var name: TextInputEditText
     private lateinit var description: TextInputEditText
     private lateinit var hoursInput: TextInputLayout
@@ -24,6 +28,12 @@ class HabitAddFragment : Fragment(), ViewInits, ViewHelper {
 
     private val hours = Array(10){it}
     private val minutes = Array(60){it}
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProvider(requireActivity()).get(HabitViewModel::class.java)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -35,10 +45,15 @@ class HabitAddFragment : Fragment(), ViewInits, ViewHelper {
         minutesInput = view.findViewById(R.id.minutes_layout)
         fabAdd = view.findViewById(R.id.fab_add)
 
-        initSpinnerAdapters()
-        initOnClickListeners()
-
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initOnClickListeners()
+        initViewModelObservables()
+        initSpinnerAdapters()
     }
 
     override fun initOnClickListeners(){
@@ -60,18 +75,18 @@ class HabitAddFragment : Fragment(), ViewInits, ViewHelper {
                     Toast.LENGTH_SHORT
                 ).show()
 
-                else Toast.makeText(
-                    requireActivity(),
-                    "${habit.name}, ${habit.description}, ${habit.sessionLength}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                else viewModel.add(habit)
             }
         }
 
     }
 
     override fun initViewModelObservables() {
-
+        viewModel.state.observe(viewLifecycleOwner){
+            when(it.status){
+                State.Status.ADDED -> requireActivity().finish()
+            }
+        }
     }
 
     private fun initSpinnerAdapters(){
