@@ -113,7 +113,7 @@ class HabitAddFragment : Fragment(R.layout.add_habit_fragment), ViewInits, ViewH
         val seconds : Long = minutes % 60
         minutes  = (minutes - seconds)/60
 
-        return mapOf<String,Long>("Hours" to hours, "Minutes" to minutes, "Seconds" to seconds)
+        return mapOf("Hours" to hours, "Minutes" to minutes, "Seconds" to seconds)
 
     }
 }
