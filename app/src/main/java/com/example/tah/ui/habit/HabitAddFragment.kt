@@ -106,15 +106,13 @@ class HabitAddFragment : Fragment(R.layout.add_habit_fragment), ViewInits, ViewH
 
     fun getTime (secondsData : Long): Map<String,Long> {
 
-        var seconds : Long = secondsData % 3600
-        var hours : Long = (secondsData - seconds)/3600
+        var minutes : Long = secondsData % 3600
+        val hours : Long = (secondsData - minutes)/3600
 
-        seconds %= 60
-        var minutes : Long = (secondsData - seconds - hours)/60
+        val seconds : Long = minutes % 60
+        minutes  = (minutes - seconds)/60
 
-        val time = mapOf<String,Long>("Hours" to hours, "Minutes" to minutes, "Seconds" to seconds)
-
-        return time
+        return mapOf<String,Long>("Hours" to hours, "Minutes" to minutes, "Seconds" to seconds)
 
     }
 }
