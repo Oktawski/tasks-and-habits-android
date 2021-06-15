@@ -40,7 +40,7 @@ class HabitRepository(application: Application) {
                         {state.value = State.error("Error")}))
     }
 
-    fun getById(id: Int?): Single<Habit> {
+    fun getById(id: Long?): Single<Habit> {
         return habitDao.getById(id)
     }
 

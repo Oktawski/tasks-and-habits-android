@@ -18,7 +18,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-class HabitAddFragment : Fragment(R.layout.add_habit_fragment), ViewInits, ViewHelper, ViewHabitTime {
+class HabitAddFragment
+    : Fragment(R.layout.add_habit_fragment), ViewInits, ViewHelper {
 
     private lateinit var viewModel: HabitViewModel
     private lateinit var name: TextInputEditText
@@ -103,17 +104,5 @@ class HabitAddFragment : Fragment(R.layout.add_habit_fragment), ViewInits, ViewH
         ).also { adapter ->
             (layout.editText as AutoCompleteTextView).setAdapter(adapter)
         }
-    }
-
-   override fun getTime (secondsData : Long): Map<String,Long> {
-
-        var minutes : Long = secondsData % 3600
-        val hours : Long = (secondsData - minutes)/3600
-
-        val seconds : Long = minutes % 60
-        minutes  = (minutes - seconds)/60
-
-        return mapOf("Hours" to hours, "Minutes" to minutes, "Seconds" to seconds)
-
     }
 }

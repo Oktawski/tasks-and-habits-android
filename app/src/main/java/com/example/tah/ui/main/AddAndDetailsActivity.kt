@@ -6,12 +6,12 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tah.R
 import com.example.tah.models.Habit
-import com.example.tah.utilities.ViewInits
 import com.example.tah.models.Task
 import com.example.tah.ui.habit.HabitAddFragment
-import com.example.tah.ui.main.placeholder.PlaceholderFragment
+import com.example.tah.ui.habit.HabitDetailsFragment
 import com.example.tah.ui.task.TaskAddFragment
 import com.example.tah.ui.task.TaskDetailsFragment
+import com.example.tah.utilities.ViewInits
 
 class AddAndDetailsActivity: AppCompatActivity(), ViewInits {
 
@@ -32,8 +32,9 @@ class AddAndDetailsActivity: AppCompatActivity(), ViewInits {
                 TaskDetailsFragment.newInstance(name, description)
             }
             Habit.getAddView() -> HabitAddFragment()
-            //Habit.getDetailsView() -> HabitDetailsFragment()  // TODO implement HabitDetailsFragment
-            else -> PlaceholderFragment()
+            Habit.getDetailsView() ->
+                HabitDetailsFragment.newInstance(intent.getLongExtra("habitId", -1))
+            else -> HabitAddFragment()
         }
 
         supportFragmentManager.beginTransaction()

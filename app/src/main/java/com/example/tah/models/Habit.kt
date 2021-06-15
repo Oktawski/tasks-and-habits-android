@@ -38,7 +38,7 @@ data class Habit(
         }
 
         override fun getDetailsView(): Int {
-            return R.layout.fragment_habits
+            return R.layout.details_habit
         }
 
         override fun getItemView(): Int {

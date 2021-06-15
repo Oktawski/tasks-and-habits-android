@@ -1,5 +1,7 @@
 package com.example.tah.ui.habit;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +11,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tah.R;
 import com.example.tah.models.Habit;
+import com.example.tah.ui.main.AddAndDetailsActivity;
+import com.example.tah.utilities.ViewHabitTime;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
-public class HabitRecyclerViewAdapter extends RecyclerView.Adapter<HabitRecyclerViewAdapter.ViewHolder> {
+public class HabitRecyclerViewAdapter
+        extends RecyclerView.Adapter<HabitRecyclerViewAdapter.ViewHolder>
+        implements ViewHabitTime{
 
     private final List<Habit> habits;
+    private final Context context;
 
-    public HabitRecyclerViewAdapter(List<Habit> items) {
+    public HabitRecyclerViewAdapter(Context context, List<Habit> items) {
+        this.context = context;
         habits = items;
     }
 
@@ -64,9 +74,28 @@ public class HabitRecyclerViewAdapter extends RecyclerView.Adapter<HabitRecycler
         private void bind(Habit habit){
             this.habit = habit;
 
+            Map<String, String> timeMap = getTimeStrings(habit.getSessionLength());
+
+            String timeText = String.format(Locale.ENGLISH,
+                    "Time left: %s:%s:%s",
+                    timeMap.get("Hours"),
+                    timeMap.get("Minutes"),
+                    timeMap.get("Seconds"));
+
             name.setText(habit.getName());
             description.setText(habit.getDescription());
-            time.setText(String.valueOf(habit.getSessionLength()));
+            time.setText(timeText);
+
+            setOnClickListeners();
+        }
+
+        private void setOnClickListeners(){
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, AddAndDetailsActivity.class);
+                intent.putExtra("fragmentId", Habit.Companion.getDetailsView());
+                intent.putExtra("habitId", habit.getId());
+                context.startActivity(intent);
+            });
         }
     }
 }

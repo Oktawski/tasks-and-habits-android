@@ -51,7 +51,7 @@ public class HabitsFragment extends Fragment implements ViewInits {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            adapter = new HabitRecyclerViewAdapter(habits);
+            adapter = new HabitRecyclerViewAdapter(getContext(), habits);
             recyclerView.setAdapter(adapter);
         }
         return view;
