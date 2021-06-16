@@ -16,7 +16,7 @@
         <RelativeLayout
             android:id="@+id/parentRelative"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_layout"
@@ -51,6 +51,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
+                android:id="@+id/time_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/description_layout"
@@ -88,21 +89,74 @@
                         android:inputType="none"
                         android:padding="16dp"/>
                 </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_start"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_margin="@dimen/fab_margin"
+                android:layout_below="@id/time_layout"
+                android:layout_centerHorizontal="true"/>
+
+            <LinearLayout
+                android:id="@+id/delete_edit_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/fab_start"
+                android:layout_marginTop="40dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/delete_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delete"
+                    android:layout_marginRight="@dimen/text_margin"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/edit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cancel_save_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/fab_start"
+                android:layout_marginTop="40dp"
+                android:visibility="gone">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:layout_marginRight="@dimen/text_margin"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/save_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save"/>
             </LinearLayout>
         </RelativeLayout>
 
     </ScrollView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add"
-        android:layout_width="match_parent"
+    
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchorGravity="end|bottom"
-        app:layout_anchor="@id/scrollView"
-        android:src="@drawable/ic_add_24px"/>
+        android:text="@string/start"
+        android:textSize="16dp"
+        app:layout_anchor="@id/fab_start"
+        android:textColor="@color/white"
+        app:layout_anchorGravity="center"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
