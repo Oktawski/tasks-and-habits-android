@@ -86,7 +86,10 @@ class HabitAddFragment
     override fun initViewModelObservables() {
         viewModel.state.observe(viewLifecycleOwner){
             when(it.status){
-                State.Status.ADDED -> requireActivity().finish()
+                State.Status.ADDED -> {
+                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
+                    requireActivity().finish()
+                }
             }
         }
     }

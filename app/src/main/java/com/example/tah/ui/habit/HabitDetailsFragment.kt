@@ -1,6 +1,8 @@
 package com.example.tah.ui.habit
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.models.Habit
+import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHabitTime
 import com.example.tah.utilities.ViewInits
 import com.example.tah.viewModels.HabitViewModel
@@ -19,6 +22,7 @@ import com.google.android.material.textfield.TextInputLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 class HabitDetailsFragment: Fragment(R.layout.details_habit), ViewInits, ViewHabitTime {
 
@@ -34,11 +38,16 @@ class HabitDetailsFragment: Fragment(R.layout.details_habit), ViewInits, ViewHab
     private lateinit var editButton: MaterialButton
     private lateinit var cancelButton: MaterialButton
     private lateinit var saveButton: MaterialButton
+    private lateinit var fabText: TextView
+
+    private lateinit var mainHandler: Handler
 
     private var habitId: Long? = -1L
 
     private val hours = Array(10){it}
     private val minutes = Array(60){it}
+
+    private var sessionLength = 0L
 
     companion object{
         fun newInstance(id: Long): HabitDetailsFragment {
@@ -56,6 +65,8 @@ class HabitDetailsFragment: Fragment(R.layout.details_habit), ViewInits, ViewHab
         viewModel = ViewModelProvider(requireActivity()).get(HabitViewModel::class.java)
 
         habitId = arguments?.getLong("habitId")
+
+        mainHandler = Handler(Looper.getMainLooper())
     }
 
     override fun onCreateView(
@@ -75,7 +86,7 @@ class HabitDetailsFragment: Fragment(R.layout.details_habit), ViewInits, ViewHab
         editButton = view.findViewById(R.id.edit_button)
         cancelButton = view.findViewById(R.id.cancel_button)
         saveButton = view.findViewById(R.id.save_button)
-
+        fabText = view.findViewById(R.id.fab_text)
 
         return view
     }
@@ -86,21 +97,27 @@ class HabitDetailsFragment: Fragment(R.layout.details_habit), ViewInits, ViewHab
         getHabit()
         initSpinnerAdapters()
         initOnClickListeners()
-
-        // TODO add edit button to enable editing, default should be uneditable
+        initViewModelObservables()
     }
 
     override fun onResume() {
         super.onResume()
-        deleteEditLayout.visibility = View.VISIBLE
-        cancelSaveLayout.visibility = View.GONE
+        setNotEditableView()
     }
 
     private fun getHabit(){
         viewModel.getById(habitId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { habit -> inflateViews(habit) }
+            .subscribe(
+                {
+                    inflateViews(it)
+                    sessionLength = it.sessionLength
+                },
+                {
+                    Toast.makeText(requireActivity(), "Habit not found", Toast.LENGTH_SHORT).show()
+                    requireActivity().finish()
+                })
 
     }
 
@@ -113,16 +130,115 @@ class HabitDetailsFragment: Fragment(R.layout.details_habit), ViewInits, ViewHab
     }
 
     override fun initOnClickListeners() {
-        editButton.setOnClickListener { setEditableView() }
-        cancelButton.setOnClickListener { setNotEditableView() }
+        editButton.setOnClickListener {
+            stop()
+            setEditableView()
+        }
+
+        cancelButton.setOnClickListener {
+            stop()
+            setNotEditableView()
+        }
+
+        deleteButton.setOnClickListener {
+            stop()
+            viewModel.getById(habitId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { habit -> viewModel.delete(habit) }
+        }
+
+        saveButton.setOnClickListener {
+            stop()
+            val hours = hoursInput.editText?.text.toString().toIntOrNull() ?: 0
+            val minutes = minutesInput.editText?.text.toString().toIntOrNull() ?: 0
+            val sessionLengthInSec = (hours * 60 * 60 + minutes * 60).toLong()
+
+            viewModel.getById(habitId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        it.name = name.text.toString()
+                        it.description = description.text.toString()
+                        it.sessionLength = sessionLengthInSec
+                        viewModel.update(it)
+                    },
+                    {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Could not update habit",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    })
+        }
+
+        startFab.setOnClickListener{
+            viewModel.startStop()
+        }
 
     }
 
 
     override fun initViewModelObservables() {
-        TODO("Not yet implemented")
+        viewModel.state.observe(viewLifecycleOwner){
+            stop()
+
+            if(it.status == State.Status.REMOVED) {
+                Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
+                requireActivity().finish()
+            }
+            else if(it.status == State.Status.UPDATED) {
+                setNotEditableView()
+                viewModel.getById(habitId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe{ habit -> inflateViews(habit)
+                        this.sessionLength = habit.sessionLength}
+
+            }
+        }
+
+        viewModel.habitTime.observe(viewLifecycleOwner){
+            sessionLength = it
+        }
+
+        viewModel.isStarted.observe(viewLifecycleOwner){ it ->
+
+            if(it) {
+                val timeMap = getTimeStrings(sessionLength)
+                val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
+                fabText.text = timeText
+                mainHandler.postDelayed(decreaseTime, 1000)
+            }
+            else{
+                mainHandler.removeCallbacks(decreaseTime)
+                viewModel.getById(habitId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        {
+                            it.sessionLength = this.sessionLength
+                            viewModel.update(it)
+                            inflateViews(it)},
+                        {})
+            }
+        }
     }
 
+    private val decreaseTime = object: Runnable{
+            override fun run() {
+                val timeMap = getTimeStrings(sessionLength)
+                val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
+                fabText.text = timeText
+                sessionLength--
+                mainHandler.postDelayed(this, 1000)
+            }
+    }
+
+    private fun stop(){
+        mainHandler.removeCallbacks(decreaseTime)
+    }
 
     private fun initSpinnerAdapters(){
         createSpinnerAdapter(minutesInput, minutes)
@@ -142,10 +258,25 @@ class HabitDetailsFragment: Fragment(R.layout.details_habit), ViewInits, ViewHab
     private fun setEditableView(){
         this.deleteEditLayout.visibility = View.GONE
         this.cancelSaveLayout.visibility = View.VISIBLE
+        enableEditText(name, description, hoursInput.editText!!, minutesInput.editText!!)
+        initSpinnerAdapters()
     }
 
     private fun setNotEditableView(){
         this.deleteEditLayout.visibility= View.VISIBLE
         this.cancelSaveLayout.visibility = View.GONE
+        disableEditText(name, description, hoursInput.editText!!, minutesInput.editText!!)
+    }
+
+    private fun disableEditText(vararg et: EditText){
+        for(e in et){
+            e.isEnabled = false
+        }
+    }
+
+    private fun enableEditText(vararg et: EditText){
+        for(e in et){
+            e.isEnabled = true
+        }
     }
 }
