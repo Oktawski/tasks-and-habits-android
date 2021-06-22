@@ -10,8 +10,8 @@ abstract class BaseViewModel<T>(application: Application)
     : AndroidViewModel(application) {
 
     lateinit var itemsLD: LiveData<List<T>>
-    var checkedItemsLD: MutableLiveData<List<Int>> = MutableLiveData()
     lateinit var state: MutableLiveData<State>
+    var checkedItemsLD: MutableLiveData<List<Int>> = MutableLiveData(emptyList())
 
 
     fun addToCheckedItems(idList: List<Int>){

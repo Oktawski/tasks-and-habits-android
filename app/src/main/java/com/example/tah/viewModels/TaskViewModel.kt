@@ -5,19 +5,28 @@ import android.view.View
 import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.tah.dao.task.TaskRepository
+import com.example.tah.dao.task.TaskDao
+import com.example.tah.dao.task.TaskDatabase
 import com.example.tah.models.Task
+import com.example.tah.utilities.State
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class TaskViewModel(@NonNull application: Application)
     : BaseViewModel<Task>(application)
 {
-    private var repository: TaskRepository = TaskRepository(application)
+    private var taskDao: TaskDao
     private val checkBoxVisibility: MutableLiveData<Int> = MutableLiveData(View.GONE)
 
+    private val disposable = CompositeDisposable()
+
     init {
-        itemsLD = repository.getTasksLD()
-        state = repository.getState()
+        val database: TaskDatabase = TaskDatabase.getDatabase(application)
+        taskDao = database.taskDao()
+        itemsLD = taskDao.getAll()
+        state = MutableLiveData()
     }
 
     fun setCheckBoxVisibility(visibility: Int){
@@ -29,27 +38,52 @@ class TaskViewModel(@NonNull application: Application)
     }
 
     override fun add(t: Task) {
-        repository.add(t)
+        state.value = State.loading()
+
+        disposable.add(taskDao.insert(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({state.value = State.added("Task added")},
+                {state.value = State.error("Error")}))
     }
 
     fun getById(id: Int?): Single<Task> {
-        return repository.getById(id)
+        return taskDao.getById(id)
     }
 
     override fun delete(t: Task) {
-        repository.delete(t)
+        disposable.add(taskDao.delete(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({state.value = State.removed("Task removed")},
+                {state.value = State.error("Error")}))
     }
 
     override fun deleteAll() {
-        repository.deleteAll()
+        disposable.add(taskDao.deleteAll()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe())
     }
 
     override fun deleteSelected() {
-        repository.deleteSelected(checkedItemsLD.value!!)
+        disposable.add(taskDao.deleteSelected(checkedItemsLD.value!!)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    if (checkedItemsLD.value!!.size > 1) state.value = State.removed("Tasks removed")
+                    else state.value = State.removed("Task removed")
+                },
+                {state.value = State.error("Error")}))
     }
 
     override fun update(t: Task) {
-        repository.update(t)
+        disposable.add(taskDao.update(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({state.value = State.updated("Task updated")},
+                {state.value = State.error("Task not updated")}))
     }
 
 }

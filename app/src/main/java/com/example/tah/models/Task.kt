@@ -3,6 +3,7 @@ package com.example.tah.models
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.tah.R
 
@@ -18,6 +19,7 @@ data class Task(
 
         @ColumnInfo(name = "is_complete") val isComplete: Boolean = false
 ){
+        @Ignore
         constructor(name: String, description: String?, isComplete: Boolean)
         :this(null, name, description, isComplete)
 
