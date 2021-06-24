@@ -1,27 +1,32 @@
 package com.example.tah.viewModels
 
 import android.app.Application
-import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.MutableLiveData
-import com.example.tah.dao.habit.HabitRepository
+import com.example.tah.dao.habit.HabitDao
+import com.example.tah.dao.habit.HabitDatabase
 import com.example.tah.models.Habit
-import io.reactivex.Scheduler
+import com.example.tah.utilities.State
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class HabitViewModel(@NonNull application: Application):
     BaseViewModel<Habit>(application)
 {
-    private val repository: HabitRepository = HabitRepository(application)
+    private var habitDao: HabitDao
 
     val habitTime = MutableLiveData<Long>()
     val isStarted = MutableLiveData(false)
 
+    private val disposable = CompositeDisposable()
+
     init {
-        itemsLD = repository.getHabitsLD()
-        state = repository.getState()
+        val database = HabitDatabase.getDatabase(application)
+        habitDao = database.habitDao()
+        itemsLD = habitDao.getAll()
+        state = MutableLiveData()
     }
 
     fun startStop(){
@@ -32,35 +37,52 @@ class HabitViewModel(@NonNull application: Application):
         isStarted.value = false
     }
 
-    fun getHabitLD(id: Long){
-        repository.getById(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({habitTime.value = it.sessionLength},{})
-    }
-
     fun getById(id: Long?): Single<Habit> {
-        return repository.getById(id)
+        return habitDao.getById(id)
     }
 
     override fun add(t: Habit) {
-        repository.add(t)
+        state.value = State.loading()
+
+        disposable.add(habitDao.insert(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({state.value = State.added("Habit added")},
+                {state.value = State.error("Error")}))
     }
 
     override fun delete(t: Habit) {
-        repository.delete(t)
+        state.value = State.loading()
+
+        disposable.add(habitDao.delete(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({state.value = State.removed("Habit removed")},
+                {state.value = State.error("Error")}))
     }
 
     override fun deleteAll() {
-        repository.deleteAll()
+        disposable.add(habitDao.deleteAll()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ state.value = State.removed("All habits removed") },
+                { state.value = State.error("Error") }))
     }
 
     override fun deleteSelected() {
-        TODO("Not yet implemented")
+        disposable.add(habitDao.deleteSelected(checkedItemsLD.value!!)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({state.value = State.removed("Habits removed")},
+                {state.value = State.error("Error")}))
     }
 
     override fun update(t: Habit) {
-        repository.update(t)
+        disposable.add(habitDao.update(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ state.value = State.updated("Habit updated") },
+                { state.value = State.error("Error") }))
     }
 
 

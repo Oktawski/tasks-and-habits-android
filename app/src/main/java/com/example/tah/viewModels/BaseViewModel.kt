@@ -11,7 +11,7 @@ abstract class BaseViewModel<T>(application: Application)
 
     lateinit var itemsLD: LiveData<List<T>>
     lateinit var state: MutableLiveData<State>
-    var checkedItemsLD: MutableLiveData<List<Int>> = MutableLiveData(emptyList())
+    val checkedItemsLD: MutableLiveData<List<Int>> = MutableLiveData(emptyList())
 
 
     fun addToCheckedItems(idList: List<Int>){

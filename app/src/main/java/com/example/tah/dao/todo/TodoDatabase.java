@@ -15,7 +15,7 @@ public abstract class TodoDatabase extends RoomDatabase {
 
     private static volatile TodoDatabase INSTANCE;
 
-    static TodoDatabase getInstance(final Context context){
+    public static TodoDatabase getInstance(final Context context){
             if(INSTANCE == null){
                 synchronized (TodoDatabase.class){
                     if(INSTANCE == null){

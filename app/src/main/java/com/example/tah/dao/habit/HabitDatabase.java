@@ -17,11 +17,8 @@ public abstract class HabitDatabase extends RoomDatabase {
     public abstract HabitDao habitDao();
 
     private static volatile HabitDatabase INSTANCE;
-    private static final int NUMBER_OF_THREADS = 6;
-    static final ExecutorService databaseWriteExecutor =
-            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    static HabitDatabase getDatabase (final Context context){
+    public static HabitDatabase getDatabase (final Context context){
         if(INSTANCE == null){
             synchronized(HabitDatabase.class){
                 if(INSTANCE == null){
