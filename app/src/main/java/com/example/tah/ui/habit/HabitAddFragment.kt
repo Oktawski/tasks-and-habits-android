@@ -11,15 +11,14 @@ import com.example.tah.R
 import com.example.tah.models.Habit
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
-import com.example.tah.utilities.ViewInits
-import com.example.tah.utilities.ViewHabitTime
+import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 class HabitAddFragment
-    : Fragment(R.layout.add_habit_fragment), ViewInits, ViewHelper {
+    : Fragment(R.layout.add_habit_fragment), ViewInitializable, ViewHelper {
 
     private lateinit var viewModel: HabitViewModel
     private lateinit var name: TextInputEditText

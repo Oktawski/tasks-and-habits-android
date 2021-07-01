@@ -1,6 +1,6 @@
 package com.example.tah.utilities
 
-interface ViewInits {
+interface ViewInitializable {
 
     fun initOnClickListeners()
     fun initViewModelObservables()

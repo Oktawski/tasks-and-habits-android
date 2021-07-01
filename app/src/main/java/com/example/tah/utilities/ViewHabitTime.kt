@@ -17,9 +17,9 @@ interface ViewHabitTime {
         //return mapOf("Hours" to hours, "Minutes" to minutes, "Seconds" to seconds)
 
         return HashMap<String, Long>(3).also { hashMap ->
-            hashMap.put("Hours", hours)
-            hashMap.put("Minutes", minutes)
-            hashMap.put("Seconds", seconds)
+            hashMap["Hours"] = hours
+            hashMap["Minutes"] = minutes
+            hashMap["Seconds"] = seconds
         }
     }
 
@@ -32,14 +32,13 @@ interface ViewHabitTime {
         val seconds = convertToString(timeMap["Seconds"]!!)
 
         return HashMap<String, String>(3).also { hashMap ->
-            hashMap.put("Hours", hours)
-            hashMap.put("Minutes", minutes)
-            hashMap.put("Seconds", seconds)
+            hashMap["Hours"] = hours
+            hashMap["Minutes"] = minutes
+            hashMap["Seconds"] = seconds
         }
     }
 
     private fun convertToString(time: Long): String{
         return if(time < 10) "0$time" else time.toString()
     }
-
 }

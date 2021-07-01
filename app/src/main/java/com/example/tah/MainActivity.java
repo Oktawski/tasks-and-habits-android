@@ -20,7 +20,7 @@ import com.example.tah.models.Habit;
 import com.example.tah.models.Task;
 import com.example.tah.ui.main.AddAndDetailsActivity;
 import com.example.tah.ui.main.SectionsPagerAdapter;
-import com.example.tah.utilities.ViewInits;
+import com.example.tah.utilities.ViewInitializable;
 import com.example.tah.viewModels.TaskViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -29,7 +29,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.Calendar;
 import java.util.Collections;
 
-public class MainActivity extends AppCompatActivity implements ViewInits {
+public class MainActivity extends AppCompatActivity implements ViewInitializable {
     
     private TaskViewModel taskViewModel;
     private ImageView deleteIcon;
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements ViewInits {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
+        //calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 10);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 1);

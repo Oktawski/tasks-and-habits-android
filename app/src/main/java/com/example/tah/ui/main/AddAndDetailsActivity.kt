@@ -11,9 +11,9 @@ import com.example.tah.ui.habit.HabitAddFragment
 import com.example.tah.ui.habit.HabitDetailsFragment
 import com.example.tah.ui.task.TaskAddFragment
 import com.example.tah.ui.task.TaskDetailsFragment
-import com.example.tah.utilities.ViewInits
+import com.example.tah.utilities.ViewInitializable
 
-class AddAndDetailsActivity: AppCompatActivity(), ViewInits {
+class AddAndDetailsActivity: AppCompatActivity(), ViewInitializable {
 
     lateinit var backArrow: ImageButton
 

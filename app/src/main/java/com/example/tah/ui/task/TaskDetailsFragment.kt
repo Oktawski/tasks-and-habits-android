@@ -10,13 +10,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
-import com.example.tah.utilities.ViewInits
+import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.utilities.State
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInits {
+class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
 
     private lateinit var name: EditText
     private lateinit var description: EditText

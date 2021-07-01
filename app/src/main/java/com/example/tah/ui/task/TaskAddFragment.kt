@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
-import com.example.tah.utilities.ViewInits
+import com.example.tah.utilities.ViewInitializable
 import com.example.tah.models.Task
 import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.utilities.State
@@ -16,7 +16,7 @@ import com.example.tah.utilities.ViewHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 
-class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInits, ViewHelper {
+class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInitializable, ViewHelper {
 
     private lateinit var viewModel: TaskViewModel
     private lateinit var name: TextInputEditText

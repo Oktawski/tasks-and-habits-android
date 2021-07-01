@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,16 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tah.R;
 import com.example.tah.models.Habit;
-import com.example.tah.utilities.ViewInits;
+import com.example.tah.utilities.ViewInitializable;
 import com.example.tah.viewModels.HabitViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class HabitsFragment extends Fragment implements ViewInits {
+public class HabitsFragment extends Fragment implements ViewInitializable {
 
     private HabitViewModel viewModel;
     private List<Habit> habits;

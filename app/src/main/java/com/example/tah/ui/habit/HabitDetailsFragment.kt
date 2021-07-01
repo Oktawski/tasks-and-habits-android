@@ -3,7 +3,6 @@ package com.example.tah.ui.habit
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,17 +13,15 @@ import com.example.tah.R
 import com.example.tah.models.Habit
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHabitTime
-import com.example.tah.utilities.ViewInits
+import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
-class HabitDetailsFragment: Fragment(R.layout.details_habit), ViewInits, ViewHabitTime {
+class HabitDetailsFragment: Fragment(R.layout.details_habit), ViewInitializable, ViewHabitTime {
 
     private lateinit var viewModel: HabitViewModel
     private lateinit var name: EditText

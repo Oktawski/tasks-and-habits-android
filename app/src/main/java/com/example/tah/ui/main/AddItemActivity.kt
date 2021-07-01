@@ -6,13 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
-import com.example.tah.utilities.ViewInits
+import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.ui.habit.HabitsFragment
 import com.example.tah.ui.task.TaskAddFragment
 import com.example.tah.ui.task.TasksFragment
 
-class AddItemActivity: AppCompatActivity(), ViewInits {
+class AddItemActivity: AppCompatActivity(), ViewInitializable {
 
     lateinit var taskViewModel: TaskViewModel
     lateinit var backArrow: ImageButton
