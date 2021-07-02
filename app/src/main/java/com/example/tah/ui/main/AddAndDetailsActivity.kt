@@ -2,9 +2,9 @@ package com.example.tah.ui.main
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tah.R
+import com.example.tah.databinding.ActivityAddAndDetailsBinding
 import com.example.tah.models.Habit
 import com.example.tah.models.Task
 import com.example.tah.ui.habit.HabitAddFragment
@@ -13,15 +13,18 @@ import com.example.tah.ui.task.TaskAddFragment
 import com.example.tah.ui.task.TaskDetailsFragment
 import com.example.tah.utilities.ViewInitializable
 
-class AddAndDetailsActivity: AppCompatActivity(), ViewInitializable {
+class AddAndDetailsActivity :
+    AppCompatActivity(),
+    ViewInitializable {
 
-    lateinit var backArrow: ImageButton
+    private var _binding: ActivityAddAndDetailsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_item)
+        setContentView(R.layout.activity_add_and_details)
+        _binding = ActivityAddAndDetailsBinding.inflate(layoutInflater)
 
-        backArrow = findViewById(R.id.back_arrow)
 
         val fragment = when(intent.getIntExtra("fragmentId", R.layout.fragment_habits)){
             Task.getAddView() -> TaskAddFragment()
@@ -44,8 +47,13 @@ class AddAndDetailsActivity: AppCompatActivity(), ViewInitializable {
         initOnClickListeners()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     override fun initOnClickListeners() {
-        backArrow.setOnClickListener{
+        binding.backArrow.setOnClickListener{
             finish()
         }
     }

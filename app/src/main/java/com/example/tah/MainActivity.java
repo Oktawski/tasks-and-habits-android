@@ -155,11 +155,11 @@ public class MainActivity extends AppCompatActivity implements ViewInitializable
                     layoutRes = Task.Companion.getAddView();
                     break;
                 case 1:
-                    fabAdd.show();
-                    layoutRes = Habit.Companion.getAddView();
+                    fabAdd.hide();
                     break;
                 case 2:
-                    fabAdd.hide();
+                    fabAdd.show();
+                    layoutRes = Habit.Companion.getAddView();
                     break;
             }
             if(layoutRes != null) intent.putExtra("fragmentId", layoutRes);

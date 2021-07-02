@@ -7,9 +7,9 @@ import com.example.tah.dao.BaseDao
 import com.example.tah.models.Habit
 import io.reactivex.Single
 
-
 @Dao
-interface HabitDao: BaseDao<Habit> {
+interface HabitDao : BaseDao<Habit> {
+
     @Query("SELECT * FROM Habits ORDER BY id ASC")
     fun getAll(): LiveData<List<Habit>>
 

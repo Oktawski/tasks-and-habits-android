@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.R
-import com.example.tah.models.Task
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskViewModel
@@ -20,7 +19,6 @@ class TasksFragment:
         ViewInitializable{
 
     private lateinit var viewModel: TaskViewModel
-    private lateinit var tasks: List<Task>
     private lateinit var adapter: TaskRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,12 +30,11 @@ class TasksFragment:
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_tasks, container, false)
-        tasks = emptyList()
 
         if(view is RecyclerView){
             val context = view.context
             view.layoutManager = LinearLayoutManager(context)
-            adapter = TaskRecyclerViewAdapter(tasks, requireActivity(), viewModel)
+            adapter = TaskRecyclerViewAdapter(mutableListOf(), requireActivity(), viewModel)
             view.adapter = adapter
         }
         return view
@@ -46,7 +43,7 @@ class TasksFragment:
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        initViewModelObservables()
     }
 
     override fun initViewModelObservables() {

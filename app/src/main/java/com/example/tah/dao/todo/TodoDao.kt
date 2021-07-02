@@ -9,7 +9,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 
 @Dao
-interface TodoDao: BaseDao<Todo> {
+interface TodoDao : BaseDao<Todo> {
 
     @Query("SELECT * FROM todos ORDER BY id ASC")
     fun getAll(): LiveData<List<Todo>>

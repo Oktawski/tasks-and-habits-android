@@ -16,16 +16,16 @@ public abstract class TodoDatabase extends RoomDatabase {
     private static volatile TodoDatabase INSTANCE;
 
     public static TodoDatabase getInstance(final Context context){
-            if(INSTANCE == null){
-                synchronized (TodoDatabase.class){
-                    if(INSTANCE == null){
-                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                TodoDatabase.class, "todo_database")
-                                .fallbackToDestructiveMigration()
-                                .build();
-                    }
+        if(INSTANCE == null){
+            synchronized (TodoDatabase.class){
+                if(INSTANCE == null){
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            TodoDatabase.class, "todo_database")
+                            .fallbackToDestructiveMigration()
+                            .build();
                 }
             }
-            return INSTANCE;
+        }
+        return INSTANCE;
     }
 }

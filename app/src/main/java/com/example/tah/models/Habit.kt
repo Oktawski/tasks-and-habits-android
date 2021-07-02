@@ -8,21 +8,13 @@ import com.example.tah.R
 
 @Entity(tableName = "Habits")
 data class Habit(
-    @PrimaryKey(autoGenerate = true) val id: Long?,
-
-    @ColumnInfo(name = "name")
-    @NonNull
-    var name: String,
-
-    @ColumnInfo(name = "description") var description: String?,
-
-    @ColumnInfo(name = "timesInWeek") var timesInWeek: Int? = 1,
-
-    @ColumnInfo(name = "timesDone") var timesDone: Int? = 0,
-
+    @PrimaryKey(autoGenerate = true)    val id: Long?,
+    @ColumnInfo(name = "name") @NonNull var name: String,
+    @ColumnInfo(name = "description")   var description: String?,
+    @ColumnInfo(name = "timesInWeek")   var timesInWeek: Int? = 1,
+    @ColumnInfo(name = "timesDone")     var timesDone: Int? = 0,
     @ColumnInfo(name = "sessionLength") var sessionLength: Long,
-
-    @ColumnInfo(name = "isComplete") val isComplete: Boolean = false
+    @ColumnInfo(name = "isComplete")    val isComplete: Boolean = false
 ) {
 
     companion object: ViewType{

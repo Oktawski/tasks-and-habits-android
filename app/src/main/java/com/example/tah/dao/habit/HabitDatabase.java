@@ -8,8 +8,6 @@ import androidx.room.RoomDatabase;
 
 import com.example.tah.models.Habit;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Database(entities = {Habit.class}, version = 3, exportSchema = false )
 public abstract class HabitDatabase extends RoomDatabase {
