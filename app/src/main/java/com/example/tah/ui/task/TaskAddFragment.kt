@@ -6,58 +6,55 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.example.tah.R
+import com.example.tah.databinding.AddTaskFragmentBinding
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.models.Task
+import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
+
 
 class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInitializable, ViewHelper {
 
-    private lateinit var viewModel: TaskViewModel
-    private lateinit var name: TextInputEditText
-    private lateinit var description: TextInputEditText
-    private lateinit var addFab: FloatingActionButton
+    private var _binding: AddTaskFragmentBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: TaskViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        val view: View = inflater.inflate(R.layout.add_task_fragment, container, false)
-        name = view.findViewById(R.id.name)
-        description = view.findViewById(R.id.description)
-        addFab = view.findViewById(R.id.add);
-
-        return view
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = AddTaskFragmentBinding.inflate(inflater, container, false)
+        return inflater.inflate(R.layout.add_task_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (requireActivity() as AddAndDetailsActivity).setTitle("New Task")
         initOnClickListeners()
         initViewModelObservables()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun initOnClickListeners() {
-        addFab.setOnClickListener{
-            val nameText = name.text.toString()
-            val descriptionText = description.text.toString()
+        binding.add.setOnClickListener{
+            val nameText = binding.name.text.toString()
+            val descriptionText = binding.description.text.toString()
 
             if(nameText.isNotEmpty()){
                 viewModel.add(Task(nameText, descriptionText, false))
             }
             else{
-                showErrorMessages(name)
+                showErrorMessages(binding.name)
             }
         }
     }
@@ -77,12 +74,12 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInitializable, 
     }
 
     private fun viewsLoading(){
-        addFab.hide()
+        binding.add.hide()
         // show progressBar
     }
 
     private fun viewsNotLoading(){
-        addFab.show()
+        binding.add.show()
         // hide progressBar
     }
 
