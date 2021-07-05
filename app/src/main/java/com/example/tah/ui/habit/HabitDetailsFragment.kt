@@ -26,26 +26,12 @@ import io.reactivex.schedulers.Schedulers
 class HabitDetailsFragment
 : Fragment(R.layout.details_habit),
     ViewInitializable,
-    ViewHabitTime {
-
+    ViewHabitTime
+{
     private var _binding: DetailsHabitBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HabitViewModel by viewModels()
 
-   /* private lateinit var viewModel: HabitViewModel
-    private lateinit var name: EditText
-    private lateinit var description: EditText
-    private lateinit var hoursInput: TextInputLayout
-    private lateinit var minutesInput: TextInputLayout
-    private lateinit var startFab: FloatingActionButton
-    private lateinit var deleteEditLayout: LinearLayout
-    private lateinit var cancelSaveLayout: LinearLayout
-    private lateinit var deleteButton: MaterialButton
-    private lateinit var editButton: MaterialButton
-    private lateinit var cancelButton: MaterialButton
-    private lateinit var saveButton: MaterialButton
-    private lateinit var fabText: TextView
-*/
     private lateinit var mainHandler: Handler
 
     private var habitId: Long? = -1L
@@ -91,6 +77,11 @@ class HabitDetailsFragment
     override fun onResume() {
         super.onResume()
         setNotEditableView()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stop()
     }
 
     override fun onDestroyView() {

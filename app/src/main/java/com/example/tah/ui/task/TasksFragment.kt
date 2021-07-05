@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.R
@@ -14,17 +14,13 @@ import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskViewModel
 
-class TasksFragment:
-        Fragment(R.layout.fragment_tasks),
-        ViewInitializable{
-
-    private lateinit var viewModel: TaskViewModel
+class TasksFragment
+    : Fragment(R.layout.fragment_tasks),
+    ViewInitializable
+{
+    private val viewModel: TaskViewModel by viewModels()
     private lateinit var adapter: TaskRecyclerViewAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
-    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -34,7 +30,7 @@ class TasksFragment:
         if(view is RecyclerView){
             val context = view.context
             view.layoutManager = LinearLayoutManager(context)
-            adapter = TaskRecyclerViewAdapter(mutableListOf(), requireActivity(), viewModel)
+            adapter = TaskRecyclerViewAdapter(requireActivity(), viewModel, mutableListOf())
             view.adapter = adapter
         }
         return view

@@ -12,11 +12,21 @@ import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.viewModels.TaskViewModel
 
 class TaskRecyclerViewAdapter(
-    private val tasks: MutableList<Task>,
     private val context: Context,
     private val viewModel: TaskViewModel,
+    private val tasks: MutableList<Task>,
     private val checkedTasks: MutableList<Int> = mutableListOf())
-: RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder>(){
+: RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemTaskBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(tasks[position])
+
+    override fun getItemCount(): Int = tasks.size
 
     fun update(tasks: List<Task>){
         this.tasks.clear()
@@ -24,20 +34,7 @@ class TaskRecyclerViewAdapter(
         this.notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemTaskBinding.inflate(inflater, parent, false)
-        return ViewHolder(context, viewModel, binding)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(tasks[position])
-
-    override fun getItemCount(): Int = tasks.size
-
-
     inner class ViewHolder(
-        private val context: Context,
-        private val viewModel: TaskViewModel,
         private val binding: ItemTaskBinding
     ) : RecyclerView.ViewHolder(binding.root){
 
