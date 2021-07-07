@@ -23,14 +23,18 @@
 
                 <TextView
                     android:id="@+id/item_name"
+                    style="@style/HeaderStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:text="@string/placeholder"
-                    android:maxLines="1"
-                    android:layout_margin="20dp"
                     android:layout_gravity="center_vertical"
-                    />
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:maxLines="1"
+                    android:text="@string/placeholder"
+                    android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/description"
@@ -39,8 +43,9 @@
                     android:text="@string/placeholder"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="15dp"
                     android:layout_gravity="bottom"
+                    style="@style/SubheadStyle"
                     android:layout_below="@id/item_name"/>
 
             </RelativeLayout>

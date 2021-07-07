@@ -10,17 +10,18 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Theme.TasksAndHabits.Dark"
+        style="@style/Theme.TasksAndHabits.Light"
         >
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
+            android:fontFamily="@font/lato"
             android:gravity="center"
             android:minHeight="?actionBarSize"
-            android:paddingTop="4dp"
             android:paddingLeft="10dp"
+            android:paddingTop="4dp"
             android:text="@string/app_name"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
 

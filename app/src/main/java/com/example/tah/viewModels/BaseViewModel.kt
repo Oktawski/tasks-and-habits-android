@@ -13,6 +13,11 @@ abstract class BaseViewModel<T>(application: Application)
     lateinit var state: MutableLiveData<State>
     val checkedItemsLD: MutableLiveData<List<Int>> = MutableLiveData(emptyList())
 
+    abstract fun add(t: T)
+    abstract fun delete(t: T)
+    abstract fun deleteAll()
+    abstract fun deleteSelected()
+    abstract fun update(t: T)
 
     fun addToCheckedItems(idList: List<Int>){
         checkedItemsLD.value = idList
@@ -21,10 +26,4 @@ abstract class BaseViewModel<T>(application: Application)
     fun clearCheckedItems(){
         checkedItemsLD.value = emptyList()
     }
-
-    abstract fun add(t: T)
-    abstract fun delete(t: T)
-    abstract fun deleteAll()
-    abstract fun deleteSelected()
-    abstract fun update(t: T)
 }

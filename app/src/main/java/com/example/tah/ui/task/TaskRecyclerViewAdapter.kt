@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.databinding.ItemTaskBinding
 import com.example.tah.models.Task
@@ -15,8 +16,8 @@ class TaskRecyclerViewAdapter(
     private val context: Context,
     private val viewModel: TaskViewModel,
     private val tasks: MutableList<Task>,
-    private val checkedTasks: MutableList<Int> = mutableListOf())
-: RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder>() {
+    private val checkedTasks: MutableList<Int> = mutableListOf()
+) : RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -87,8 +88,10 @@ class TaskRecyclerViewAdapter(
             binding.checkBox.setOnClickListener {
                 if(binding.checkBox.isChecked){
                     checkedTasks.add(task.id!!)
+                    Toast.makeText(context, "Task checked", Toast.LENGTH_SHORT).show()
                 }else{
                     checkedTasks.remove(task.id!!)
+                    Toast.makeText(context, "Task unchecked", Toast.LENGTH_SHORT).show()
                 }
                 viewModel.addToCheckedItems(checkedTasks)
             }
