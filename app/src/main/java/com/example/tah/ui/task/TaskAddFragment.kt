@@ -17,7 +17,10 @@ import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
 
 
-class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInitializable, ViewHelper {
+class TaskAddFragment
+    : Fragment(R.layout.add_task_fragment),
+    ViewInitializable,
+    ViewHelper {
 
     private var _binding: AddTaskFragmentBinding? = null
     private val binding get() = _binding!!
@@ -28,9 +31,9 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInitializable, 
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = AddTaskFragmentBinding.inflate(inflater, container, false)
-        return inflater.inflate(R.layout.add_task_fragment, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,7 +69,7 @@ class TaskAddFragment: Fragment(R.layout.add_task_fragment), ViewInitializable, 
                 State.Status.SUCCESS -> {
                     viewsNotLoading()
                 }
-                State.Status.ADDED -> activity?.finish()
+                State.Status.ADDED -> requireActivity().finish()
                 else -> viewsNotLoading()
             }
             toast(it.message)

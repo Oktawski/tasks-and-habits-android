@@ -17,8 +17,8 @@ import com.example.tah.viewModels.TaskViewModel
 
 class TasksFragment
     : Fragment(R.layout.fragment_tasks),
-    ViewInitializable
-{
+    ViewInitializable {
+
     private lateinit var viewModel: TaskViewModel
     private lateinit var adapter: TaskRecyclerViewAdapter
 
@@ -72,8 +72,4 @@ class TasksFragment
     override fun initOnClickListeners() {
         TODO("Not yet implemented")
     }
-
-
-
-
 }

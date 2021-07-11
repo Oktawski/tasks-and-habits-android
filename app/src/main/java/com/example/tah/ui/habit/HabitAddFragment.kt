@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.databinding.AddHabitFragmentBinding
 import com.example.tah.models.Habit
+import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInitializable
@@ -39,6 +40,7 @@ class HabitAddFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as AddAndDetailsActivity).setTitle("Add Habit")
         initOnClickListeners()
         initViewModelObservables()
         initSpinnerAdapters()
