@@ -42,13 +42,19 @@ class AddAndDetailsActivity :
         }
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.add_fragment_container, fragment)
-                .commit()
+            .replace(R.id.add_fragment_container, fragment)
+            .commit()
 
         initOnClickListeners()
     }
 
-    override fun initOnClickListeners() = backArrow.setOnClickListener { finish() }
+    override fun onBackPressed() {
+        if(supportFragmentManager.backStackEntryCount == 0) finish()
+        else supportFragmentManager.popBackStack()
+
+    }
+
+    override fun initOnClickListeners() = backArrow.setOnClickListener { onBackPressed() }
 
     override fun initViewModelObservables() {
         TODO("Not yet implemented")

@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.databinding.DetailsHabitBinding
+import com.example.tah.databinding.DetailsHabitStartedBinding
 import com.example.tah.models.Habit
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHabitTime
@@ -79,31 +80,18 @@ class HabitDetailsFragment
         setNotEditableView()
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.stop()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun initOnClickListeners() {
         with(binding) {
 
             editButton.setOnClickListener {
-                stop()
                 setEditableView()
             }
 
             cancelButton.setOnClickListener {
-                stop()
                 setNotEditableView()
             }
 
             deleteButton.setOnClickListener {
-                stop()
                 viewModel.getById(habitId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -111,7 +99,6 @@ class HabitDetailsFragment
             }
 
             saveButton.setOnClickListener {
-                stop()
                 val hours = hoursLayout.editText?.text.toString().toIntOrNull() ?: 0
                 val minutes = minutesLayout.editText?.text.toString().toIntOrNull() ?: 0
                 val sessionLengthInSec = (hours * 60 * 60 + minutes * 60).toLong()
@@ -136,15 +123,17 @@ class HabitDetailsFragment
             }
 
             fabStart.setOnClickListener {
-                viewModel.startStop()
+                val fragment = HabitStartedFragment.newInstance(habitId!!)
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.add_fragment_container, fragment, "habitStartedFragment")
+                    .addToBackStack("habitStartedFragment")
+                    .commit()
             }
         }
     }
 
     override fun initViewModelObservables() {
         viewModel.state.observe(viewLifecycleOwner){
-            stop()
-
             if(it.status == State.Status.REMOVED) {
                 Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
                 requireActivity().finish()
@@ -157,31 +146,6 @@ class HabitDetailsFragment
                     .subscribe{ habit -> inflateViews(habit)
                         this.sessionLength = habit.sessionLength}
 
-            }
-        }
-
-        viewModel.habitTime.observe(viewLifecycleOwner){
-            sessionLength = it
-        }
-
-        viewModel.isStarted.observe(viewLifecycleOwner){ it ->
-            if(it) {
-                val timeMap = getTimeStrings(sessionLength)
-                val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
-                binding.fabText.text = timeText
-                mainHandler.postDelayed(decreaseTime, 1000)
-            }
-            else{
-                mainHandler.removeCallbacks(decreaseTime)
-                viewModel.getById(habitId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        {
-                            it.sessionLength = this.sessionLength
-                            viewModel.update(it)
-                            inflateViews(it)},
-                        {})
             }
         }
     }
@@ -202,17 +166,13 @@ class HabitDetailsFragment
     }
 
     private fun inflateViews(it: Habit){
-        with(binding){
+        with (binding) {
             name.setText(it.name)
             description.setText(it.description)
             val timeMap = getTimeStrings(it.sessionLength)
             (hoursLayout.editText as AutoCompleteTextView).setText(timeMap["Hours"])
             (minutesLayout.editText as AutoCompleteTextView).setText(timeMap["Minutes"])
         }
-    }
-
-    private fun stop(){
-        mainHandler.removeCallbacks(decreaseTime)
     }
 
     private fun initSpinnerAdapters(){
@@ -256,16 +216,6 @@ class HabitDetailsFragment
     private fun enableEditText(vararg et: EditText){
         for(e in et){
             e.isEnabled = true
-        }
-    }
-
-    private val decreaseTime = object : Runnable{
-        override fun run() {
-            val timeMap = getTimeStrings(sessionLength)
-            val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
-            binding.fabText.text = timeText
-            sessionLength--
-            mainHandler.postDelayed(this, 1000)
         }
     }
 }

@@ -40,7 +40,7 @@ class HabitAddFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as AddAndDetailsActivity).setTitle("Add Habit")
+        (requireActivity() as AddAndDetailsActivity).setTitle("New Habit")
         initOnClickListeners()
         initViewModelObservables()
         initSpinnerAdapters()
