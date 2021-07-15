@@ -7,6 +7,7 @@ import com.example.tah.dao.BaseDao
 import com.example.tah.models.Habit
 import io.reactivex.Single
 
+
 @Dao
 interface HabitDao : BaseDao<Habit> {
 
@@ -21,4 +22,5 @@ interface HabitDao : BaseDao<Habit> {
 
     @Query( "DELETE FROM habits")
     fun deleteAll(): Single<Int>
+
 }

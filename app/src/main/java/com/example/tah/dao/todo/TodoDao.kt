@@ -8,6 +8,7 @@ import com.example.tah.models.Todo
 import io.reactivex.Completable
 import io.reactivex.Single
 
+
 @Dao
 interface TodoDao : BaseDao<Todo> {
 

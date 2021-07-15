@@ -12,6 +12,7 @@ import com.example.tah.R
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 
+
 class HabitsFragment
     : Fragment(R.layout.fragment_habits),
     ViewInitializable

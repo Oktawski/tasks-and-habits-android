@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
+
 class HabitDetailsFragment
 : Fragment(R.layout.details_habit),
     ViewInitializable,
@@ -72,7 +73,7 @@ class HabitDetailsFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AddAndDetailsActivity).setTitle("Habit details")
-        //binding.cancelSaveLayout.visibility = View.GONE
+        binding.cancelSaveLayout.visibility = View.GONE
         getHabit()
         initSpinnerAdapters()
         initOnClickListeners()

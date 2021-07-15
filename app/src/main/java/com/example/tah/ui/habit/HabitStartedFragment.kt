@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,11 +19,12 @@ import com.example.tah.viewModels.HabitViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
+
 class HabitStartedFragment
     : Fragment(R.layout.details_habit_started),
     ViewHabitTime,
-    ViewInitializable {
-
+    ViewInitializable
+{
     private var _binding: DetailsHabitStartedBinding? = null
     private val binding get() = _binding!!
 
@@ -137,5 +137,4 @@ class HabitStartedFragment
             mainHandler.postDelayed(this, 1000)
         }
     }
-
 }

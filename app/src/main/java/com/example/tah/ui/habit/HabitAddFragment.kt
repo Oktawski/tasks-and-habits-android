@@ -1,13 +1,14 @@
 package com.example.tah.ui.habit
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.databinding.AddHabitFragmentBinding
 import com.example.tah.models.Habit
@@ -16,15 +17,14 @@ import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+
 
 class HabitAddFragment
 : Fragment(R.layout.add_habit_fragment),
     ViewInitializable,
-    ViewHelper {
-
+    ViewHelper
+{
     private var _binding: AddHabitFragmentBinding? = null
     private val binding get() = _binding!!
 

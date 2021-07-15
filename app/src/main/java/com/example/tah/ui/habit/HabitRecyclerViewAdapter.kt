@@ -16,7 +16,8 @@ class HabitRecyclerViewAdapter(
     private val context: Context,
     private val habits: MutableList<Habit>)
 : RecyclerView.Adapter<HabitRecyclerViewAdapter.ViewHolder>(),
-    ViewHabitTime {
+    ViewHabitTime
+{
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

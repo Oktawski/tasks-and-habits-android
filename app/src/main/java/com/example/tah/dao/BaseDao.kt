@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.Update
 import io.reactivex.Completable
 
+
 interface BaseDao<T> {
 
     @Insert

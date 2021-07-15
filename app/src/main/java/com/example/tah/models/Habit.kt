@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.tah.R
 
+
 @Entity(tableName = "Habits")
 data class Habit(
     @PrimaryKey(autoGenerate = true)    val id: Long?,
