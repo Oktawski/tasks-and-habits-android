@@ -6,7 +6,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tah.R
-import com.example.tah.databinding.ActivityAddAndDetailsBinding
 import com.example.tah.models.Habit
 import com.example.tah.models.Task
 import com.example.tah.ui.habit.HabitAddFragment
@@ -42,6 +41,11 @@ class AddAndDetailsActivity :
         }
 
         supportFragmentManager.beginTransaction()
+/*            .setCustomAnimations(
+                android.R.anim.fade_in,
+                android.R.anim.fade_out,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out)*/
             .replace(R.id.add_fragment_container, fragment)
             .commit()
 
@@ -51,7 +55,6 @@ class AddAndDetailsActivity :
     override fun onBackPressed() {
         if(supportFragmentManager.backStackEntryCount == 0) finish()
         else supportFragmentManager.popBackStack()
-
     }
 
     override fun initOnClickListeners() = backArrow.setOnClickListener { onBackPressed() }
@@ -60,7 +63,7 @@ class AddAndDetailsActivity :
         TODO("Not yet implemented")
     }
 
-    fun setTitle(title: String){
+    internal fun setTitle(title: String){
         this.title.text = title
     }
 }

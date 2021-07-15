@@ -5,9 +5,10 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:focusable="true">
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -24,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
                 android:hint="@string/name"
-                android:layout_below="@id/buttons_layout">
+                android:layout_below="@id/fab_start">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
@@ -98,71 +99,78 @@
                 android:layout_marginTop="30dp"
                 android:layout_centerHorizontal="true"
                 android:contentDescription="@string/start_habit_button_description" />
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <LinearLayout
+            android:id="@+id/buttons_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/buttons_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/fab_start"
-                android:layout_centerHorizontal="true">
+                android:id="@+id/delete_edit_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/delete_edit_layout"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/delete_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="40dp">
+                    android:layout_weight="1"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="@string/delete"/>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/delete_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/delete"
-                        android:layout_marginRight="@dimen/text_margin"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/edit_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/edit"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/cancel_save_layout"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/edit_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_below="@id/fab_start"
-                    android:layout_marginTop="40dp"
-                    android:visibility="gone">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/cancel_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/cancel"
-                        android:layout_marginRight="@dimen/text_margin"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/save_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/save"/>
-                </LinearLayout>
+                    android:layout_weight="1"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="@string/edit"/>
             </LinearLayout>
 
-        </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/cancel_save_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-    </ScrollView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="@string/cancel" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/save_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="@string/save"/>
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
     
     <TextView
         android:id="@+id/fab_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/start"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_anchor="@id/fab_start"
         android:textColor="@color/white"
         app:layout_anchorGravity="center"/>

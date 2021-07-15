@@ -137,4 +137,5 @@ class HabitStartedFragment
             mainHandler.postDelayed(this, 1000)
         }
     }
+
 }

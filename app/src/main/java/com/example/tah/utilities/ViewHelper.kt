@@ -1,6 +1,7 @@
 package com.example.tah.utilities
 
 import android.view.View
+import android.widget.EditText
 import com.google.android.material.textfield.TextInputEditText
 
 interface ViewHelper {
@@ -12,4 +13,11 @@ interface ViewHelper {
             }
         }
     }
+
+    fun toggleEditText(vararg editText: EditText) {
+        for (e in editText) {
+            e.isEnabled = !e.isEnabled
+        }
+    }
+
 }

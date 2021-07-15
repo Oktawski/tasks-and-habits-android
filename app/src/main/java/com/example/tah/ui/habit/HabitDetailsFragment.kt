@@ -6,20 +6,21 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.databinding.DetailsHabitBinding
-import com.example.tah.databinding.DetailsHabitStartedBinding
 import com.example.tah.models.Habit
+import com.example.tah.ui.animations.ViewAnimations
+import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHabitTime
+import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -27,7 +28,8 @@ import io.reactivex.schedulers.Schedulers
 class HabitDetailsFragment
 : Fragment(R.layout.details_habit),
     ViewInitializable,
-    ViewHabitTime
+    ViewHabitTime,
+    ViewHelper
 {
     private var _binding: DetailsHabitBinding? = null
     private val binding get() = _binding!!
@@ -40,7 +42,7 @@ class HabitDetailsFragment
     private val hours = Array(10){it}
     private val minutes = Array(60){it}
 
-    private var sessionLength = 0L
+    private var sessionLength: Long? = null
 
     companion object{
         fun newInstance(id: Long): HabitDetailsFragment {
@@ -69,6 +71,8 @@ class HabitDetailsFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as AddAndDetailsActivity).setTitle("Habit details")
+        //binding.cancelSaveLayout.visibility = View.GONE
         getHabit()
         initSpinnerAdapters()
         initOnClickListeners()
@@ -125,6 +129,11 @@ class HabitDetailsFragment
             fabStart.setOnClickListener {
                 val fragment = HabitStartedFragment.newInstance(habitId!!)
                 requireActivity().supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        android.R.anim.fade_in,
+                        android.R.anim.fade_out,
+                        android.R.anim.fade_out,
+                        android.R.anim.fade_out)
                     .replace(R.id.add_fragment_container, fragment, "habitStartedFragment")
                     .addToBackStack("habitStartedFragment")
                     .commit()
@@ -144,8 +153,8 @@ class HabitDetailsFragment
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe{ habit -> inflateViews(habit)
-                        this.sessionLength = habit.sessionLength}
-
+                        Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
+                        this.sessionLength = habit.sessionLength }
             }
         }
     }
@@ -191,31 +200,20 @@ class HabitDetailsFragment
     }
 
     private fun setEditableView(){
-        with(binding){
-            deleteEditLayout.visibility = View.GONE
-            cancelSaveLayout.visibility = View.VISIBLE
-            enableEditText(name, description, hoursLayout.editText!!, minutesLayout.editText!!)
+        with(binding) {
+            ViewAnimations.hide(binding.deleteEditLayout)
+            ViewAnimations.show(binding.cancelSaveLayout)
+            toggleEditText(name, description, hoursLayout.editText!!, minutesLayout.editText!!)
             initSpinnerAdapters()
         }
     }
 
     private fun setNotEditableView(){
-        with(binding){
-            deleteEditLayout.visibility= View.VISIBLE
-            cancelSaveLayout.visibility = View.GONE
-            disableEditText(name, description, hoursLayout.editText!!, minutesLayout.editText!!)
+        with(binding) {
+            ViewAnimations.hide(binding.cancelSaveLayout)
+            ViewAnimations.show(binding.deleteEditLayout)
+            toggleEditText(name, description, hoursLayout.editText!!, minutesLayout.editText!!)
         }
     }
 
-    private fun disableEditText(vararg et: EditText){
-        for(e in et){
-            e.isEnabled = false
-        }
-    }
-
-    private fun enableEditText(vararg et: EditText){
-        for(e in et){
-            e.isEnabled = true
-        }
-    }
 }
