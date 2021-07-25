@@ -133,8 +133,8 @@ class HabitDetailsFragment
                     .setCustomAnimations(
                         android.R.anim.fade_in,
                         android.R.anim.fade_out,
-                        android.R.anim.fade_out,
-                        android.R.anim.fade_out)
+                        android.R.anim.fade_in,
+                        android.R.anim.fade_out )
                     .replace(R.id.add_fragment_container, fragment, "habitStartedFragment")
                     .addToBackStack("habitStartedFragment")
                     .commit()
@@ -143,7 +143,7 @@ class HabitDetailsFragment
     }
 
     override fun initViewModelObservables() {
-        viewModel.state.observe(viewLifecycleOwner){
+        viewModel.state.observe(viewLifecycleOwner) {
             if(it.status == State.Status.REMOVED) {
                 Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
                 requireActivity().finish()
@@ -160,7 +160,7 @@ class HabitDetailsFragment
         }
     }
 
-    private fun getHabit(){
+    private fun getHabit() {
         viewModel.getById(habitId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -175,7 +175,7 @@ class HabitDetailsFragment
                 })
     }
 
-    private fun inflateViews(it: Habit){
+    private fun inflateViews(it: Habit) {
         with (binding) {
             name.setText(it.name)
             description.setText(it.description)
@@ -185,12 +185,12 @@ class HabitDetailsFragment
         }
     }
 
-    private fun initSpinnerAdapters(){
+    private fun initSpinnerAdapters() {
         createSpinnerAdapter(binding.minutesLayout, minutes)
         createSpinnerAdapter(binding.minutesLayout, hours)
     }
 
-    private fun createSpinnerAdapter(layout: TextInputLayout, array: Array<Int>){
+    private fun createSpinnerAdapter(layout: TextInputLayout, array: Array<Int>) {
         ArrayAdapter(
             requireActivity(),
             android.R.layout.simple_spinner_item,
@@ -200,7 +200,7 @@ class HabitDetailsFragment
         }
     }
 
-    private fun setEditableView(){
+    private fun setEditableView() {
         with(binding) {
             ViewAnimations.hide(binding.deleteEditLayout)
             ViewAnimations.show(binding.cancelSaveLayout)
@@ -209,7 +209,7 @@ class HabitDetailsFragment
         }
     }
 
-    private fun setNotEditableView(){
+    private fun setNotEditableView() {
         with(binding) {
             ViewAnimations.hide(binding.cancelSaveLayout)
             ViewAnimations.show(binding.deleteEditLayout)
