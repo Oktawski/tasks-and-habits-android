@@ -16,10 +16,12 @@ import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.utilities.ViewHabitTime
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
+@AndroidEntryPoint
 class HabitStartedFragment
     : Fragment(R.layout.details_habit_started),
     ViewHabitTime,

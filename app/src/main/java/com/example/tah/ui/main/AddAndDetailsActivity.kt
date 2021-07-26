@@ -13,7 +13,9 @@ import com.example.tah.ui.habit.HabitDetailsFragment
 import com.example.tah.ui.task.TaskAddFragment
 import com.example.tah.ui.task.TaskDetailsFragment
 import com.example.tah.utilities.ViewInitializable
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AddAndDetailsActivity :
     AppCompatActivity(R.layout.activity_add_and_details),
     ViewInitializable {
@@ -41,11 +43,6 @@ class AddAndDetailsActivity :
         }
 
         supportFragmentManager.beginTransaction()
-/*            .setCustomAnimations(
-                android.R.anim.fade_in,
-                android.R.anim.fade_out,
-                android.R.anim.fade_in,
-                android.R.anim.fade_out)*/
             .replace(R.id.add_fragment_container, fragment)
             .commit()
 

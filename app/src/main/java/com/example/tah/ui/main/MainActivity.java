@@ -1,4 +1,4 @@
-package com.example.tah;
+package com.example.tah.ui.main;
 
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
@@ -16,10 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.tah.NotificationBroadcast;
+import com.example.tah.R;
 import com.example.tah.models.Habit;
 import com.example.tah.models.Task;
-import com.example.tah.ui.main.AddAndDetailsActivity;
-import com.example.tah.ui.main.SectionsPagerAdapter;
 import com.example.tah.utilities.ViewInitializable;
 import com.example.tah.viewModels.TaskViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,9 +29,13 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.Calendar;
 import java.util.Collections;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements ViewInitializable {
     
-    private TaskViewModel taskViewModel;
+    //private TaskViewModel taskViewModel;
     private ImageView deleteIcon;
     private FloatingActionButton fabAdd;
     private SectionsPagerAdapter sectionsPagerAdapter;
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements ViewInitializable
         setContentView(R.layout.activity_main);
         initViews();
 
-        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        //taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         intent = new Intent(this, AddAndDetailsActivity.class);
 
         viewPager.registerOnPageChangeCallback(onPageChangeCallback);
@@ -72,12 +76,12 @@ public class MainActivity extends AppCompatActivity implements ViewInitializable
     public void initOnClickListeners(){
         fabAdd.setOnClickListener(v -> startActivity(intent));
 
-        deleteIcon.setOnClickListener(v -> taskViewModel.deleteSelected());
+      //  deleteIcon.setOnClickListener(v -> taskViewModel.deleteSelected());
     }
 
     @Override
     public void initViewModelObservables(){
-        taskViewModel.itemsLD.observe(this, items -> {
+       /* taskViewModel.itemsLD.observe(this, items -> {
             if(items.size() > 0){
                 createNotificationChannel();
                 initNotifications();
@@ -100,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements ViewInitializable
                     taskViewModel.getCheckedItemsLD().setValue(Collections.emptyList());
                     break;
             }
-        });
+        });*/
     }
 
     private void createNotificationChannel(){

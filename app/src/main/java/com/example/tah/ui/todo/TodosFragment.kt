@@ -11,7 +11,9 @@ import com.example.tah.databinding.FragmentTodosBinding
 import com.example.tah.models.Todo
 import com.example.tah.utilities.State
 import com.example.tah.viewModels.TodoViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TodosFragment: Fragment(R.layout.fragment_todos) {
 
     private val todoViewModel: TodoViewModel by viewModels()

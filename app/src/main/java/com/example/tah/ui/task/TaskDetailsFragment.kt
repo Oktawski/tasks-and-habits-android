@@ -13,9 +13,11 @@ import com.example.tah.R
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.utilities.State
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
+@AndroidEntryPoint
 class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
 
     private lateinit var name: EditText

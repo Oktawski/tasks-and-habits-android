@@ -4,14 +4,15 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.tah.utilities.State
 
-abstract class BaseViewModel<T>(application: Application)
-    : AndroidViewModel(application) {
-
+abstract class BaseViewModel<T>
+    : ViewModel()
+{
     lateinit var itemsLD: LiveData<List<T>>
     lateinit var state: MutableLiveData<State>
-    val checkedItemsLD: MutableLiveData<List<Int>> = MutableLiveData(emptyList())
+    var checkedItemsLD: MutableLiveData<List<Int>> = MutableLiveData(emptyList())
 
     abstract fun add(t: T)
     abstract fun delete(t: T)

@@ -1,40 +1,23 @@
 package com.example.tah.viewModels
 
-import android.app.Application
-import android.util.Log
-import androidx.annotation.NonNull
 import androidx.lifecycle.MutableLiveData
-import com.example.tah.dao.todo.TodoDao
-import com.example.tah.dao.todo.TodoDatabase
+import com.example.tah.dao.todo.TodoRepository
 import com.example.tah.models.Todo
-import com.example.tah.utilities.State
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class TodoViewModel(@NonNull application: Application)
-    :BaseViewModel<Todo>(application) {
-
-    private var todoDao: TodoDao
-
-    private val disposable = CompositeDisposable()
-
+@HiltViewModel
+class TodoViewModel @Inject constructor(
+    private val repository: TodoRepository
+) : BaseViewModel<Todo>()
+{
     init{
-        val database = TodoDatabase.getInstance(application)
-        todoDao = database.todoDao()
-        itemsLD = todoDao.getAll()
-        state = MutableLiveData()
+        itemsLD = repository.getAll()
+        state = repository.state
     }
 
     override fun add(t: Todo) {
-        state.value = State.loading()
-
-        disposable.add(todoDao.insert(t)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({state.value = State.added()},
-                {state.value = State.error("Error")}))
-
+        repository.add(t)
     }
 
     override fun delete(t: Todo) {
@@ -42,27 +25,15 @@ class TodoViewModel(@NonNull application: Application)
     }
 
     override fun deleteAll() {
-        TODO("Not yet implemented")
+        repository.deleteAll()
     }
 
     override fun deleteSelected() {
-        disposable.add(todoDao.deleteCompleted()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe())
+        repository.deleteSelected()
     }
 
     override fun update(t: Todo) {
-        disposable.add(todoDao.update(t)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    state.value = State.updated("Updated")
-                },
-                {
-                    state.value = State.error("Could not update")
-                    Log.i("TODOREPO", "update: error")
-                }))
+        repository.update(t)
     }
+
 }

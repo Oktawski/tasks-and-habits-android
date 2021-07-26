@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.R
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class HabitsFragment
     : Fragment(R.layout.fragment_habits),
     ViewInitializable

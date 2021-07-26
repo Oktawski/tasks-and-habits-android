@@ -15,8 +15,9 @@ import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class TaskAddFragment
     : Fragment(R.layout.add_task_fragment),
     ViewInitializable,

@@ -22,10 +22,12 @@ import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
+@AndroidEntryPoint
 class HabitDetailsFragment
 : Fragment(R.layout.details_habit),
     ViewInitializable,
@@ -72,12 +74,12 @@ class HabitDetailsFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AddAndDetailsActivity).setTitle("Habit details")
         binding.cancelSaveLayout.visibility = View.GONE
         getHabit()
-        initSpinnerAdapters()
         initOnClickListeners()
         initViewModelObservables()
+        with(binding){
+        toggleEditText(name, description, hoursLayout.editText!!, minutesLayout.editText!!)}
     }
 
     override fun onResume() {
@@ -87,14 +89,8 @@ class HabitDetailsFragment
 
     override fun initOnClickListeners() {
         with(binding) {
-
-            editButton.setOnClickListener {
-                setEditableView()
-            }
-
-            cancelButton.setOnClickListener {
-                setNotEditableView()
-            }
+            editButton.setOnClickListener { viewModel.editable.value = true }
+            cancelButton.setOnClickListener { viewModel.editable.value = false }
 
             deleteButton.setOnClickListener {
                 viewModel.getById(habitId)
@@ -143,6 +139,10 @@ class HabitDetailsFragment
     }
 
     override fun initViewModelObservables() {
+        viewModel.editable.observe(viewLifecycleOwner) {
+            if(it) setEditableView() else setNotEditableView()
+        }
+
         viewModel.state.observe(viewLifecycleOwner) {
             if(it.status == State.Status.REMOVED) {
                 Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
@@ -185,11 +185,6 @@ class HabitDetailsFragment
         }
     }
 
-    private fun initSpinnerAdapters() {
-        createSpinnerAdapter(binding.minutesLayout, minutes)
-        createSpinnerAdapter(binding.minutesLayout, hours)
-    }
-
     private fun createSpinnerAdapter(layout: TextInputLayout, array: Array<Int>) {
         ArrayAdapter(
             requireActivity(),
@@ -205,7 +200,8 @@ class HabitDetailsFragment
             ViewAnimations.hide(binding.deleteEditLayout)
             ViewAnimations.show(binding.cancelSaveLayout)
             toggleEditText(name, description, hoursLayout.editText!!, minutesLayout.editText!!)
-            initSpinnerAdapters()
+            createSpinnerAdapter(minutesLayout, minutes)
+            createSpinnerAdapter(hoursLayout, hours)
         }
     }
 

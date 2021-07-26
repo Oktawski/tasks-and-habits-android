@@ -7,24 +7,26 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.R
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TasksFragment
     : Fragment(R.layout.fragment_tasks),
     ViewInitializable {
 
-    private lateinit var viewModel: TaskViewModel
+   // private lateinit var viewModel: TaskViewModel
+    private val viewModel: TaskViewModel by viewModels()
     private lateinit var adapter: TaskRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
+    //    viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
