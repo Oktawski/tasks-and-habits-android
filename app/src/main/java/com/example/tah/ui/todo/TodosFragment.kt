@@ -12,6 +12,7 @@ import com.example.tah.models.Todo
 import com.example.tah.utilities.State
 import com.example.tah.viewModels.TodoViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TodosFragment: Fragment(R.layout.fragment_todos) {
@@ -21,7 +22,8 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
     private var _binding: FragmentTodosBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: TodoRecyclerViewAdapter
+    @Inject
+    lateinit var adapter: TodoRecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,9 +36,6 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        adapter = TodoRecyclerViewAdapter(mutableListOf(), todoViewModel)
-
         initAdapter()
         initOnClickListeners()
         initViewModelObservables()

@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.utilities.ViewInitializable
@@ -26,7 +27,7 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
     private lateinit var deleteButton: Button
     private var taskId: Int? = null
 
-    private lateinit var taskViewModel: TaskViewModel
+    private val taskViewModel: TaskViewModel by viewModels()
 
     companion object {
         fun newInstance(name: String?, description: String?): TaskDetailsFragment{
@@ -40,7 +41,7 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        taskViewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
+        //taskViewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
 
         taskId = requireActivity().intent.getIntExtra("taskId", -1);
 

@@ -12,6 +12,7 @@ import com.example.tah.R
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -20,7 +21,9 @@ class HabitsFragment
     ViewInitializable
 {
     private val viewModel: HabitViewModel by viewModels()
-    private lateinit var adapter: HabitRecyclerViewAdapter
+
+    @Inject
+    lateinit var adapter: HabitRecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +34,6 @@ class HabitsFragment
 
         if (view is RecyclerView) {
             view.layoutManager = LinearLayoutManager(view.context)
-            adapter = HabitRecyclerViewAdapter(requireActivity(), mutableListOf())
             view.adapter = adapter
         }
         return view

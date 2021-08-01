@@ -18,8 +18,10 @@ import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class HabitAddFragment
 : Fragment(R.layout.add_habit_fragment),
     ViewInitializable,

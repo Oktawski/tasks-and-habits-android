@@ -14,20 +14,17 @@ import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TasksFragment
     : Fragment(R.layout.fragment_tasks),
     ViewInitializable {
 
-   // private lateinit var viewModel: TaskViewModel
     private val viewModel: TaskViewModel by viewModels()
-    private lateinit var adapter: TaskRecyclerViewAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    //    viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
-    }
+    @Inject
+    lateinit var adapter: TaskRecyclerViewAdapter
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -37,7 +34,6 @@ class TasksFragment
         if(view is RecyclerView){
             val context = view.context
             view.layoutManager = LinearLayoutManager(context)
-            adapter = TaskRecyclerViewAdapter(requireActivity(), viewModel, mutableListOf())
             view.adapter = adapter
         }
         return view
@@ -45,7 +41,6 @@ class TasksFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViewModelObservables()
     }
 

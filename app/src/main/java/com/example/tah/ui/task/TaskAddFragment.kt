@@ -21,8 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class TaskAddFragment
     : Fragment(R.layout.add_task_fragment),
     ViewInitializable,
-    ViewHelper {
-
+    ViewHelper
+{
     private var _binding: AddTaskFragmentBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TaskViewModel by viewModels()

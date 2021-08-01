@@ -15,7 +15,7 @@ class TaskRepository @Inject constructor(
 ) {
 
     val state: MutableLiveData<State> = MutableLiveData()
-    val checkedItemsLD = MutableLiveData<List<Int>>(mutableListOf())
+    private val checkedItemsLD = MutableLiveData<List<Int>>(mutableListOf())
 
     private val disposable = CompositeDisposable()
 
