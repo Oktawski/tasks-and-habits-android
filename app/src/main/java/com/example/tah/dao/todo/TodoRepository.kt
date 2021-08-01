@@ -33,7 +33,10 @@ class TodoRepository @Inject constructor(
     }
 
     fun delete(t: Todo) {
-        TODO("Not yet implemented")
+        disposable.add(todoDao.delete(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ getAll() },{}))
     }
 
     fun deleteAll() {

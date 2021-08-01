@@ -34,6 +34,7 @@ object AdapterModule {
         @ActivityContext context: Context
     ): TodoRecyclerViewAdapter {
         return TodoRecyclerViewAdapter(
+            context,
             mutableListOf(),
             ViewModelProvider(context as MainActivity).get(TodoViewModel::class.java)
         )

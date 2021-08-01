@@ -35,7 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements ViewInitializable {
     
-    //private TaskViewModel taskViewModel;
+    private TaskViewModel taskViewModel;
     private ImageView deleteIcon;
     private FloatingActionButton fabAdd;
     private SectionsPagerAdapter sectionsPagerAdapter;
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements ViewInitializable
         setContentView(R.layout.activity_main);
         initViews();
 
-        //taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         intent = new Intent(this, AddAndDetailsActivity.class);
 
         viewPager.registerOnPageChangeCallback(onPageChangeCallback);
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements ViewInitializable
     public void initOnClickListeners(){
         fabAdd.setOnClickListener(v -> startActivity(intent));
 
-      //  deleteIcon.setOnClickListener(v -> taskViewModel.deleteSelected());
+        deleteIcon.setOnClickListener(v -> taskViewModel.deleteSelected());
     }
 
     @Override
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements ViewInitializable
                 createNotificationChannel();
                 initNotifications();
             }
-        });
+        }); */
 
         taskViewModel.getCheckedItemsLD().observe(this, checkedTasks -> {
             if(checkedTasks.isEmpty()){
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements ViewInitializable
                     taskViewModel.getCheckedItemsLD().setValue(Collections.emptyList());
                     break;
             }
-        });*/
+        });
     }
 
     private void createNotificationChannel(){

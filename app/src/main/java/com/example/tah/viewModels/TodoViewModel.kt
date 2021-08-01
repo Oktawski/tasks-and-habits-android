@@ -21,7 +21,7 @@ class TodoViewModel @Inject constructor(
     }
 
     override fun delete(t: Todo) {
-        TODO("Not yet implemented")
+        repository.delete(t)
     }
 
     override fun deleteAll() {
