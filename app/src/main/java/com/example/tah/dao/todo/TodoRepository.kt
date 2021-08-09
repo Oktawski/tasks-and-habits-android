@@ -14,6 +14,7 @@ class TodoRepository @Inject constructor(
     private val todoDao: TodoDao
 ) {
     val state = MutableLiveData<State>()
+    val completedTodos = MutableLiveData<List<Todo>>(mutableListOf())
 
     private val disposable = CompositeDisposable()
 
@@ -43,11 +44,23 @@ class TodoRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    fun getCompletedList(): LiveData<List<Todo>> {
+        disposable.add(todoDao.getCompletedList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {completedTodos.value = it},
+                {}))
+
+        return completedTodos
+    }
+
+
     fun deleteSelected() {
         disposable.add(todoDao.deleteCompleted()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe())
+            .subscribe({ getCompletedList() },{}))
     }
 
     fun update(t: Todo) {
@@ -57,6 +70,7 @@ class TodoRepository @Inject constructor(
             .subscribe(
                 {
                     state.value = State.updated("Updated")
+                    getCompletedList()
                 },
                 {
                     state.value = State.error("Could not update")

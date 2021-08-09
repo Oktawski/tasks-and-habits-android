@@ -40,21 +40,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:inputType="textAutoComplete"
+                android:inputType="textAutoComplete|textCapSentences"
                 android:hint="@string/add"
                 android:layout_marginRight="50dp"
                 android:layout_weight="1"/>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/text_delete_completed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linear_layout"
-            android:paddingBottom="8dp"
-            android:text="Delete completed"
-            android:textAlignment="center"
-            />
 
     </RelativeLayout>
 

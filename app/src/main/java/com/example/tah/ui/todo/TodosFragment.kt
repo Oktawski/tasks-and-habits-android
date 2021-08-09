@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.databinding.FragmentTodosBinding
 import com.example.tah.models.Todo
+import com.example.tah.ui.main.MainActivity
 import com.example.tah.utilities.State
 import com.example.tah.viewModels.TodoViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +18,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TodosFragment: Fragment(R.layout.fragment_todos) {
 
-    private val todoViewModel: TodoViewModel by viewModels()
+    private lateinit var todoViewModel: TodoViewModel
 
     private var _binding: FragmentTodosBinding? = null
     private val binding get() = _binding!!
@@ -31,6 +32,7 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTodosBinding.inflate(inflater, container, false)
+        todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
         return binding.root
     }
 
@@ -41,12 +43,27 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         initViewModelObservables()
     }
 
+    override fun onResume() {
+        super.onResume()
+        todoViewModel.getCompletedList()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).setDeleteIconVisibility(View.GONE)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     private fun initViewModelObservables(){
+        todoViewModel.completedTodos.observe(requireActivity()) {
+            if(it.isNotEmpty()) (activity as MainActivity).setDeleteIconVisibility(View.VISIBLE)
+            else (activity as MainActivity).setDeleteIconVisibility(View.GONE)
+        }
+
         todoViewModel.itemsLD.observe(requireActivity()){
             adapter.update(it)
         }
@@ -83,10 +100,6 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
                 } else {
                     addText.error = "Cannot be blank"
                 }
-            }
-
-            textDeleteCompleted.setOnClickListener {
-                todoViewModel.deleteSelected()
             }
         }
     }

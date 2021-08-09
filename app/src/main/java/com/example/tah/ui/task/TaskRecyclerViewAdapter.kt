@@ -88,13 +88,12 @@ class TaskRecyclerViewAdapter(
             binding.checkBox.setOnClickListener {
                 if(binding.checkBox.isChecked){
                     checkedTasks.add(task.id!!)
-                    Toast.makeText(context, "Task checked", Toast.LENGTH_SHORT).show()
                 }else{
                     checkedTasks.remove(task.id!!)
-                    Toast.makeText(context, "Task unchecked", Toast.LENGTH_SHORT).show()
                 }
                 viewModel.addToCheckedItems(checkedTasks)
             }
         }
     }
+
 }

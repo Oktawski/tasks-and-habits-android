@@ -27,4 +27,5 @@ abstract class BaseViewModel<T>
     fun clearCheckedItems(){
         checkedItemsLD.value = emptyList()
     }
+
 }

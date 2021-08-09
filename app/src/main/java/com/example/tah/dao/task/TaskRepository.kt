@@ -1,5 +1,6 @@
 package com.example.tah.dao.task
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tah.models.Task
@@ -15,7 +16,7 @@ class TaskRepository @Inject constructor(
 ) {
 
     val state: MutableLiveData<State> = MutableLiveData()
-    private val checkedItemsLD = MutableLiveData<List<Int>>(mutableListOf())
+    internal val checkedItemsLD = MutableLiveData<List<Int>>(mutableListOf())
 
     private val disposable = CompositeDisposable()
 

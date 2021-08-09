@@ -1,3 +1,4 @@
+/*
 package com.example.tah.ui.main;
 
 import android.app.AlarmManager;
@@ -81,12 +82,14 @@ public class MainActivity extends AppCompatActivity implements ViewInitializable
 
     @Override
     public void initViewModelObservables(){
-       /* taskViewModel.itemsLD.observe(this, items -> {
+       */
+/* taskViewModel.itemsLD.observe(this, items -> {
             if(items.size() > 0){
                 createNotificationChannel();
                 initNotifications();
             }
-        }); */
+        }); *//*
+
 
         taskViewModel.getCheckedItemsLD().observe(this, checkedTasks -> {
             if(checkedTasks.isEmpty()){
@@ -169,4 +172,4 @@ public class MainActivity extends AppCompatActivity implements ViewInitializable
             if(layoutRes != null) intent.putExtra("fragmentId", layoutRes);
         }
     };
-}
+}*/

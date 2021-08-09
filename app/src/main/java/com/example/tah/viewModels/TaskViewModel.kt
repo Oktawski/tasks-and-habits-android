@@ -19,6 +19,7 @@ class TaskViewModel @Inject constructor(
 
     init {
         itemsLD = repository.getAll()
+        checkedItemsLD = repository.checkedItemsLD
         state = repository.state
     }
 

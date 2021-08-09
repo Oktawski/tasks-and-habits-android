@@ -18,6 +18,9 @@ interface TodoDao : BaseDao<Todo> {
     @Query("SELECT * FROM todos WHERE id = :id LIMIT 1")
     fun getById(id: Int): Single<Todo>
 
+    @Query("SELECT * FROM todos WHERE is_complete = 1")
+    fun getCompletedList(): Single<List<Todo>>
+
     @Query("DELETE FROM todos WHERE is_complete = 1")
     fun deleteCompleted(): Completable
 }

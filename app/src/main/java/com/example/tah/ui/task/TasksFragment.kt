@@ -1,15 +1,18 @@
 package com.example.tah.ui.task
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.R
+import com.example.tah.ui.main.MainActivity
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskViewModel
@@ -21,7 +24,7 @@ class TasksFragment
     : Fragment(R.layout.fragment_tasks),
     ViewInitializable {
 
-    private val viewModel: TaskViewModel by viewModels()
+    private lateinit var viewModel: TaskViewModel
 
     @Inject
     lateinit var adapter: TaskRecyclerViewAdapter
@@ -30,6 +33,8 @@ class TasksFragment
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_tasks, container, false)
+
+        viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
 
         if(view is RecyclerView){
             val context = view.context
@@ -44,7 +49,19 @@ class TasksFragment
         initViewModelObservables()
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.clearCheckedItems()
+        adapter.notifyDataSetChanged()
+        (activity as MainActivity).setDeleteIconVisibility(View.GONE)
+    }
+
     override fun initViewModelObservables() {
+        viewModel.checkedItemsLD.observe(viewLifecycleOwner) {
+            if(it.isNotEmpty()) (activity as MainActivity).setDeleteIconVisibility(View.VISIBLE)
+            else (activity as MainActivity).setDeleteIconVisibility(View.GONE)
+        }
+
         viewModel.itemsLD.observe(viewLifecycleOwner) {
             adapter.update(it)
         }
@@ -60,13 +77,10 @@ class TasksFragment
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.clearCheckedItems()
-        adapter.notifyDataSetChanged()
-    }
+
 
     override fun initOnClickListeners() {
         TODO("Not yet implemented")
     }
+
 }
