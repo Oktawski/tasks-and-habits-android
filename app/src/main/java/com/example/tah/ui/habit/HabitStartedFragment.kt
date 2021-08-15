@@ -16,6 +16,7 @@ import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.utilities.ViewHabitTime
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
+import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -64,10 +65,12 @@ class HabitStartedFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (habitId != null) {
+            activity?.findViewById<AppBarLayout>(R.id.app_bar)?.visibility = View.GONE
             getHabit(habitId!!)
-            (activity as AddAndDetailsActivity).setTitle("Habit details")
+            (activity as AddAndDetailsActivity).setTitle("")
             initViewModelObservables()
             initOnClickListeners()
+            viewModel.startStop()
         }
         else {
             Toast.makeText(requireActivity(), "Habit not found", Toast.LENGTH_SHORT).show()

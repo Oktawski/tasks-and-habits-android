@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tah.R
 import com.example.tah.databinding.ItemTodoBinding
 import com.example.tah.models.Todo
 import com.example.tah.viewModels.TodoViewModel
@@ -68,26 +69,26 @@ class TodoRecyclerViewAdapter(
         }
 
         private fun showEditDialog() {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+            val builder: AlertDialog.Builder =
+                AlertDialog.Builder(context, R.style.AlertDialog_MyTheme)
             val input = EditText(context)
             input.hint = "Edit name"
             input.inputType = InputType.TYPE_CLASS_TEXT
             builder.setView(input)
 
-            builder.setPositiveButton("OK") { _, _ ->
-                todo?.name = input.text.toString()
-                viewModel.update(todo!!)
+
+            builder.apply {
+                setPositiveButton("OK") { _, _ ->
+                    todo?.name = input.text.toString()
+                    viewModel.update(todo!!)
+                }
+                setNeutralButton("DELETE") { _, _ ->
+                    viewModel.delete(todo!!)
+                }
+                setNegativeButton("CANCEL") { dialog, _ ->
+                    dialog.cancel()
+                }
             }
-
-            builder.setNeutralButton("DELETE") { _, _ ->
-                viewModel.delete(todo!!)
-            }
-
-            builder.setNegativeButton("CANCEL") { dialog, _ ->
-                dialog.cancel()
-            }
-
-
             builder.show()
         }
     }

@@ -29,10 +29,7 @@ class HabitAddFragment
 {
     private var _binding: AddHabitFragmentBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: HabitViewModel by viewModels()
-    private val hours = Array(10){it}
-    private val minutes = Array(60){it}
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -43,9 +40,9 @@ class HabitAddFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AddAndDetailsActivity).setTitle("New Habit")
+        initTimePicker()
         initOnClickListeners()
         initViewModelObservables()
-        initSpinnerAdapters()
     }
 
     override fun onDestroyView() {
@@ -62,8 +59,8 @@ class HabitAddFragment
                     val habit = Habit.new(
                         name.text.toString(),
                         description.text.toString(),
-                        hoursLayout.editText?.text.toString().toIntOrNull() ?: 0,
-                        minutesLayout.editText?.text.toString().toIntOrNull() ?: 0
+                        timePicker.hour,
+                        timePicker.minute
                     )
 
                     if (habit.sessionLength == 0L) Toast.makeText(
@@ -88,18 +85,10 @@ class HabitAddFragment
         }
     }
 
-    private fun initSpinnerAdapters(){
-        createSpinnerAdapter(binding.minutesLayout, minutes)
-        createSpinnerAdapter(binding.hoursLayout, hours)
+    private fun initTimePicker() {
+        binding.timePicker.setIs24HourView(true)
+        binding.timePicker.hour = 0
+        binding.timePicker.minute = 1
     }
 
-    private fun createSpinnerAdapter(layout: TextInputLayout, array: Array<Int>){
-        ArrayAdapter(
-            requireActivity(),
-            android.R.layout.simple_spinner_item,
-            array
-        ).also { adapter ->
-            (layout.editText as AutoCompleteTextView).setAdapter(adapter)
-        }
-    }
 }

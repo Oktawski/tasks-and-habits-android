@@ -13,4 +13,5 @@
     tools:listitem="@layout/item_task"
     android:paddingBottom="64dp"
     android:clipToPadding="false"
+    android:scrollbars="vertical"
     />

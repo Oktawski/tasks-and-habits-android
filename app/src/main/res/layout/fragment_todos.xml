@@ -10,6 +10,7 @@
         android:id="@+id/todos_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="vertical"
         android:clipToPadding="false"
         android:paddingBottom="84dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -25,7 +26,7 @@
         app:layout_anchor="@id/todos_recycler_view"
         app:layout_anchorGravity="bottom|center"
         android:background="?colorOnSecondary"
-        android:elevation="2dp"
+        android:elevation="32dp"
         >
 
         <LinearLayout
@@ -37,12 +38,12 @@
 
             <EditText
                 android:id="@+id/add_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:inputType="textAutoComplete|textCapSentences"
                 android:hint="@string/add"
-                android:layout_marginRight="50dp"
+                android:layout_marginEnd="50dp"
                 android:layout_weight="1"/>
         </LinearLayout>
 
@@ -58,5 +59,6 @@
         app:layout_anchor="@id/linear_layout"
         app:layout_anchorGravity="end|center_vertical"
         android:layout_marginEnd="8dp"
+        app:elevation="32dp"
         />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

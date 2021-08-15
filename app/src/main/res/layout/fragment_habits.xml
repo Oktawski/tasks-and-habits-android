@@ -10,4 +10,5 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.habit.HabitsFragment"
-    tools:listitem="@layout/item_habit" />
+    tools:listitem="@layout/item_habit"
+    android:scrollbars="vertical"/>
