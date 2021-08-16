@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tah.models.Task
+import com.example.tah.utilities.PropertiesTrimmer
 import com.example.tah.utilities.State
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 class TaskRepository @Inject constructor(
     private val taskDao: TaskDao
-) {
+) : PropertiesTrimmer {
 
     val state: MutableLiveData<State> = MutableLiveData()
     internal val checkedItemsLD = MutableLiveData<List<Int>>(mutableListOf())
@@ -23,10 +24,12 @@ class TaskRepository @Inject constructor(
     fun add(t: Task) {
         state.value = State.loading()
 
+        trimLeadingAndTrailingWhitespaces(t)
+
         disposable.add(taskDao.insert(t)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({state.value = State.added("Habit added")},
+            .subscribe({state.value = State.added("Task added")},
                 {state.value = State.error("Error")}))
     }
 
@@ -66,6 +69,8 @@ class TaskRepository @Inject constructor(
     }
 
     fun update(t: Task) {
+        trimLeadingAndTrailingWhitespaces(t)
+
         disposable.add(taskDao.update(t)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

@@ -2,6 +2,7 @@ package com.example.tah.dao.habit
 
 import androidx.lifecycle.MutableLiveData
 import com.example.tah.models.Habit
+import com.example.tah.utilities.PropertiesTrimmer
 import com.example.tah.utilities.State
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,7 +12,7 @@ import javax.inject.Inject
 
 class HabitRepository @Inject constructor(
     private val dao: HabitDao
-) {
+) : PropertiesTrimmer {
 
     val state = MutableLiveData<State>()
 
@@ -25,6 +26,8 @@ class HabitRepository @Inject constructor(
 
     fun add(t: Habit) {
         state.value = State.loading()
+
+        trimLeadingAndTrailingWhitespaces(t)
 
         disposable.add(dao.insert(t)
             .subscribeOn(Schedulers.io())
@@ -56,6 +59,8 @@ class HabitRepository @Inject constructor(
     }
 
     fun update(t: Habit) {
+        trimLeadingAndTrailingWhitespaces(t)
+
         disposable.add(dao.update(t)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

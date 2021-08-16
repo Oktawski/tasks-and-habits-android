@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tah.models.Todo
+import com.example.tah.utilities.PropertiesTrimmer
 import com.example.tah.utilities.State
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 class TodoRepository @Inject constructor(
     private val todoDao: TodoDao
-) {
+) : PropertiesTrimmer {
+
     val state = MutableLiveData<State>()
     val completedTodos = MutableLiveData<List<Todo>>(mutableListOf())
 
@@ -24,6 +26,8 @@ class TodoRepository @Inject constructor(
 
     fun add(t: Todo) {
         state.value = State.loading()
+
+        trimLeadingAndTrailingWhitespaces(t)
 
         disposable.add(todoDao.insert(t)
             .subscribeOn(Schedulers.io())
@@ -64,6 +68,8 @@ class TodoRepository @Inject constructor(
     }
 
     fun update(t: Todo) {
+        trimLeadingAndTrailingWhitespaces(t)
+
         disposable.add(todoDao.update(t)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
