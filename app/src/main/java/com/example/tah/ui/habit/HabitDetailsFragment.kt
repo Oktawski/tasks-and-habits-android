@@ -6,8 +6,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,16 +13,16 @@ import com.example.tah.R
 import com.example.tah.databinding.DetailsHabitBinding
 import com.example.tah.models.Habit
 import com.example.tah.ui.animations.ViewAnimations
-import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHabitTime
 import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
-import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -37,14 +35,11 @@ class HabitDetailsFragment
     private var _binding: DetailsHabitBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HabitViewModel by viewModels()
+    private var job: Job? = null
 
     private lateinit var mainHandler: Handler
 
     private var habitId: Long? = -1L
-
-    private val hours = Array(10){it}
-    private val minutes = Array(60){it}
-
     private var sessionLength: Long? = null
 
     companion object{
@@ -69,6 +64,7 @@ class HabitDetailsFragment
         savedInstanceState: Bundle?
     ): View {
         _binding = DetailsHabitBinding.inflate(inflater, container, false)
+        binding.timePicker.setIs24HourView(true)
         return binding.root
     }
 
@@ -78,13 +74,19 @@ class HabitDetailsFragment
         getHabit()
         initOnClickListeners()
         initViewModelObservables()
-        with(binding){
-        toggleEditText(name, description, hoursLayout.editText!!, minutesLayout.editText!!)}
+        with(binding) {
+            toggleEditText(name, description)
+        }
     }
 
     override fun onResume() {
         super.onResume()
         setNotEditableView()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        job?.cancel()
     }
 
     override fun initOnClickListeners() {
@@ -93,34 +95,24 @@ class HabitDetailsFragment
             cancelButton.setOnClickListener { viewModel.editable.value = false }
 
             deleteButton.setOnClickListener {
-                viewModel.getById(habitId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { habit -> viewModel.delete(habit) }
+                job = CoroutineScope(Dispatchers.Main).launch {
+                    val habit = viewModel.getByIdSus(habitId)
+                    viewModel.delete(habit)
+                }
             }
 
             saveButton.setOnClickListener {
-                val hours = hoursLayout.editText?.text.toString().toIntOrNull() ?: 0
-                val minutes = minutesLayout.editText?.text.toString().toIntOrNull() ?: 0
+                val hours = timePicker.hour
+                val minutes = timePicker.minute
                 val sessionLengthInSec = (hours * 60 * 60 + minutes * 60).toLong()
 
-                viewModel.getById(habitId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        {
-                            it.name = name.text.toString()
-                            it.description = description.text.toString()
-                            it.sessionLength = sessionLengthInSec
-                            viewModel.update(it)
-                        },
-                        {
-                            Toast.makeText(
-                                requireActivity(),
-                                "Could not update habit",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        })
+                job = CoroutineScope(Dispatchers.IO).launch {
+                    val habit = viewModel.getByIdSus(habitId)
+                    habit.name = name.text.toString()
+                    habit.description = description.text.toString()
+                    habit.sessionLength = sessionLengthInSec
+                    viewModel.update(habit)
+                }
             }
 
             fabStart.setOnClickListener {
@@ -150,29 +142,21 @@ class HabitDetailsFragment
             }
             else if(it.status == State.Status.UPDATED) {
                 setNotEditableView()
-                viewModel.getById(habitId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe{ habit -> inflateViews(habit)
-                        Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
-                        this.sessionLength = habit.sessionLength }
+                job = CoroutineScope(Dispatchers.Main).launch {
+                    val habit = viewModel.getByIdSus(habitId)
+                    inflateViews(habit)
+                    Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
+                    this@HabitDetailsFragment.sessionLength = habit.sessionLength
+                }
             }
         }
     }
 
     private fun getHabit() {
-        viewModel.getById(habitId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    inflateViews(it)
-                    sessionLength = it.sessionLength
-                },
-                {
-                    Toast.makeText(requireActivity(), "Habit not found", Toast.LENGTH_SHORT).show()
-                    requireActivity().finish()
-                })
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val habit = viewModel.getByIdSus(habitId)
+            inflateViews(habit)
+        }
     }
 
     private fun inflateViews(it: Habit) {
@@ -180,18 +164,8 @@ class HabitDetailsFragment
             name.setText(it.name)
             description.setText(it.description)
             val timeMap = getTimeStrings(it.sessionLength)
-            (hoursLayout.editText as AutoCompleteTextView).setText(timeMap["Hours"])
-            (minutesLayout.editText as AutoCompleteTextView).setText(timeMap["Minutes"])
-        }
-    }
-
-    private fun createSpinnerAdapter(layout: TextInputLayout, array: Array<Int>) {
-        ArrayAdapter(
-            requireActivity(),
-            android.R.layout.simple_spinner_item,
-            array
-        ).also { adapter ->
-            (layout.editText as AutoCompleteTextView).setAdapter(adapter)
+            timePicker.hour = timeMap["Hours"]?.toInt()!!
+            timePicker.minute = timeMap["Minutes"]?.toInt()!!
         }
     }
 
@@ -199,9 +173,8 @@ class HabitDetailsFragment
         with(binding) {
             ViewAnimations.hide(binding.deleteEditLayout)
             ViewAnimations.show(binding.cancelSaveLayout)
-            toggleEditText(name, description, hoursLayout.editText!!, minutesLayout.editText!!)
-            createSpinnerAdapter(minutesLayout, minutes)
-            createSpinnerAdapter(hoursLayout, hours)
+            toggleEditText(name, description)
+            timePicker.isEnabled = true
         }
     }
 
@@ -209,7 +182,8 @@ class HabitDetailsFragment
         with(binding) {
             ViewAnimations.hide(binding.cancelSaveLayout)
             ViewAnimations.show(binding.deleteEditLayout)
-            toggleEditText(name, description, hoursLayout.editText!!, minutesLayout.editText!!)
+            toggleEditText(name, description)
+            timePicker.isEnabled = false
         }
     }
 

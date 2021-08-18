@@ -5,7 +5,6 @@ import java.util.*
 
 interface ViewHabitTime {
 
-    @JvmDefault
     fun getTime(secondsData: Long): Map<String, Long> {
         var minutes: Long = secondsData % 3600
         val hours: Long = (secondsData - minutes) / 3600
@@ -23,7 +22,6 @@ interface ViewHabitTime {
         }
     }
 
-    @JvmDefault
     fun getTimeStrings(secondsData: Long): Map<String, String>{
         val timeMap = getTime(secondsData)
 

@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.tah.models.Habit
 import com.example.tah.utilities.PropertiesTrimmer
 import com.example.tah.utilities.State
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -20,7 +19,7 @@ class HabitRepository @Inject constructor(
 
     fun getAll() = dao.getAll()
 
-    fun getById(id: Long?): Single<Habit> {
+    suspend fun getById(id: Long?): Habit {
         return dao.getById(id)
     }
 

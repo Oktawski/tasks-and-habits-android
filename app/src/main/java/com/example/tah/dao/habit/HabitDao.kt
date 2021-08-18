@@ -15,7 +15,7 @@ interface HabitDao : BaseDao<Habit> {
     fun getAll(): LiveData<List<Habit>>
 
     @Query("SELECT * FROM Habits WHERE id=:habitId")
-    fun getById(habitId: Long?): Single<Habit>
+    suspend fun getById(habitId: Long?): Habit
 
     @Query("DELETE FROM habits WHERE id in (:idList)")
     fun deleteSelected(idList: List<Int>): Single<Int>

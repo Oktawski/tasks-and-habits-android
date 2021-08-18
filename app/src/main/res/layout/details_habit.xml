@@ -56,46 +56,12 @@
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:id="@+id/time_layout"
+            <TimePicker
+                android:id="@+id/time_picker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/description_layout"
-                android:layout_centerHorizontal="true"
-                android:baselineAligned="false">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/hours_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                    android:layout_weight="1"
-                    android:layout_margin="@dimen/text_margin">
-
-                    <AutoCompleteTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/hour"
-                        android:inputType="none"
-                        android:padding="16dp"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/minutes_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                    android:layout_weight="1"
-                    android:layout_margin="@dimen/text_margin">
-
-                    <AutoCompleteTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/minute"
-                        android:inputType="none"
-                        android:padding="16dp"/>
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
+                android:timePickerMode="spinner"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_start"

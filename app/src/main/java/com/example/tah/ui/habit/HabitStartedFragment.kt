@@ -18,8 +18,13 @@ import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
+import hilt_aggregated_deps._com_example_tah_viewModels_HabitViewModel_HiltModules_BindsModule
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -34,6 +39,7 @@ class HabitStartedFragment
     private var habitId: Long? = null
     private var sessionLength = 0L
     private lateinit var mainHandler: Handler
+    private var job: Job? = null
 
     private val viewModel: HabitViewModel by viewModels()
 
@@ -82,6 +88,7 @@ class HabitStartedFragment
         super.onDestroyView()
         _binding = null
         mainHandler.removeCallbacks(decreaseTime)
+        job?.cancel()
     }
 
     override fun initViewModelObservables() {
@@ -94,12 +101,11 @@ class HabitStartedFragment
             } else {
                 mainHandler.removeCallbacks(decreaseTime)
 
-                viewModel.getById(habitId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe{ it ->
-                            it.sessionLength = this.sessionLength
-                            viewModel.update(it) }
+                job = CoroutineScope(Dispatchers.Main).launch {
+                    val habit = viewModel.getByIdSus(habitId)
+                    habit.sessionLength = this@HabitStartedFragment.sessionLength
+                    viewModel.update(habit)
+                }
             }
         }
     }
@@ -112,24 +118,22 @@ class HabitStartedFragment
 
     @SuppressLint("CheckResult")
     private fun getHabit(id: Long) {
-        viewModel.getById(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { habit ->
-                    val timeMap = getTimeStrings(habit.sessionLength)
-                    val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
-                    this.sessionLength = habit.sessionLength
-                    binding.timeText.text = timeText
-                    binding.habitName.text = habit.name }
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val habit = viewModel.getByIdSus(id)
+            val timeMap = getTimeStrings(habit.sessionLength)
+            val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
+            this@HabitStartedFragment.sessionLength = habit.sessionLength
+            binding.timeText.text = timeText
+            binding.habitName.text = habit.name }
     }
 
+
     private fun updateHabit() {
-        viewModel.getById(habitId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { habit ->
-                habit.sessionLength = this.sessionLength
-                viewModel.update(habit) }
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val habit = viewModel.getByIdSus(habitId)
+            habit.sessionLength = this@HabitStartedFragment.sessionLength
+            viewModel.update(habit)
+        }
     }
 
     private val decreaseTime = object : Runnable {

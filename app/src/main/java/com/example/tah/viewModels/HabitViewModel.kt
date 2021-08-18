@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.tah.dao.habit.HabitRepository
 import com.example.tah.models.Habit
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Single
 import javax.inject.Inject
 
 @HiltViewModel
@@ -12,10 +11,8 @@ class HabitViewModel @Inject constructor(
     private val repository: HabitRepository
 ) : BaseViewModel<Habit>() {
 
-
     val editable = MutableLiveData(false)
     val isStarted = MutableLiveData(false)
-
 
     init {
         itemsLD = repository.getAll()
@@ -28,7 +25,7 @@ class HabitViewModel @Inject constructor(
 
     fun getAll() = repository.getAll()
 
-    fun getById(id: Long?): Single<Habit> {
+    suspend fun getByIdSus(id: Long?): Habit {
         return repository.getById(id)
     }
 
