@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -11,11 +13,14 @@ import com.example.tah.R
 import com.example.tah.databinding.AddTaskFragmentBinding
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.models.Task
+import com.example.tah.models.TaskType
 import com.example.tah.ui.main.AddAndDetailsActivity
+import com.example.tah.utilities.Converters
 import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class TaskAddFragment
@@ -26,6 +31,7 @@ class TaskAddFragment
     private var _binding: AddTaskFragmentBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TaskViewModel by viewModels()
+    private val taskTypes = TaskType.values()
 
 
     override fun onCreateView(
@@ -34,6 +40,9 @@ class TaskAddFragment
         savedInstanceState: Bundle?
     ): View {
         _binding = AddTaskFragmentBinding.inflate(inflater, container, false)
+        val adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_dropdown_item, taskTypes)
+        (binding.typeLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
         return binding.root
     }
 
@@ -53,12 +62,13 @@ class TaskAddFragment
         binding.add.setOnClickListener{
             val nameText = binding.name.text.toString()
             val descriptionText = binding.description.text.toString()
+            val type = binding.typeLayout.editText?.text.toString()
 
-            if(nameText.isNotEmpty()){
-                viewModel.add(Task(nameText, descriptionText, false))
+            if(nameText.isNotEmpty() && type.isNotEmpty()){
+                viewModel.add(Task(nameText, descriptionText, Converters.toType(type), false))
             }
             else{
-                showErrorMessages(binding.name)
+                showErrorMessages(binding.name, binding.typeLayout)
             }
         }
     }

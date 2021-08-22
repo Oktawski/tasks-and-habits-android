@@ -7,6 +7,11 @@
     <string name="placeholder">PLACEHOLDER</string>
     <string name="time_placeholder">--:--:-- / --:--:--</string>
 
+    <!-- Task types -->
+    <string name="shopping">Shopping</string>
+    <string name="home">Home</string>
+    <string name="basic">Basic</string>
+
     <string name="add">Add</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
@@ -24,4 +29,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="start_habit_button_description">button_to_start_habit</string>
     <string name="button_started_time_text">button_started_time_text</string>
+    <string name="type">Type</string>
 </resources>

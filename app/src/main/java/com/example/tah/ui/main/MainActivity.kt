@@ -49,14 +49,12 @@ class MainActivity
 
         initOnClickListeners()
         initViewModelObservables()
-
     }
 
     override fun initOnClickListeners() {
         binding.fabAdd.setOnClickListener { startActivity(addAndDetailsIntent) }
 
         binding.deleteIcon.setOnClickListener {
-
             when(binding.viewPager.currentItem) {
                 0 -> taskViewModel.deleteSelected()
                 1 -> todoViewModel.deleteSelected()

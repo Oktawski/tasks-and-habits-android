@@ -7,17 +7,24 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.tah.R
 
+enum class TaskType {
+        BASIC,
+        HOME,
+        SHOPPING,
+        LEARNING
+}
 
 @Entity(tableName = "tasks")
 data class Task(
         @PrimaryKey(autoGenerate = true)        val id: Int?,
         @ColumnInfo(name = "name") @NonNull     var name: String,
         @ColumnInfo(name = "description")       var description: String?,
+        @ColumnInfo(name = "type")              var type: TaskType,
         @ColumnInfo(name = "is_complete")       val isComplete: Boolean = false
 ) {
         @Ignore
-        constructor(name: String, description: String?, isComplete: Boolean)
-        :this(null, name, description, isComplete)
+        constructor(name: String, description: String?, type: TaskType, isComplete: Boolean)
+        :this(null, name, description, type, isComplete)
 
         companion object: ViewType{
                 override fun getAddView(): Int {
