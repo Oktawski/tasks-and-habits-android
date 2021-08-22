@@ -154,8 +154,7 @@ class HabitDetailsFragment
 
     private fun getHabit() {
         job = CoroutineScope(Dispatchers.Main).launch {
-            val habit = viewModel.getByIdSus(habitId)
-            inflateViews(habit)
+            inflateViews(viewModel.getByIdSus(habitId))
         }
     }
 

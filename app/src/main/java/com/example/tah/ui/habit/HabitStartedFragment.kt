@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -141,7 +142,12 @@ class HabitStartedFragment
             val timeMap = getTimeStrings(sessionLength)
             val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
             binding.timeText.text = timeText
-            if(sessionLength > 0) sessionLength--
+            if (sessionLength > 0) {
+                sessionLength--
+            } else {
+                viewModel.startStop()
+                Toast.makeText(activity, "Time's up", Toast.LENGTH_SHORT).show()
+            }
             updateHabit()
             mainHandler.postDelayed(this, 1000)
         }
