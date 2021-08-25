@@ -1,10 +1,7 @@
 package com.example.tah.models
 
 import androidx.annotation.NonNull
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.example.tah.R
 
 enum class TaskType {
@@ -16,11 +13,11 @@ enum class TaskType {
 
 @Entity(tableName = "tasks")
 data class Task(
-        @PrimaryKey(autoGenerate = true)        val id: Int?,
+        @PrimaryKey(autoGenerate = true)        val taskId: Int?,
         @ColumnInfo(name = "name") @NonNull     var name: String,
         @ColumnInfo(name = "description")       var description: String?,
         @ColumnInfo(name = "type")              var type: TaskType,
-        @ColumnInfo(name = "is_complete")       val isComplete: Boolean = false
+        @ColumnInfo(name = "is_complete")       val isComplete: Boolean = false,
 ) {
         @Ignore
         constructor(name: String, description: String?, type: TaskType, isComplete: Boolean)

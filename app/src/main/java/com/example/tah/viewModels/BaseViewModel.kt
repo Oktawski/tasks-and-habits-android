@@ -10,7 +10,7 @@ import com.example.tah.utilities.State
 abstract class BaseViewModel<T>
     : ViewModel()
 {
-    lateinit var itemsLD: LiveData<List<T>>
+    var itemsLD: LiveData<List<T>>? = null
     lateinit var state: MutableLiveData<State>
     var checkedItemsLD: MutableLiveData<List<Int>> = MutableLiveData(emptyList())
 

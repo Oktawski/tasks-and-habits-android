@@ -1,6 +1,7 @@
 package com.example.tah.viewModels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.tah.dao.todo.TodoRepository
 import com.example.tah.models.Todo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,12 +14,18 @@ class TodoViewModel @Inject constructor(
 ) : BaseViewModel<Todo>()
 {
     val completedTodos: LiveData<List<Todo>>
-    val disposable = CompositeDisposable()
 
     init{
-        itemsLD = repository.getAll()
         state = repository.state
         completedTodos = repository.completedTodos
+    }
+
+    fun getAllByTaskId(id: Int) {
+        itemsLD = repository.getAll(id)
+    }
+
+    fun getCompletedList(): LiveData<List<Todo>> {
+        return repository.getCompletedList()
     }
 
     override fun add(t: Todo) {
@@ -39,10 +46,6 @@ class TodoViewModel @Inject constructor(
 
     override fun update(t: Todo) {
         repository.update(t)
-    }
-
-    fun getCompletedList(): LiveData<List<Todo>> {
-        return repository.getCompletedList()
     }
 
 }

@@ -9,6 +9,9 @@ import com.example.tah.utilities.State
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TodoRepository @Inject constructor(
@@ -20,8 +23,8 @@ class TodoRepository @Inject constructor(
 
     private val disposable = CompositeDisposable()
 
-    fun getAll(): LiveData<List<Todo>> {
-        return todoDao.getAll()
+    fun getAll(id: Int): LiveData<List<Todo>> {
+        return todoDao.getAllByTaskId(id)
     }
 
     fun add(t: Todo) {
@@ -29,19 +32,17 @@ class TodoRepository @Inject constructor(
 
         trimLeadingAndTrailingWhitespaces(t)
 
-        disposable.add(todoDao.insert(t)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({state.value = State.added()},
-                {state.value = State.error("Error")}))
-
+        CoroutineScope(Dispatchers.Main).launch {
+            todoDao.insert(t)
+            state.value = State.added()
+        }
     }
 
     fun delete(t: Todo) {
         disposable.add(todoDao.delete(t)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ getAll() },{}))
+            .subscribe({ getAll(t.taskId!!) },{}))
     }
 
     fun deleteAll() {

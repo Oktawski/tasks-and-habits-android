@@ -9,12 +9,14 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.databinding.AddTaskFragmentBinding
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.models.Task
 import com.example.tah.models.TaskType
 import com.example.tah.ui.main.AddAndDetailsActivity
+import com.example.tah.ui.todo.TodosFragment
 import com.example.tah.utilities.Converters
 import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.utilities.State
@@ -30,7 +32,8 @@ class TaskAddFragment
 {
     private var _binding: AddTaskFragmentBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: TaskViewModel by viewModels()
+    //private val viewModel: TaskViewModel by viewModels()
+    private lateinit var viewModel: TaskViewModel
     private val taskTypes = TaskType.values()
 
 
@@ -39,6 +42,7 @@ class TaskAddFragment
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
         _binding = AddTaskFragmentBinding.inflate(inflater, container, false)
         val adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_dropdown_item, taskTypes)
         (binding.typeLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
@@ -65,7 +69,13 @@ class TaskAddFragment
             val type = binding.typeLayout.editText?.text.toString()
 
             if(nameText.isNotEmpty() && type.isNotEmpty()){
-                viewModel.add(Task(nameText, descriptionText, Converters.toType(type), false))
+                //viewModel.add(Task(nameText, descriptionText, Converters.toType(type), false))
+
+                if(Converters.toType(type) == TaskType.SHOPPING) {
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, TodosFragment())
+                        .commit()
+                }
             }
             else{
                 showErrorMessages(binding.name, binding.typeLayout)
@@ -80,7 +90,7 @@ class TaskAddFragment
                 State.Status.SUCCESS -> {
                     viewsNotLoading()
                 }
-                State.Status.ADDED -> requireActivity().finish()
+                //State.Status.ADDED -> requireActivity().finish()
                 else -> viewsNotLoading()
             }
             toast(it.message)

@@ -9,7 +9,7 @@ import io.reactivex.Completable
 interface BaseDao<T> {
 
     @Insert
-    fun insert(t: T): Completable
+    suspend fun insert(t: T): Long
 
     @Delete
     fun delete(t: T): Completable

@@ -3,6 +3,7 @@ package com.example.tah.di
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.ui.habit.HabitRecyclerViewAdapter
+import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.ui.main.MainActivity
 import com.example.tah.ui.task.TaskRecyclerViewAdapter
 import com.example.tah.ui.todo.TodoRecyclerViewAdapter
@@ -36,7 +37,7 @@ object AdapterModule {
         return TodoRecyclerViewAdapter(
             context,
             mutableListOf(),
-            ViewModelProvider(context as MainActivity).get(TodoViewModel::class.java)
+            ViewModelProvider(context as AddAndDetailsActivity).get(TodoViewModel::class.java)
         )
     }
 

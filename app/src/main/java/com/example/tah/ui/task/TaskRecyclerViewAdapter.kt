@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.databinding.ItemTaskBinding
 import com.example.tah.models.Task
@@ -65,7 +64,7 @@ class TaskRecyclerViewAdapter(
             itemView.setOnClickListener {
                 val intent = Intent(context, AddAndDetailsActivity::class.java)
                 intent.putExtra("fragmentId", Task.getDetailsView())
-                intent.putExtra("taskId", task.id)
+                intent.putExtra("taskId", task.taskId)
                 intent.putExtra("name", task.name)
                 intent.putExtra("description", task.description)
                 context.startActivity(intent)
@@ -87,9 +86,9 @@ class TaskRecyclerViewAdapter(
 
             binding.checkBox.setOnClickListener {
                 if(binding.checkBox.isChecked){
-                    checkedTasks.add(task.id!!)
+                    checkedTasks.add(task.taskId!!)
                 }else{
-                    checkedTasks.remove(task.id!!)
+                    checkedTasks.remove(task.taskId!!)
                 }
                 viewModel.addToCheckedItems(checkedTasks)
             }

@@ -62,7 +62,7 @@ class TasksFragment
             else (activity as MainActivity).setDeleteIconVisibility(View.GONE)
         }
 
-        viewModel.itemsLD.observe(viewLifecycleOwner) {
+        viewModel.itemsLD!!.observe(viewLifecycleOwner) {
             adapter.update(it)
         }
 

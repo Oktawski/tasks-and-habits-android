@@ -10,6 +10,10 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TaskRepository @Inject constructor(
@@ -21,16 +25,16 @@ class TaskRepository @Inject constructor(
 
     private val disposable = CompositeDisposable()
 
-    fun add(t: Task) {
+    suspend fun add(t: Task): Long {
         state.value = State.loading()
 
         trimLeadingAndTrailingWhitespaces(t)
 
-        disposable.add(taskDao.insert(t)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({state.value = State.added("Task added")},
-                {state.value = State.error("Error")}))
+        var taskId: Long = -1
+
+        taskId = taskDao.insert(t)
+        state.value = State.added("Task added $taskId")
+        return taskId
     }
 
     fun getAll(): LiveData<List<Task>> {
@@ -39,6 +43,10 @@ class TaskRepository @Inject constructor(
 
     fun getById(id: Int?): Single<Task> {
         return taskDao.getById(id)
+    }
+
+    suspend fun getTaskById(id: Int): Task {
+        return taskDao.getTaskById(id)
     }
 
     fun delete(t: Task) {
@@ -77,4 +85,6 @@ class TaskRepository @Inject constructor(
             .subscribe({state.value = State.updated("Task updated")},
                 {state.value = State.error("Task not updated")}))
     }
+
+    suspend fun getTaskWithTodosByTaskId(id: Int) = taskDao.getTaskWithTodosByTaskId(id)
 }

@@ -7,6 +7,10 @@ import com.example.tah.utilities.State
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HabitRepository @Inject constructor(
@@ -27,12 +31,16 @@ class HabitRepository @Inject constructor(
         state.value = State.loading()
 
         trimLeadingAndTrailingWhitespaces(t)
-
+        CoroutineScope(Dispatchers.Main).launch {
+            val habitId = dao.insert(t)
+            state.value = State.added("Habit added")
+        }
+/*
         disposable.add(dao.insert(t)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({state.value = State.added("Habit added")},
-                {state.value = State.error("Error")}))
+                {state.value = State.error("Error")}))*/
     }
 
     fun delete(t: Habit) {

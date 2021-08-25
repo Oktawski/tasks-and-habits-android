@@ -12,15 +12,15 @@ import com.example.tah.ui.todo.TodosFragment
 class SectionsPagerAdapter(fa: FragmentActivity): FragmentStateAdapter(fa) {
 
     @StringRes
-    private val tabTitles = listOf(R.string.tab_tasks, R.string.tab_todos, R.string.tab_habits)
+    private val tabTitles = listOf(R.string.tab_tasks, R.string.tab_habits)
 
     override fun getItemCount(): Int = tabTitles.size
 
     override fun createFragment(position: Int): Fragment {
         return when(position){
             0 -> TasksFragment()
-            1 -> TodosFragment()
-            2 -> HabitsFragment()
+            1 -> HabitsFragment()
+            //2 -> HabitsFragment()
             else -> TasksFragment()
         }
     }

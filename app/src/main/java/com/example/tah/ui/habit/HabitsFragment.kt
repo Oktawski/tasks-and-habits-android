@@ -45,7 +45,7 @@ class HabitsFragment
     }
 
     override fun initViewModelObservables() {
-        viewModel.itemsLD.observe(viewLifecycleOwner) { adapter.update(it) }
+        viewModel.itemsLD!!.observe(viewLifecycleOwner) { adapter.update(it) }
     }
 
     override fun initOnClickListeners() {

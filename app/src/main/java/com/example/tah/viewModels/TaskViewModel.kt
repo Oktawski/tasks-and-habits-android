@@ -31,10 +31,22 @@ class TaskViewModel @Inject constructor(
         return checkBoxVisibility
     }
 
-    override fun add(t: Task) = repository.add(t)
+    //override fun add(t: Task) = repository.add(t)
+
+    override fun add(t: Task) {
+        TODO("Not yet implemented")
+    }
+
+    suspend fun addGetId(t: Task): Long = repository.add(t)
+
+    suspend fun getTaskWithTodosByTaskId(id: Int) = repository.getTaskWithTodosByTaskId(id)
 
     fun getById(id: Int?): Single<Task> {
         return repository.getById(id)
+    }
+
+    suspend fun getTaskById(id: Int): Task {
+        return repository.getTaskById(id)
     }
 
     override fun delete(t: Task) {
