@@ -4,25 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.databinding.AddTaskFragmentBinding
-import com.example.tah.utilities.ViewInitializable
 import com.example.tah.models.Task
 import com.example.tah.models.TaskType
+import com.example.tah.models.TaskWithTodos
 import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.ui.todo.TodosFragment
 import com.example.tah.utilities.Converters
-import com.example.tah.viewModels.TaskViewModel
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
+import com.example.tah.utilities.ViewInitializable
+import com.example.tah.viewModels.TaskViewModel
+import com.example.tah.viewModels.TaskWithTodosViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class TaskAddFragment
@@ -32,10 +37,8 @@ class TaskAddFragment
 {
     private var _binding: AddTaskFragmentBinding? = null
     private val binding get() = _binding!!
-    //private val viewModel: TaskViewModel by viewModels()
     private lateinit var viewModel: TaskViewModel
-    private val taskTypes = TaskType.values()
-
+    private lateinit var taskWithTodosViewModel: TaskWithTodosViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,10 +46,18 @@ class TaskAddFragment
         savedInstanceState: Bundle?
     ): View {
         viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
-        _binding = AddTaskFragmentBinding.inflate(inflater, container, false)
-        val adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_dropdown_item, taskTypes)
-        (binding.typeLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+        taskWithTodosViewModel = ViewModelProvider(requireActivity())
+            .get(TaskWithTodosViewModel::class.java)
 
+        val adapter = ArrayAdapter(
+            requireActivity(), android.R.layout.simple_spinner_dropdown_item, TaskType.values()
+        )
+
+        _binding = AddTaskFragmentBinding.inflate(inflater, container, false)
+        (binding.typeLayout.editText as? AutoCompleteTextView)?.apply {
+            setAdapter(adapter)
+            onItemClickListener = spinnerAdapter
+        }
         return binding.root
     }
 
@@ -69,12 +80,18 @@ class TaskAddFragment
             val type = binding.typeLayout.editText?.text.toString()
 
             if(nameText.isNotEmpty() && type.isNotEmpty()){
-                //viewModel.add(Task(nameText, descriptionText, Converters.toType(type), false))
-
-                if(Converters.toType(type) == TaskType.SHOPPING) {
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, TodosFragment())
-                        .commit()
+                if (Converters.toType(type) == TaskType.SHOPPING) {
+                    runBlocking {
+                        /*viewModel.addTaskWithTodos(
+                            taskWithTodosViewModel.taskWithTodos.value!!
+                        )*/
+                    }
+                } else {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        viewModel.add(
+                            Task(nameText, descriptionText, Converters.toType(type), false)
+                        )
+                    }
                 }
             }
             else{
@@ -87,10 +104,8 @@ class TaskAddFragment
         viewModel.state.observe(viewLifecycleOwner){
             when(it.status){
                 State.Status.LOADING -> viewsLoading()
-                State.Status.SUCCESS -> {
-                    viewsNotLoading()
-                }
-                //State.Status.ADDED -> requireActivity().finish()
+                State.Status.SUCCESS -> viewsNotLoading()
+                State.Status.ADDED -> requireActivity().finish()
                 else -> viewsNotLoading()
             }
             toast(it.message)
@@ -110,6 +125,23 @@ class TaskAddFragment
     private fun toast(message: String?){
         if(!message.isNullOrEmpty()){
             Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val spinnerAdapter: AdapterView.OnItemClickListener
+    = AdapterView.OnItemClickListener { _, _, position, _ ->
+        if (position == 2) {
+            taskWithTodosViewModel.taskWithTodos.value =
+                TaskWithTodos(Task(TaskType.SHOPPING), mutableListOf())
+
+            binding.descriptionLayout.visibility = View.GONE
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, TodosFragment.newInstance(-1))
+                .addToBackStack("todoFragment")
+                .commit()
+        } else {
+            binding.descriptionLayout.visibility = View.VISIBLE
+            parentFragmentManager.popBackStack("todoFragment", -1)
         }
     }
 }

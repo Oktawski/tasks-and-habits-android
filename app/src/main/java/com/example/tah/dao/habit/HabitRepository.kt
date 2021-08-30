@@ -27,14 +27,18 @@ class HabitRepository @Inject constructor(
         return dao.getById(id)
     }
 
-    fun add(t: Habit) {
+    suspend fun add(t: Habit): Long {
         state.value = State.loading()
+
+        var habitId = -1L
 
         trimLeadingAndTrailingWhitespaces(t)
         CoroutineScope(Dispatchers.Main).launch {
-            val habitId = dao.insert(t)
+            habitId = dao.insert(t)
             state.value = State.added("Habit added")
         }
+
+        return habitId
 /*
         disposable.add(dao.insert(t)
             .subscribeOn(Schedulers.io())
@@ -43,14 +47,15 @@ class HabitRepository @Inject constructor(
                 {state.value = State.error("Error")}))*/
     }
 
-    fun delete(t: Habit) {
+    suspend fun delete(t: Habit) {
         state.value = State.loading()
+        dao.delete(t)
 
-        disposable.add(dao.delete(t)
+        /*disposable.add(dao.delete(t)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({state.value = State.removed("Habit removed")},
-                {state.value = State.error("Error")}))
+                {state.value = State.error("Error")}))*/
     }
 
     fun deleteAll() {

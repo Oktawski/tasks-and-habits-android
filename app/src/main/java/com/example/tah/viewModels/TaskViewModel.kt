@@ -3,10 +3,13 @@ package com.example.tah.viewModels
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.tah.dao.task.TaskRepository
 import com.example.tah.models.Task
+import com.example.tah.models.TaskWithTodos
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Single
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -33,32 +36,39 @@ class TaskViewModel @Inject constructor(
 
     //override fun add(t: Task) = repository.add(t)
 
-    override fun add(t: Task) {
-        TODO("Not yet implemented")
-    }
 
-    suspend fun addGetId(t: Task): Long = repository.add(t)
+    override suspend fun add(t: Task) = repository.add(t)
 
-    suspend fun getTaskWithTodosByTaskId(id: Int) = repository.getTaskWithTodosByTaskId(id)
+    //suspend fun addGetId(t: Task): Long = repository.add(t)
 
-    fun getById(id: Int?): Single<Task> {
+    //suspend fun getTaskWithTodosByTaskId(id: Int) = repository.getTaskWithTodosByTaskId(id)
+
+    //suspend fun addTaskWithTodos(taskWithTodos: TaskWithTodos) = repository.addTaskWithTodos(taskWithTodos)
+
+    /*fun getById(id: Int?): Single<Task> {
         return repository.getById(id)
-    }
+    }*/
 
     suspend fun getTaskById(id: Int): Task {
         return repository.getTaskById(id)
     }
 
     override fun delete(t: Task) {
-        return repository.delete(t)
+        viewModelScope.launch {
+            repository.delete(t)
+        }
     }
 
     override fun deleteAll() {
-        repository.deleteAll()
+        viewModelScope.launch {
+            repository.deleteAll()
+        }
     }
 
     override fun deleteSelected() {
-        repository.deleteSelected()
+        viewModelScope.launch {
+            repository.deleteSelected()
+        }
     }
 
     override fun update(t: Task) {

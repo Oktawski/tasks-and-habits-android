@@ -96,10 +96,6 @@ class MainActivity
                         layoutRes = Task.getAddView()
                     }
                     1 -> {
-                        binding.fabAdd.hide()
-                        taskViewModel.setCheckBoxVisibility(View.GONE)
-                    }
-                    2 -> {
                         binding.fabAdd.show()
                         layoutRes = Habit.getAddView()
                         taskViewModel.setCheckBoxVisibility(View.GONE)

@@ -1,11 +1,13 @@
 package com.example.tah.viewModels
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.tah.dao.todo.TodoRepository
 import com.example.tah.models.Todo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -13,27 +15,29 @@ class TodoViewModel @Inject constructor(
     private val repository: TodoRepository
 ) : BaseViewModel<Todo>()
 {
-    val completedTodos: LiveData<List<Todo>>
 
     init{
         state = repository.state
-        completedTodos = repository.completedTodos
     }
 
     fun getAllByTaskId(id: Int) {
         itemsLD = repository.getAll(id)
     }
 
-    fun getCompletedList(): LiveData<List<Todo>> {
-        return repository.getCompletedList()
-    }
+    suspend fun getTodosByTaskId(id: Int) = repository.getTodosByTaskId(id)
 
-    override fun add(t: Todo) {
-        repository.add(t)
+    fun deleteCompletedByTaskId(taskId: Int) = repository.deleteCompletedByTaskId(taskId)
+
+    fun getCompletedByTaskId(taskId: Int) = repository.getCompletedByTaskId(taskId)
+
+    override suspend fun add(t: Todo): Long {
+        return repository.add(t)
     }
 
     override fun delete(t: Todo) {
-        repository.delete(t)
+        viewModelScope.launch {
+            repository.delete(t)
+        }
     }
 
     override fun deleteAll() {
@@ -41,7 +45,6 @@ class TodoViewModel @Inject constructor(
     }
 
     override fun deleteSelected() {
-        repository.deleteSelected()
     }
 
     override fun update(t: Todo) {

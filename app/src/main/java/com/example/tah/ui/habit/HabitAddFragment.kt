@@ -19,6 +19,9 @@ import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -68,7 +71,11 @@ class HabitAddFragment
                         "Session length cannot be less than 1 minute",
                         Toast.LENGTH_SHORT
                     ).show()
-                    else viewModel.add(habit)
+                    else {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            viewModel.add(habit)
+                        }
+                    }
                 }
             }
         }
@@ -76,11 +83,9 @@ class HabitAddFragment
 
     override fun initViewModelObservables() {
         viewModel.state.observe(viewLifecycleOwner){
-            when(it.status){
-                State.Status.ADDED -> {
-                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
-                    requireActivity().finish()
-                }
+            if (it.status == State.Status.ADDED) {
+                Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
+                requireActivity().finish()
             }
         }
     }

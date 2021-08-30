@@ -23,6 +23,9 @@ data class Task(
         constructor(name: String, description: String?, type: TaskType, isComplete: Boolean)
         :this(null, name, description, type, isComplete)
 
+        @Ignore
+        constructor(type: TaskType) : this(null, "", "", type, false)
+
         companion object: ViewType{
                 override fun getAddView(): Int {
                         return R.layout.add_task_fragment

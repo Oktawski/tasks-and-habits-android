@@ -1,9 +1,11 @@
 package com.example.tah.viewModels
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.tah.dao.habit.HabitRepository
 import com.example.tah.models.Habit
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,12 +31,14 @@ class HabitViewModel @Inject constructor(
         return repository.getById(id)
     }
 
-    override fun add(t: Habit) {
-        repository.add(t)
+    override suspend fun add(t: Habit): Long {
+        return repository.add(t)
     }
 
     override fun delete(t: Habit) {
-        repository.delete(t)
+        viewModelScope.launch {
+            repository.delete(t)
+        }
     }
 
     override fun deleteAll() {

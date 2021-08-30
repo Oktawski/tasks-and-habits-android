@@ -14,7 +14,7 @@ abstract class BaseViewModel<T>
     lateinit var state: MutableLiveData<State>
     var checkedItemsLD: MutableLiveData<List<Int>> = MutableLiveData(emptyList())
 
-    abstract fun add(t: T)
+    abstract suspend fun add(t: T): Long
     abstract fun delete(t: T)
     abstract fun deleteAll()
     abstract fun deleteSelected()

@@ -9,9 +9,7 @@ import com.example.tah.utilities.State
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class TodoRepository @Inject constructor(
@@ -19,53 +17,48 @@ class TodoRepository @Inject constructor(
 ) : PropertiesTrimmer {
 
     val state = MutableLiveData<State>()
-    val completedTodos = MutableLiveData<List<Todo>>(mutableListOf())
-
     private val disposable = CompositeDisposable()
 
     fun getAll(id: Int): LiveData<List<Todo>> {
         return todoDao.getAllByTaskId(id)
     }
 
-    fun add(t: Todo) {
-        state.value = State.loading()
+    suspend fun getTodosByTaskId(id: Int) = todoDao.getTodosByTaskId(id)
 
+    suspend fun add(t: Todo): Long {
+        state.value = State.loading()
         trimLeadingAndTrailingWhitespaces(t)
 
+        var id = -1L
+
         CoroutineScope(Dispatchers.Main).launch {
-            todoDao.insert(t)
+            id = todoDao.insert(t)
             state.value = State.added()
         }
+
+        return id
     }
 
-    fun delete(t: Todo) {
-        disposable.add(todoDao.delete(t)
+    suspend fun delete(t: Todo) {
+        todoDao.delete(t)
+    }
+
+    fun deleteCompletedByTaskId(taskId: Int) {
+        disposable.add(todoDao.deleteCompletedByTaskId(taskId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ getAll(t.taskId!!) },{}))
+            .subscribe( {getAll(taskId)}, {}))
     }
 
     fun deleteAll() {
-        TODO("Not yet implemented")
-    }
-
-    fun getCompletedList(): LiveData<List<Todo>> {
-        disposable.add(todoDao.getCompletedList()
+        disposable.add(todoDao.deleteAll()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {completedTodos.value = it},
-                {}))
-
-        return completedTodos
+            .subscribe())
     }
 
-
-    fun deleteSelected() {
-        disposable.add(todoDao.deleteCompleted()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ getCompletedList() },{}))
+    fun getCompletedByTaskId(taskId: Int): LiveData<List<Todo>> {
+        return todoDao.getCompletedByTaskId(taskId)
     }
 
     fun update(t: Todo) {
@@ -77,7 +70,7 @@ class TodoRepository @Inject constructor(
             .subscribe(
                 {
                     state.value = State.updated("Updated")
-                    getCompletedList()
+                    getCompletedByTaskId(t.taskId!!)
                 },
                 {
                     state.value = State.error("Could not update")

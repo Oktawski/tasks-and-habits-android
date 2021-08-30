@@ -1,6 +1,7 @@
 package com.example.tah.models
 
 import androidx.room.Embedded
+import androidx.room.Entity
 import androidx.room.Relation
 
 data class TaskWithTodos(
@@ -9,5 +10,5 @@ data class TaskWithTodos(
         parentColumn = "taskId",
         entityColumn = "taskId"
     )
-    val todos: List<Todo>?
+    val todos: MutableList<Todo>?
 )

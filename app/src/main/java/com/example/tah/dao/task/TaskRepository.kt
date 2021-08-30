@@ -1,39 +1,32 @@
 package com.example.tah.dao.task
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.tah.dao.todo.TodoDao
 import com.example.tah.models.Task
+import com.example.tah.models.TaskWithTodos
 import com.example.tah.utilities.PropertiesTrimmer
 import com.example.tah.utilities.State
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TaskRepository @Inject constructor(
-    private val taskDao: TaskDao
+    private val taskDao: TaskDao,
+    private val todoDao: TodoDao
 ) : PropertiesTrimmer {
 
     val state: MutableLiveData<State> = MutableLiveData()
     internal val checkedItemsLD = MutableLiveData<List<Int>>(mutableListOf())
-
     private val disposable = CompositeDisposable()
 
     suspend fun add(t: Task): Long {
         state.value = State.loading()
-
         trimLeadingAndTrailingWhitespaces(t)
 
-        var taskId: Long = -1
-
-        taskId = taskDao.insert(t)
-        state.value = State.added("Task added $taskId")
+        val taskId = taskDao.insert(t)
+        state.value = State.added("Task added")
         return taskId
     }
 
@@ -41,39 +34,23 @@ class TaskRepository @Inject constructor(
         return taskDao.getAll()
     }
 
-    fun getById(id: Int?): Single<Task> {
-        return taskDao.getById(id)
-    }
-
     suspend fun getTaskById(id: Int): Task {
         return taskDao.getTaskById(id)
     }
 
-    fun delete(t: Task) {
-        disposable.add(taskDao.delete(t)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({state.value = State.removed("Task removed")},
-                {state.value = State.error("Error")}))
+    suspend fun delete(t: Task) {
+        if (taskDao.delete(t) == 1) state.value = State.removed("Task removed")
+        else state.value = State.error("Error")
     }
 
-    fun deleteAll() {
-        disposable.add(taskDao.deleteAll()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe())
+    suspend fun deleteAll() {
+        taskDao.deleteAll()
     }
 
-    fun deleteSelected() {
-        disposable.add(taskDao.deleteSelected(checkedItemsLD.value!!)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    if (checkedItemsLD.value!!.size > 1) state.value = State.removed("Tasks removed")
-                    else state.value = State.removed("Task removed")
-                },
-                {state.value = State.error("Error")}))
+    suspend fun deleteSelected() {
+        val deletedCount = taskDao.deleteSelected(checkedItemsLD.value!!)
+        if(deletedCount > 1) state.value = State.removed("Tasks removed")
+        else state.value = State.removed("Task removed")
     }
 
     fun update(t: Task) {
@@ -87,4 +64,12 @@ class TaskRepository @Inject constructor(
     }
 
     suspend fun getTaskWithTodosByTaskId(id: Int) = taskDao.getTaskWithTodosByTaskId(id)
+
+    suspend fun addTaskWithTodos(taskWithTodos: TaskWithTodos) {
+        val taskId = taskDao.insert(taskWithTodos.task!!)
+        for (todo in taskWithTodos.todos!!) {
+            todo.taskId = taskId.toInt()
+            todoDao.insert(todo)
+        }
+    }
 }
