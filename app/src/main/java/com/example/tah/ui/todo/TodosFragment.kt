@@ -64,16 +64,7 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         taskWithTodosViewModel =
             ViewModelProvider(requireActivity()).get(TaskWithTodosViewModel::class.java)
 
-        Log.i("TodosF", "onCreateView: ${taskWithTodosViewModel.hashCode()}")
 
-        runBlocking {
-            if (arguments?.getInt("taskId") != -1) {
-                taskId = arguments?.getInt("taskId")
-                task = taskViewModel.getTaskById(taskId!!)
-            } else {
-                //task = Task("", "", TaskType.SHOPPING, false)
-            }
-        }
 
         return binding.root
     }
@@ -83,8 +74,15 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         initAdapter()
 
         CoroutineScope(Dispatchers.Main).launch {
-            //if (taskId == null) taskId = taskViewModel.addGetId(task!!).toInt()
-            todoViewModel.getAllByTaskId(taskId!!)
+            if (arguments?.getInt("taskId") != -1) {
+                taskId = arguments?.getInt("taskId")
+                task = taskViewModel.getTaskById(taskId!!)
+            } else {
+                task = Task("", "", TaskType.SHOPPING, false)
+                taskId = taskViewModel.add(task!!).toInt()
+            }
+
+            if(taskId != null) todoViewModel.getAllByTaskId(taskId!!)
             initOnClickListeners()
             initViewModelObservables()
         }
@@ -92,7 +90,7 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
 
     override fun onResume() {
         super.onResume()
-        todoViewModel.getCompletedByTaskId(taskId!!)
+        if(taskId != null) todoViewModel.getCompletedByTaskId(taskId!!)
     }
 
     override fun onDestroyView() {
@@ -143,21 +141,11 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
                 val name: String = addText.text.toString()
 
                 if (name.isNotEmpty()) {
-                    /*val task = taskWithTodosViewModel.taskWithTodos.value
-                    task?.todos?.add(
-                        Todo(null, name, false, task.task.taskId)
-                    )*/
                     CoroutineScope(Dispatchers.Main).launch {
                         todoViewModel.add(
                             Todo(null, name, false, taskId)
                         )
                     }
-
-                    /*todoViewModel.add(
-                        Todo(null, name = name, isComplete = false, taskId = taskId)
-                    )*/
-                    //Log.i("Adding Todo", "Task Id: $taskId")
-
                 } else {
                     addText.error = "Cannot be blank"
                 }

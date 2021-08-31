@@ -74,6 +74,7 @@ class TodoRecyclerViewAdapter(
             val input = EditText(context)
             input.hint = "Edit name"
             input.inputType = InputType.TYPE_CLASS_TEXT
+            input.setText(todo?.name)
             builder.setView(input)
 
 
