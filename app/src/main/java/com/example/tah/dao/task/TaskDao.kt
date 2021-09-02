@@ -1,11 +1,13 @@
 package com.example.tah.dao.task
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.tah.dao.BaseDao
 import com.example.tah.models.Task
+import com.example.tah.models.TaskType
 import com.example.tah.models.TaskWithTodos
 
 
@@ -18,8 +20,8 @@ interface TaskDao : BaseDao<Task> {
     @Query("SELECT * FROM tasks WHERE taskId=:taskId LIMIT 1")
     suspend fun getTaskById(taskId: Int?): Task
 
-   /* @Query("SELECT * FROM tasks WHERE type = :taskType")
-    suspend fun getFilteredTasks(taskType: TaskType)*/
+    @Query("SELECT * FROM tasks WHERE type = :taskType ORDER BY taskId ASC")
+    fun getFilteredTasks(taskType: TaskType): LiveData<List<Task>>
 
     @Query("DELETE FROM tasks WHERE taskId in (:idList)")
     suspend fun deleteSelected(idList: List<Int>): Int

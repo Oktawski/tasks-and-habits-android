@@ -6,9 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.tah.dao.task.TaskRepository
 import com.example.tah.models.Task
-import com.example.tah.models.TaskWithTodos
+import com.example.tah.models.TaskType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Single
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +20,7 @@ class TaskViewModel @Inject constructor(
     private val checkBoxVisibility: MutableLiveData<Int> = MutableLiveData(View.GONE)
 
     init {
-        itemsLD = repository.getAll()
+        itemsLD =  repository.getAll()
         checkedItemsLD = repository.checkedItemsLD
         state = repository.state
     }
@@ -34,8 +33,15 @@ class TaskViewModel @Inject constructor(
         return checkBoxVisibility
     }
 
-    //override fun add(t: Task) = repository.add(t)
+    fun getAll() {
+        itemsLD = repository.getAll()
+    }
 
+    fun getFiltered(type: TaskType) {
+        itemsLD = repository.getFiltered(type)
+    }
+
+    //override fun add(t: Task) = repository.add(t)
 
     override suspend fun add(t: Task) = repository.add(t)
 

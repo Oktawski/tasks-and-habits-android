@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tah.dao.todo.TodoDao
 import com.example.tah.models.Task
+import com.example.tah.models.TaskType
 import com.example.tah.models.TaskWithTodos
 import com.example.tah.utilities.PropertiesTrimmer
 import com.example.tah.utilities.State
@@ -32,6 +33,10 @@ class TaskRepository @Inject constructor(
 
     fun getAll(): LiveData<List<Task>> {
         return taskDao.getAll()
+    }
+
+    fun getFiltered(type: TaskType): LiveData<List<Task>> {
+        return  taskDao.getFilteredTasks(type)
     }
 
     suspend fun getTaskById(id: Int): Task {

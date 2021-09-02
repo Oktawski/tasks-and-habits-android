@@ -11,6 +11,7 @@ import com.example.tah.models.Task
 import com.example.tah.models.TaskType
 import kotlinx.coroutines.*
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,7 +24,7 @@ class TaskDatabaseTest : LiveDataUtil {
 
     private lateinit var taskDao: TaskDao
     private lateinit var taskDatabase: TaskDatabase
-    val context = ApplicationProvider.getApplicationContext<Context>()
+    private val context = ApplicationProvider.getApplicationContext<Context>()
 
     @Before
     fun createDb() {
@@ -67,7 +68,8 @@ class TaskDatabaseTest : LiveDataUtil {
             taskInserted = taskDao.getTaskById(1)
         }
 
-        assert(task.name == taskInserted?.name)
+        assertEquals(task.name, taskInserted?.name)
+        (task.name == taskInserted?.name)
     }
 
     @Test
@@ -87,12 +89,45 @@ class TaskDatabaseTest : LiveDataUtil {
             tasks = taskDao.getAll()
         }
 
-        tasks.getOrAwait()
-
-        assert(tasks.getOrAwait()?.size == 0)
+        assertEquals(tasks.getOrAwait()?.size, 0)
     }
 
+    @Test
+    fun insertMultipleFilterByTaskType() {
+        val taskShopping = Task("shopping", "", TaskType.SHOPPING, false)
+        val taskOther = Task("other", "desc", TaskType.BASIC, false)
+        var shoppingTasks: LiveData<List<Task>>
+        var basicTasks: LiveData<List<Task>>
+
+        runBlocking {
+            taskDao.insert(taskShopping)
+            taskDao.insert(taskOther)
+            taskDao.insert(taskShopping)
+            taskDao.insert(taskOther)
+            taskDao.insert(taskShopping)
+            taskDao.insert(taskOther)
+            taskDao.insert(taskShopping)
+            taskDao.insert(taskOther)
+
+            shoppingTasks = taskDao.getFilteredTasks(TaskType.SHOPPING)
+            basicTasks = taskDao.getFilteredTasks(TaskType.BASIC)
+        }
+
+        val shoppingMatchedStream = shoppingTasks.getOrAwait()
+            ?.stream()
+            ?.allMatch { e -> e.type == TaskType.SHOPPING }
+
+        val basicMatchedStream = basicTasks.getOrAwait()
+            ?.stream()
+            ?.allMatch { e -> e.type == TaskType.BASIC }
+
+        val basicMatchedStreamFalse = basicTasks.getOrAwait()
+            ?.stream()
+            ?.anyMatch { e -> e.type in listOf(TaskType.HOME, TaskType.SHOPPING, TaskType.LEARNING) }
+
+        assertEquals(shoppingMatchedStream, true)
+        assertEquals(basicMatchedStream, true)
+        assertEquals(basicMatchedStreamFalse, false)
+    }
 
 }
-
-
