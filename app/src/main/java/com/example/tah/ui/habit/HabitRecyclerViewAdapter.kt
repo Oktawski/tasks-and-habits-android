@@ -16,8 +16,7 @@ import java.util.*
 
 class HabitRecyclerViewAdapter(
     private val context: Context,
-    private val habits: MutableList<Habit>)
-: RecyclerView.Adapter<HabitRecyclerViewAdapter.ViewHolder>(),
+) : RecyclerView.Adapter<HabitRecyclerViewAdapter.ViewHolder>(),
     ViewHabitTime
 {
 

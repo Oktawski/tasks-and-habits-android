@@ -64,8 +64,6 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         taskWithTodosViewModel =
             ViewModelProvider(requireActivity()).get(TaskWithTodosViewModel::class.java)
 
-
-
         return binding.root
     }
 
@@ -105,7 +103,7 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         }
 
         todoViewModel.itemsLD!!.observe(requireActivity()){
-            adapter.update(it)
+            adapter.differ.submitList(it)
         }
 
         todoViewModel.state.observe(requireActivity()){

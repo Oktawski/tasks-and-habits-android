@@ -2,12 +2,13 @@ package com.example.tah.ui.todo
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.R
 import com.example.tah.databinding.ItemTodoBinding
@@ -16,14 +17,21 @@ import com.example.tah.viewModels.TodoViewModel
 
 class TodoRecyclerViewAdapter(
         private val context: Context,
-        private var todos: List<Todo>,
         private val viewModel: TodoViewModel
 ) : RecyclerView.Adapter<TodoRecyclerViewAdapter.ViewHolder>() {
 
-    fun update(todos: List<Todo>){
-        this.todos = todos
-        this.notifyDataSetChanged()
+    private val differCallback = object : DiffUtil.ItemCallback<Todo>() {
+        override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Todo, newItem: Todo): Boolean {
+            return oldItem == newItem
+        }
     }
+
+    val differ = AsyncListDiffer(this, differCallback)
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -32,11 +40,11 @@ class TodoRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(todos[position])
+        holder.bind(differ.currentList[position])
     }
 
     override fun getItemCount(): Int {
-        return todos.size
+        return differ.currentList.size
     }
 
     inner class ViewHolder(

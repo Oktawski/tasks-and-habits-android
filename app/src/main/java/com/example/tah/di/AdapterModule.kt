@@ -36,7 +36,6 @@ object AdapterModule {
     ): TodoRecyclerViewAdapter {
         return TodoRecyclerViewAdapter(
             context,
-            mutableListOf(),
             ViewModelProvider(context as AddAndDetailsActivity).get(TodoViewModel::class.java)
         )
     }
@@ -46,7 +45,7 @@ object AdapterModule {
     fun provideHabitAdapter(
         @ActivityContext context: Context,
     ): HabitRecyclerViewAdapter {
-        return HabitRecyclerViewAdapter(context, mutableListOf())
+        return HabitRecyclerViewAdapter(context)
     }
 
 }
