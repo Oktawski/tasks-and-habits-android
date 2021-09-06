@@ -26,7 +26,7 @@ object AdapterModule {
         @ActivityContext context: Context,
     ): TaskRecyclerViewAdapter {
         val viewModel: TaskViewModel = ViewModelProvider(context as MainActivity).get(TaskViewModel::class.java)
-        return TaskRecyclerViewAdapter(context, viewModel, mutableListOf(), mutableListOf())
+        return TaskRecyclerViewAdapter(context, viewModel, mutableListOf())
     }
 
     @Provides

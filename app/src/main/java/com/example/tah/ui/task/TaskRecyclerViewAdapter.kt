@@ -5,6 +5,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.databinding.ItemTaskBinding
 import com.example.tah.models.Task
@@ -14,9 +16,20 @@ import com.example.tah.viewModels.TaskViewModel
 class TaskRecyclerViewAdapter(
     private val context: Context,
     private val viewModel: TaskViewModel,
-    private val tasks: MutableList<Task>,
     private val checkedTasks: MutableList<Int> = mutableListOf()
 ) : RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder>() {
+
+    private val differCallback = object : DiffUtil.ItemCallback<Task>() {
+        override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    val differ = AsyncListDiffer(this, differCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,15 +37,12 @@ class TaskRecyclerViewAdapter(
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(tasks[position])
-
-    override fun getItemCount(): Int = tasks.size
-
-    fun update(tasks: List<Task>){
-        this.tasks.clear()
-        this.tasks.addAll(tasks)
-        this.notifyDataSetChanged()
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(differ.currentList[position])
     }
+
+    override fun getItemCount(): Int = differ.currentList.size
+
 
     inner class ViewHolder(
         private val binding: ItemTaskBinding
@@ -46,6 +56,7 @@ class TaskRecyclerViewAdapter(
             with(binding){
                 itemName.text = task.name
                 checkBox.isChecked = false
+                typeImage.setImageResource(task.imageResource)
 
                 if(task.description.isNullOrEmpty()){
                     description.visibility = View.GONE

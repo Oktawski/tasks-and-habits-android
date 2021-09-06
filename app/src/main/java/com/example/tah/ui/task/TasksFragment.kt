@@ -63,7 +63,7 @@ class TasksFragment
         }
 
         viewModel.itemsLD!!.observe(viewLifecycleOwner) {
-            adapter.update(it)
+            adapter.differ.submitList(it)
         }
 
         viewModel.getCheckBoxVisibility().observe(viewLifecycleOwner) {
@@ -76,8 +76,6 @@ class TasksFragment
             }
         }
     }
-
-
 
     override fun initOnClickListeners() {
         TODO("Not yet implemented")

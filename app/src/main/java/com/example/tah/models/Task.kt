@@ -1,7 +1,11 @@
 package com.example.tah.models
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.example.tah.R
 
 enum class TaskType {
@@ -19,6 +23,19 @@ data class Task(
         @ColumnInfo(name = "type")              var type: TaskType,
         @ColumnInfo(name = "is_complete")       val isComplete: Boolean = false,
 ) {
+        @DrawableRes
+        var imageResource: Int = -1
+
+        init {
+            imageResource = when (type) {
+                    TaskType.SHOPPING -> R.drawable.ic_baseline_shopping_cart_24
+                    TaskType.HOME -> R.drawable.ic_baseline_home_24
+                    TaskType.BASIC -> R.drawable.ic_baseline_assignment_24
+                    TaskType.LEARNING -> R.drawable.ic_baseline_school_24
+            }
+
+        }
+
         @Ignore
         constructor(name: String, description: String?, type: TaskType, isComplete: Boolean)
         :this(null, name, description, type, isComplete)

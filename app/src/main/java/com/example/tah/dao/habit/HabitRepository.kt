@@ -50,12 +50,7 @@ class HabitRepository @Inject constructor(
     suspend fun delete(t: Habit) {
         state.value = State.loading()
         dao.delete(t)
-
-        /*disposable.add(dao.delete(t)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({state.value = State.removed("Habit removed")},
-                {state.value = State.error("Error")}))*/
+        state.value = State.removed("Habit removed")
     }
 
     fun deleteAll() {

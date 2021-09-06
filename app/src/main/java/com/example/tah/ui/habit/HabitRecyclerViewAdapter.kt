@@ -5,6 +5,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.databinding.ItemHabitBinding
 import com.example.tah.models.Habit
@@ -19,21 +21,30 @@ class HabitRecyclerViewAdapter(
     ViewHabitTime
 {
 
+    private val differCallback = object : DiffUtil.ItemCallback<Habit>() {
+        override fun areItemsTheSame(oldItem: Habit, newItem: Habit): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Habit, newItem: Habit): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    val differ = AsyncListDiffer(this, differCallback)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemHabitBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(habits[position])
-
-    override fun getItemCount(): Int = habits.size
-
-    fun update(items: List<Habit>){
-        habits.clear()
-        habits.addAll(items)
-        notifyDataSetChanged()
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(differ.currentList[position])
     }
+
+    override fun getItemCount(): Int = differ.currentList.size
+
 
     inner class ViewHolder(
         private val binding: ItemHabitBinding
