@@ -77,10 +77,12 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
                 task = taskViewModel.getTaskById(taskId!!)
             } else {
                 task = Task("", "", TaskType.SHOPPING, false)
+                //remove observers
                 taskId = taskViewModel.add(task!!).toInt()
             }
 
             if(taskId != null) todoViewModel.getAllByTaskId(taskId!!)
+
             initOnClickListeners()
             initViewModelObservables()
         }

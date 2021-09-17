@@ -33,7 +33,6 @@ data class Task(
                     TaskType.BASIC -> R.drawable.ic_baseline_assignment_24
                     TaskType.LEARNING -> R.drawable.ic_baseline_school_24
             }
-
         }
 
         @Ignore

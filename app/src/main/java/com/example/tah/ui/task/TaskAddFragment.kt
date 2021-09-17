@@ -16,6 +16,7 @@ import com.example.tah.models.Task
 import com.example.tah.models.TaskType
 import com.example.tah.models.TaskWithTodos
 import com.example.tah.ui.main.AddAndDetailsActivity
+import com.example.tah.ui.todo.TodosAddFragment
 import com.example.tah.ui.todo.TodosFragment
 import com.example.tah.utilities.Converters
 import com.example.tah.utilities.State
@@ -81,7 +82,7 @@ class TaskAddFragment
 
             if(nameText.isNotEmpty() && type.isNotEmpty()){
                 if (Converters.toType(type) == TaskType.SHOPPING) {
-                    runBlocking {
+                    CoroutineScope(Dispatchers.Main).launch {
                         /*viewModel.addTaskWithTodos(
                             taskWithTodosViewModel.taskWithTodos.value!!
                         )*/
@@ -135,11 +136,19 @@ class TaskAddFragment
                 TaskWithTodos(Task(TaskType.SHOPPING), mutableListOf())
 
             binding.descriptionLayout.visibility = View.GONE
+            viewModel.state.removeObservers(viewLifecycleOwner)
+
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, TodosFragment.newInstance(-1))
+                .replace(R.id.fragment_container, TodosAddFragment())
                 .addToBackStack("todoFragment")
                 .commit()
+
+            /*parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, TodosFragment.newInstance(-1))
+                .addToBackStack("todoFragment")
+                .commit()*/
         } else {
+            initViewModelObservables()
             binding.descriptionLayout.visibility = View.VISIBLE
             parentFragmentManager.popBackStack("todoFragment", -1)
         }
