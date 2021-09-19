@@ -52,7 +52,7 @@ class TasksFragment
     override fun onPause() {
         super.onPause()
         viewModel.clearCheckedItems()
-        adapter.notifyDataSetChanged()
+        //adapter.notifyDataSetChanged()
         (activity as MainActivity).setDeleteIconVisibility(View.GONE)
     }
 

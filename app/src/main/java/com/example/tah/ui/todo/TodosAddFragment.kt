@@ -1,7 +1,6 @@
 package com.example.tah.ui.todo
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.databinding.FragmentTodosBinding
-import com.example.tah.models.Task
-import com.example.tah.models.TaskType
-import com.example.tah.models.TaskWithTodos
 import com.example.tah.models.Todo
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskWithTodosViewModel
@@ -23,9 +19,6 @@ class TodosAddFragment
     : Fragment(R.layout.fragment_todos),
     ViewInitializable
 {
-
-    val todos = mutableListOf<Todo>()
-
     private lateinit var taskWithTodosViewModel: TaskWithTodosViewModel
 
     private var _binding: FragmentTodosBinding? = null
@@ -39,35 +32,35 @@ class TodosAddFragment
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        taskWithTodosViewModel =
-            ViewModelProvider(requireActivity()).get(TaskWithTodosViewModel::class.java)
-/*
-        taskWithTodosViewModel.taskWithTodos.value =
-            TaskWithTodos(Task(TaskType.SHOPPING), mutableListOf())*/
-
         _binding = FragmentTodosBinding.inflate(inflater, container, false)
+        taskWithTodosViewModel =
+            ViewModelProvider(this).get(TaskWithTodosViewModel::class.java)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
-        initOnClickListeners()
+        binding.todosRecyclerView.adapter = adapter
         initViewModelObservables()
+        initOnClickListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun initOnClickListeners() {
         with (binding) {
             addIcon.setOnClickListener {
                 val name = addText.text.toString()
-                Log.i("TodosAdd", "initOnClickListeners: ${name}")
                 if (name.isNotEmpty()) {
                     taskWithTodosViewModel.addTodo(Todo(
                         todoId = null,
-                        name = binding.addText.text.toString(),
+                        name = name,
                         isComplete = false,
                         taskId = null))
-                    //adapter.differ.submitList(taskWithTodosViewModel.taskWithTodos.value?.todos)
                 } else {
                     addText.error = "Cannot be blank"
                 }
@@ -76,14 +69,9 @@ class TodosAddFragment
     }
 
     override fun initViewModelObservables() {
-        taskWithTodosViewModel.taskWithTodos.observe(viewLifecycleOwner) {
-            adapter.differ.submitList(it.todos)
+        taskWithTodosViewModel.getTodos().observe(viewLifecycleOwner) {
+            adapter.differ.submitList(it)
         }
     }
-
-    private fun initAdapter() {
-        binding.todosRecyclerView.adapter = adapter
-    }
-
 
 }

@@ -61,8 +61,8 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         _binding = FragmentTodosBinding.inflate(inflater, container, false)
         todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
         taskViewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
-        taskWithTodosViewModel =
-            ViewModelProvider(requireActivity()).get(TaskWithTodosViewModel::class.java)
+        /*taskWithTodosViewModel =
+            ViewModelProvider(requireActivity()).get(TaskWithTodosViewModel::class.java)*/
 
         return binding.root
     }

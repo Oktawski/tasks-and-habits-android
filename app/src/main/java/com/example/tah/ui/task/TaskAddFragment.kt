@@ -39,7 +39,6 @@ class TaskAddFragment
     private var _binding: AddTaskFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: TaskViewModel
-    private lateinit var taskWithTodosViewModel: TaskWithTodosViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,8 +46,6 @@ class TaskAddFragment
         savedInstanceState: Bundle?
     ): View {
         viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
-        taskWithTodosViewModel = ViewModelProvider(requireActivity())
-            .get(TaskWithTodosViewModel::class.java)
 
         val adapter = ArrayAdapter(
             requireActivity(), android.R.layout.simple_spinner_dropdown_item, TaskType.values()
@@ -132,9 +129,6 @@ class TaskAddFragment
     private val spinnerAdapter: AdapterView.OnItemClickListener
     = AdapterView.OnItemClickListener { _, _, position, _ ->
         if (position == 2) {
-            taskWithTodosViewModel.taskWithTodos.value =
-                TaskWithTodos(Task(TaskType.SHOPPING), mutableListOf())
-
             binding.descriptionLayout.visibility = View.GONE
             viewModel.state.removeObservers(viewLifecycleOwner)
 
@@ -142,11 +136,6 @@ class TaskAddFragment
                 .replace(R.id.fragment_container, TodosAddFragment())
                 .addToBackStack("todoFragment")
                 .commit()
-
-            /*parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, TodosFragment.newInstance(-1))
-                .addToBackStack("todoFragment")
-                .commit()*/
         } else {
             initViewModelObservables()
             binding.descriptionLayout.visibility = View.VISIBLE
