@@ -32,24 +32,12 @@ class TaskDetailsViewModel @Inject constructor(
         }
     }
 
-    suspend fun getTaskById(taskId: Int): Task {
-        return taskRepository.getTaskById(taskId)
-    }
-
     suspend fun delete() {
         taskRepository.delete(task.value!!)
     }
 
     fun update() {
         taskRepository.update(task.value!!)
-    }
-
-    suspend fun delete(task: Task) {
-        taskRepository.delete(task)
-    }
-
-    fun update(task: Task) {
-        taskRepository.update(task)
     }
 
 }
