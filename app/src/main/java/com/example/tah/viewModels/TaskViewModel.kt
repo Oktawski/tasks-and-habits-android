@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.tah.dao.task.TaskRepository
 import com.example.tah.models.Task
 import com.example.tah.models.TaskType
+import com.example.tah.models.TaskWithTodos
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,21 +42,19 @@ class TaskViewModel @Inject constructor(
         itemsLD = repository.getFiltered(type)
     }
 
-    //override fun add(t: Task) = repository.add(t)
-
     override suspend fun add(t: Task) = repository.add(t)
 
     //suspend fun addGetId(t: Task): Long = repository.add(t)
 
     //suspend fun getTaskWithTodosByTaskId(id: Int) = repository.getTaskWithTodosByTaskId(id)
 
-    //suspend fun addTaskWithTodos(taskWithTodos: TaskWithTodos) = repository.addTaskWithTodos(taskWithTodos)
+    suspend fun addTaskWithTodos(taskWithTodos: TaskWithTodos): Long = repository.addTaskWithTodos(taskWithTodos)
 
     /*fun getById(id: Int?): Single<Task> {
         return repository.getById(id)
     }*/
 
-    suspend fun getTaskById(id: Int): Task {
+    suspend fun getTaskById(id: Long): Task {
         return repository.getTaskById(id)
     }
 

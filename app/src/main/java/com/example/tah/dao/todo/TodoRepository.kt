@@ -19,11 +19,11 @@ class TodoRepository @Inject constructor(
     val state = MutableLiveData<State>()
     private val disposable = CompositeDisposable()
 
-    fun getAll(id: Int): LiveData<List<Todo>> {
+    fun getAll(id: Long): LiveData<List<Todo>> {
         return todoDao.getAllByTaskId(id)
     }
 
-    suspend fun getTodosByTaskId(id: Int) = todoDao.getTodosByTaskId(id)
+    suspend fun getTodosByTaskId(id: Long) = todoDao.getTodosByTaskId(id)
 
     suspend fun add(t: Todo): Long {
         state.value = State.loading()
@@ -43,7 +43,7 @@ class TodoRepository @Inject constructor(
         todoDao.delete(t)
     }
 
-    fun deleteCompletedByTaskId(taskId: Int) {
+    fun deleteCompletedByTaskId(taskId: Long) {
         disposable.add(todoDao.deleteCompletedByTaskId(taskId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -57,7 +57,7 @@ class TodoRepository @Inject constructor(
             .subscribe())
     }
 
-    fun getCompletedByTaskId(taskId: Int): LiveData<List<Todo>> {
+    fun getCompletedByTaskId(taskId: Long): LiveData<List<Todo>> {
         return todoDao.getCompletedByTaskId(taskId)
     }
 
@@ -76,5 +76,12 @@ class TodoRepository @Inject constructor(
                     state.value = State.error("Could not update")
                     Log.i("TODOREPO", "update: error")
                 }))
+    }
+
+    fun deleteTodosByTaskId(taskId: Long) {
+        disposable.add(todoDao.deleteTodosByTaskId(taskId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe())
     }
 }

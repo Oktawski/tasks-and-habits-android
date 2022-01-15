@@ -19,10 +19,10 @@ class TaskRepository @Inject constructor(
 ) : PropertiesTrimmer {
 
     val state: MutableLiveData<State> = MutableLiveData()
-    internal val checkedItemsLD = MutableLiveData<List<Int>>(mutableListOf())
+    internal val checkedItemsLD = MutableLiveData<List<Long>>(mutableListOf())
     private val disposable = CompositeDisposable()
 
-    suspend fun add(t: Task): Long {
+    suspend fun add(t: Task): Long{
         state.value = State.loading()
         trimLeadingAndTrailingWhitespaces(t)
 
@@ -39,7 +39,7 @@ class TaskRepository @Inject constructor(
         return  taskDao.getFilteredTasks(type)
     }
 
-    suspend fun getTaskById(id: Int): Task {
+    suspend fun getTaskById(id: Long): Task {
         return taskDao.getTaskById(id)
     }
 
@@ -68,13 +68,14 @@ class TaskRepository @Inject constructor(
                 {state.value = State.error("Task not updated")}))
     }
 
-    suspend fun getTaskWithTodosByTaskId(id: Int) = taskDao.getTaskWithTodosByTaskId(id)
+    suspend fun getTaskWithTodosByTaskId(id: Long) = taskDao.getTaskWithTodosByTaskId(id)
 
-    suspend fun addTaskWithTodos(taskWithTodos: TaskWithTodos) {
+    suspend fun addTaskWithTodos(taskWithTodos: TaskWithTodos): Long {
         val taskId = taskDao.insert(taskWithTodos.task!!)
         for (todo in taskWithTodos.todos!!) {
-            todo.taskId = taskId.toInt()
+            todo.taskId = taskId
             todoDao.insert(todo)
         }
+        return taskId
     }
 }

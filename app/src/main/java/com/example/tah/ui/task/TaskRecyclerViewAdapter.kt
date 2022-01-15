@@ -16,7 +16,7 @@ import com.example.tah.viewModels.TaskViewModel
 class TaskRecyclerViewAdapter(
     private val context: Context,
     private val viewModel: TaskViewModel,
-    private val checkedTasks: MutableList<Int> = mutableListOf()
+    private val checkedTasks: MutableList<Long> = mutableListOf()
 ) : RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<Task>() {
@@ -76,8 +76,6 @@ class TaskRecyclerViewAdapter(
                 val intent = Intent(context, AddAndDetailsActivity::class.java)
                 intent.putExtra("fragmentId", Task.getDetailsView())
                 intent.putExtra("taskId", task.taskId)
-                intent.putExtra("name", task.name)
-                intent.putExtra("description", task.description)
                 context.startActivity(intent)
             }
 

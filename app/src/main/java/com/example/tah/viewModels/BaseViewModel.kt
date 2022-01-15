@@ -10,7 +10,7 @@ abstract class BaseViewModel<T>
 {
     var itemsLD: LiveData<List<T>>? = null
     lateinit var state: MutableLiveData<State>
-    var checkedItemsLD: MutableLiveData<List<Int>> = MutableLiveData(emptyList())
+    var checkedItemsLD: MutableLiveData<List<Long>> = MutableLiveData(emptyList())
 
     abstract suspend fun add(t: T): Long
     abstract fun delete(t: T)
@@ -18,7 +18,7 @@ abstract class BaseViewModel<T>
     abstract fun deleteSelected()
     abstract fun update(t: T)
 
-    fun addToCheckedItems(idList: List<Int>){
+    fun addToCheckedItems(idList: List<Long>){
         checkedItemsLD.value = idList
     }
 

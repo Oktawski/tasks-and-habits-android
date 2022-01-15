@@ -13,23 +13,26 @@ import io.reactivex.Single
 interface TodoDao : BaseDao<Todo> {
 
     @Query("SELECT * FROM todos WHERE taskId = :id ORDER BY todoId ASC")
-    fun getAllByTaskId(id: Int): LiveData<List<Todo>>
+    fun getAllByTaskId(id: Long): LiveData<List<Todo>>
 
     @Query("SELECT * FROM todos WHERE taskId = :id ORDER BY todoId ASC")
-    suspend fun getTodosByTaskId(id: Int): List<Todo>
+    suspend fun getTodosByTaskId(id: Long): List<Todo>
 
     @Query("SELECT * FROM todos WHERE todoId = :id LIMIT 1")
-    fun getById(id: Int): Single<Todo>
+    fun getById(id: Long): Single<Todo>
 
     @Query("SELECT * FROM todos WHERE is_complete = 1 AND taskId = :taskId")
-    fun getCompletedByTaskId(taskId: Int): LiveData<List<Todo>>
+    fun getCompletedByTaskId(taskId: Long): LiveData<List<Todo>>
 
     @Query("DELETE FROM todos WHERE is_complete = 1 AND taskId = :taskId")
-    fun deleteCompletedByTaskId(taskId: Int): Completable
+    fun deleteCompletedByTaskId(taskId: Long): Completable
 
     @Query("DELETE FROM todos")
     fun deleteAll(): Completable
 
+    @Query("DELETE FROM todos WHERE taskId = :taskId")
+    fun deleteTodosByTaskId(taskId: Long): Completable
+
     @Query("DELETE FROM todos WHERE todoId IN (:idList)")
-    suspend fun deleteMultiple(idList: List<Int>)
+    suspend fun deleteMultiple(idList: List<Long>)
 }

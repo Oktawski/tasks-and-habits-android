@@ -18,19 +18,19 @@ interface TaskDao : BaseDao<Task> {
     fun getAll(): LiveData<List<Task>>
 
     @Query("SELECT * FROM tasks WHERE taskId=:taskId LIMIT 1")
-    suspend fun getTaskById(taskId: Int?): Task
+    suspend fun getTaskById(taskId: Long?): Task
 
     @Query("SELECT * FROM tasks WHERE type = :taskType ORDER BY taskId ASC")
     fun getFilteredTasks(taskType: TaskType): LiveData<List<Task>>
 
     @Query("DELETE FROM tasks WHERE taskId in (:idList)")
-    suspend fun deleteSelected(idList: List<Int>): Int
+    suspend fun deleteSelected(idList: List<Long>): Int
 
     @Query("DELETE FROM tasks")
     suspend fun deleteAll()
 
     @Transaction
     @Query("SELECT * FROM tasks WHERE taskId = :taskId")
-    suspend fun getTaskWithTodosByTaskId(taskId: Int?): TaskWithTodos
+    suspend fun getTaskWithTodosByTaskId(taskId: Long?): TaskWithTodos
 
 }

@@ -16,15 +16,15 @@ class TodoViewModel @Inject constructor(
         state = repository.state
     }
 
-    fun getAllByTaskId(id: Int) {
+    fun getAllByTaskId(id: Long) {
         itemsLD = repository.getAll(id)
     }
 
-    suspend fun getTodosByTaskId(id: Int) = repository.getTodosByTaskId(id)
+    suspend fun getTodosByTaskId(id: Long) = repository.getTodosByTaskId(id)
 
-    fun deleteCompletedByTaskId(taskId: Int) = repository.deleteCompletedByTaskId(taskId)
+    fun deleteCompletedByTaskId(taskId: Long) = repository.deleteCompletedByTaskId(taskId)
 
-    fun getCompletedByTaskId(taskId: Int) = repository.getCompletedByTaskId(taskId)
+    fun getCompletedByTaskId(taskId: Long) = repository.getCompletedByTaskId(taskId)
 
     override suspend fun add(t: Todo): Long {
         return repository.add(t)

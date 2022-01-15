@@ -1,5 +1,6 @@
 package com.example.tah.ui.task
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,18 +18,16 @@ import com.example.tah.models.TaskType
 import com.example.tah.models.TaskWithTodos
 import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.ui.todo.TodosAddFragment
-import com.example.tah.ui.todo.TodosFragment
 import com.example.tah.utilities.Converters
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskViewModel
-import com.example.tah.viewModels.TaskWithTodosViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class TaskAddFragment
@@ -80,9 +79,25 @@ class TaskAddFragment
             if(nameText.isNotEmpty() && type.isNotEmpty()){
                 if (Converters.toType(type) == TaskType.SHOPPING) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        /*viewModel.addTaskWithTodos(
-                            taskWithTodosViewModel.taskWithTodos.value!!
-                        )*/
+                        val id = withContext(Dispatchers.Default) {
+                            viewModel.addTaskWithTodos(
+                                TaskWithTodos(
+                                    Task(nameText,
+                                        descriptionText,
+                                        TaskType.SHOPPING,
+                                        false
+                                    ),
+                                    mutableListOf()
+                                )
+                            )
+                        }
+
+                        requireActivity().finish()
+
+                        val intent = Intent(requireActivity(), AddAndDetailsActivity::class.java)
+                        intent.putExtra("fragmentId", Task.getDetailsView())
+                        intent.putExtra("taskId", id)
+                        requireActivity().startActivity(intent)
                     }
                 } else {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -130,16 +145,16 @@ class TaskAddFragment
     = AdapterView.OnItemClickListener { _, _, position, _ ->
         if (position == 2) {
             binding.descriptionLayout.visibility = View.GONE
-            viewModel.state.removeObservers(viewLifecycleOwner)
-
+ //           viewModel.state.removeObservers(viewLifecycleOwner)
+/*
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, TodosAddFragment())
                 .addToBackStack("todoFragment")
-                .commit()
+                .commit()*/
         } else {
             initViewModelObservables()
             binding.descriptionLayout.visibility = View.VISIBLE
-            parentFragmentManager.popBackStack("todoFragment", -1)
+            //parentFragmentManager.popBackStack("todoFragment", -1)
         }
     }
 }

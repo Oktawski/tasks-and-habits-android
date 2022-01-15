@@ -32,7 +32,7 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
     private lateinit var todoViewModel: TodoViewModel
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var taskWithTodosViewModel: TaskWithTodosViewModel
-    private var taskId: Int? = null
+    private var taskId: Long? = null
     private var task: Task? = null
 
     private var _binding: FragmentTodosBinding? = null
@@ -43,9 +43,9 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
     lateinit var adapter: TodoRecyclerViewAdapter
 
     companion object {
-        fun newInstance(taskId: Int): TodosFragment {
+        fun newInstance(taskId: Long): TodosFragment {
             val args = Bundle()
-            args.putInt("taskId", taskId)
+            args.putLong("taskId", taskId)
             val fragment = TodosFragment()
             fragment.arguments = args
             return fragment
@@ -72,13 +72,13 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         initAdapter()
 
         CoroutineScope(Dispatchers.Main).launch {
-            if (arguments?.getInt("taskId") != -1) {
-                taskId = arguments?.getInt("taskId")
+            if (arguments?.getLong("taskId") != -1L) {
+                taskId = arguments?.getLong("taskId")
                 task = taskViewModel.getTaskById(taskId!!)
             } else {
                 task = Task("", "", TaskType.SHOPPING, false)
                 //remove observers
-                taskId = taskViewModel.add(task!!).toInt()
+                taskId = taskViewModel.add(task!!)
             }
 
             if(taskId != null) todoViewModel.getAllByTaskId(taskId!!)

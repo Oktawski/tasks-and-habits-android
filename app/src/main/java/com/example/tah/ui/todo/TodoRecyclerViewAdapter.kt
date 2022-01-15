@@ -32,7 +32,6 @@ class TodoRecyclerViewAdapter(
 
     val differ = AsyncListDiffer(this, differCallback)
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemTodoBinding.inflate(inflater, parent, false)

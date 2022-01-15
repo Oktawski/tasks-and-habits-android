@@ -28,10 +28,10 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
     private val taskDetailsViewModel: TaskDetailsViewModel by viewModels()
 
     companion object {
-        fun newInstance(taskId: Int): TaskDetailsFragment{
+        fun newInstance(taskId: Long): TaskDetailsFragment{
             val fragment = TaskDetailsFragment()
             val args = Bundle()
-            args.putInt("taskId", taskId)
+            args.putLong("taskId", taskId)
             fragment.arguments = args
             return fragment
         }
@@ -46,7 +46,7 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        taskDetailsViewModel.init(arguments?.getInt("taskId")!!)
+        taskDetailsViewModel.init(arguments?.getLong("taskId")!!)
         initOnClickListeners()
         initViewModelObservables()
     }
@@ -69,7 +69,8 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
 
         binding.deleteButton.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                taskDetailsViewModel.delete()
+                //taskDetailsViewModel.delete()
+                taskDetailsViewModel.deleteTaskWithTodos()
             }
         }
     }

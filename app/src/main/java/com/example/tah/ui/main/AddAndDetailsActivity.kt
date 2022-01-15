@@ -39,7 +39,7 @@ class AddAndDetailsActivity :
         val fragment = when(intent.getIntExtra("fragmentId", R.layout.fragment_habits)){
             Task.getAddView() -> TaskAddFragment()
             Task.getDetailsView() ->
-                TaskDetailsFragment.newInstance(intent.getIntExtra("taskId", -1))
+                TaskDetailsFragment.newInstance(intent.getLongExtra("taskId", -1))
             Habit.getAddView() -> HabitAddFragment()
             Habit.getDetailsView() ->
                 HabitDetailsFragment.newInstance(intent.getLongExtra("habitId", -1))

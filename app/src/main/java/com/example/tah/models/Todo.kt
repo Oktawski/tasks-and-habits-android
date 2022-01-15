@@ -8,8 +8,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "todos")
 data class Todo(
-        @PrimaryKey(autoGenerate = true)        val todoId: Int?,
+        @PrimaryKey(autoGenerate = true)        val todoId: Long?,
         @ColumnInfo(name = "name") @NonNull     var name: String,
         @ColumnInfo(name = "is_complete")       var isComplete: Boolean = false,
-        var taskId: Int?
+        var taskId: Long?
 )

@@ -17,7 +17,7 @@ enum class TaskType {
 
 @Entity(tableName = "tasks")
 data class Task(
-        @PrimaryKey(autoGenerate = true)        val taskId: Int?,
+        @PrimaryKey(autoGenerate = true)        val taskId: Long?,
         @ColumnInfo(name = "name") @NonNull     var name: String,
         @ColumnInfo(name = "description")       var description: String?,
         @ColumnInfo(name = "type")              var type: TaskType,
