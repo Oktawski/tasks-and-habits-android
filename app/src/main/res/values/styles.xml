@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="CardView.Rounded" parent="CardView">
+        <item name="android:layout_marginLeft">@dimen/margin_s</item>
+        <item name="android:layout_marginTop">@dimen/margin_xs</item>
+        <item name="android:layout_marginRight">@dimen/margin_s</item>
+        <item name="android:layout_marginBottom">@dimen/margin_xs</item>
+        <item name="cardCornerRadius">@dimen/cardCornerRadius</item>
+    </style>
+
+    <style name="TextInputLayout.OutlinedBox.Rounded" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">@dimen/cardCornerRadius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/cardCornerRadius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/cardCornerRadius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/cardCornerRadius</item>
+
+    </style>
+
+
+</resources>

@@ -18,30 +18,31 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"
-                android:hint="@string/name">
-
+                android:layout_marginLeft="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:layout_marginRight="@dimen/margin_m"
+                android:hint="@string/name"
+                style="@style/TextInputLayout.OutlinedBox.Rounded">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapSentences|textAutoComplete"
                     android:maxLines="1" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/description_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/name_layout"
-                android:layout_margin="@dimen/text_margin"
-                android:hint="@string/description">
-
+                android:layout_marginLeft="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_s"
+                android:layout_marginRight="@dimen/margin_m"
+                android:hint="@string/description"
+                style="@style/TextInputLayout.OutlinedBox.Rounded">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/description"
                     android:layout_width="match_parent"
@@ -54,14 +55,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_below="@id/description_layout"
-                android:layout_centerHorizontal="true"
-                >
+                android:layout_centerHorizontal="true">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/hour"
                     android:layout_marginEnd="36dp"/>
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -74,9 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/time_description"
-                android:timePickerMode="spinner"
-
-                />
+                android:timePickerMode="spinner"/>
         </RelativeLayout>
 
     </ScrollView>
@@ -90,6 +87,7 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchorGravity="end|bottom"
         app:layout_anchor="@id/scrollView"
-        android:src="@drawable/ic_add_24px"/>
+        android:src="@drawable/ic_add_24px"
+        android:contentDescription="@string/add_habit_fab_description" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

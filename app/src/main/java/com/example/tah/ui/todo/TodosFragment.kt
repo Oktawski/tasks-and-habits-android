@@ -75,7 +75,6 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
                 task = taskViewModel.getTaskById(taskId!!)
             } else {
                 task = Task("", "", TaskType.SHOPPING, false)
-                //remove observers
                 taskId = taskViewModel.add(task!!)
             }
 
@@ -109,7 +108,6 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
             // Without notifying about whole data set the UI is not always updating the icon
             // If anyone knows better way I would appreciate if you told me <
             adapter.notifyDataSetChanged()
-            //adapter.notifyDataSetChanged()
         }
 
         todoViewModel.state.observe(requireActivity()){

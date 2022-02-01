@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
         <LinearLayout
@@ -11,21 +12,19 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:hint="@string/name">
-
+                android:layout_marginLeft="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_s"
+                android:layout_marginRight="@dimen/margin_m"
+                android:hint="@string/name"
+                style="@style/TextInputLayout.OutlinedBox.Rounded">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textAutoComplete|textCapSentences"
                     android:maxLines="1"/>
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -33,17 +32,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/description"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_below="@id/name_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
+                android:layout_marginLeft="@dimen/margin_m"
+                android:layout_marginRight="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_s"
+                style="@style/TextInputLayout.OutlinedBox.Rounded">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <FrameLayout
@@ -51,8 +47,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_marginBottom="40dp"/>
         </LinearLayout>
@@ -64,6 +58,7 @@
         android:layout_height="40dp"
         android:layout_gravity="bottom">
 
+    <!--TODO fix layout below having margin on the left. It's fixed in smarthome app -->
     <LinearLayout
         android:id="@+id/buttons_layout"
         android:layout_width="match_parent"

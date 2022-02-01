@@ -30,4 +30,5 @@
     <string name="start_habit_button_description">button_to_start_habit</string>
     <string name="button_started_time_text">button_started_time_text</string>
     <string name="type">Type</string>
+    <string name="add_habit_fab_description">Button adds new habit to the database</string>
 </resources>

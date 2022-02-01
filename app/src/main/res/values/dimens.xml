@@ -8,4 +8,10 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="text_m">24dp</dimen>
     <dimen name="text_l">42dp</dimen>
+    <dimen name="margin_xs">4dp</dimen>
+    <dimen name="margin_s">8dp</dimen>
+    <dimen name="margin_m">16dp</dimen>
+    <dimen name="margin_l">24dp</dimen>
+    <dimen name="margin_xl">32dp</dimen>
+    <dimen name="cardCornerRadius">16dp</dimen>
 </resources>
