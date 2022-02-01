@@ -64,12 +64,12 @@ class TodoRecyclerViewAdapter(
         }
 
         private fun initOnClickListeners(){
-            itemView.setOnClickListener {
+            binding.root.setOnClickListener {
                 todo?.isComplete = !todo?.isComplete!!
                 viewModel.update(todo!!)
             }
 
-            itemView.setOnLongClickListener {
+            binding.root.setOnLongClickListener {
                 showEditDialog()
                 return@setOnLongClickListener true
             }

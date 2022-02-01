@@ -1,5 +1,6 @@
 package com.example.tah.ui.todo
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,7 +32,6 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
 
     private lateinit var todoViewModel: TodoViewModel
     private lateinit var taskViewModel: TaskViewModel
-    private lateinit var taskWithTodosViewModel: TaskWithTodosViewModel
     private var taskId: Long? = null
     private var task: Task? = null
 
@@ -61,8 +61,6 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         _binding = FragmentTodosBinding.inflate(inflater, container, false)
         todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
         taskViewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
-        /*taskWithTodosViewModel =
-            ViewModelProvider(requireActivity()).get(TaskWithTodosViewModel::class.java)*/
 
         return binding.root
     }
@@ -98,6 +96,7 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         _binding = null
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initViewModelObservables(){
         todoViewModel.getCompletedByTaskId(taskId!!).observe(viewLifecycleOwner) {
             if(it.isNotEmpty()) (activity as AddAndDetailsActivity).setDeleteIconVisibility(View.VISIBLE)
@@ -106,6 +105,11 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
 
         todoViewModel.itemsLD!!.observe(requireActivity()){
             adapter.differ.submitList(it)
+
+            // Without notifying about whole data set the UI is not always updating the icon
+            // If anyone knows better way I would appreciate if you told me <
+            adapter.notifyDataSetChanged()
+            //adapter.notifyDataSetChanged()
         }
 
         todoViewModel.state.observe(requireActivity()){
