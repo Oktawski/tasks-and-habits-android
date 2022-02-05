@@ -4,7 +4,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Update
 import io.reactivex.Completable
-import kotlinx.coroutines.Deferred
 
 
 interface BaseDao<T> {
@@ -18,4 +17,6 @@ interface BaseDao<T> {
     @Update
     fun update(t: T): Completable
 
+    @Update
+    suspend fun updateS(t: T)
 }

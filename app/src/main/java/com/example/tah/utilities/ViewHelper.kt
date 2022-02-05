@@ -19,6 +19,12 @@ interface ViewHelper {
         }
     }
 
+    fun toggleEditText(isEnabled: Boolean, vararg editText: EditText) {
+        for (e in editText) {
+            e.isEnabled = isEnabled
+        }
+    }
+
     fun toggleEditText(vararg editText: EditText) {
         for (e in editText) {
             e.isEnabled = !e.isEnabled

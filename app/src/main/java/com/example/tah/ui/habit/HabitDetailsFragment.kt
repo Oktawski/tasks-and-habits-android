@@ -1,8 +1,7 @@
 package com.example.tah.ui.habit
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,10 +18,7 @@ import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 @AndroidEntryPoint
@@ -36,8 +32,6 @@ class HabitDetailsFragment
     private val binding get() = _binding!!
     private val viewModel: HabitViewModel by viewModels()
     private var job: Job? = null
-
-    private lateinit var mainHandler: Handler
 
     private var habitId: Long? = -1L
     private var sessionLength: Long? = null
@@ -55,7 +49,6 @@ class HabitDetailsFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         habitId = arguments?.getLong("habitId")
-        mainHandler = Handler(Looper.getMainLooper())
     }
 
     override fun onCreateView(
@@ -74,14 +67,12 @@ class HabitDetailsFragment
         getHabit()
         initOnClickListeners()
         initViewModelObservables()
-        with(binding) {
-            toggleEditText(name, description)
-        }
+        toggleEditText(binding.name, binding.description)
     }
 
     override fun onResume() {
         super.onResume()
-        setNotEditableView()
+        setEditableView(false)
     }
 
     override fun onDestroyView() {
@@ -91,64 +82,36 @@ class HabitDetailsFragment
 
     override fun initOnClickListeners() {
         with(binding) {
-            editButton.setOnClickListener { viewModel.editable.value = true }
-            cancelButton.setOnClickListener { viewModel.editable.value = false }
-
-            deleteButton.setOnClickListener {
-                job = CoroutineScope(Dispatchers.Main).launch {
-                    val habit = viewModel.getByIdSus(habitId)
-                    viewModel.delete(habit)
-                }
-            }
-
-            saveButton.setOnClickListener {
-                val hours = timePicker.hour
-                val minutes = timePicker.minute
-                val sessionLengthInSec = (hours * 60 * 60 + minutes * 60).toLong()
-
-                job = CoroutineScope(Dispatchers.IO).launch {
-                    val habit = viewModel.getByIdSus(habitId)
-                    habit.name = name.text.toString()
-                    habit.description = description.text.toString()
-                    habit.sessionLength = sessionLengthInSec
-                    viewModel.update(habit)
-                }
-            }
-
-            fabStart.setOnClickListener {
-                val fragment = HabitStartedFragment.newInstance(habitId!!)
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                        android.R.anim.fade_in,
-                        android.R.anim.fade_out,
-                        android.R.anim.fade_in,
-                        android.R.anim.fade_out )
-                    .replace(R.id.add_fragment_container, fragment, "habitStartedFragment")
-                    .addToBackStack("habitStartedFragment")
-                    .commit()
-            }
+            editButton.setOnClickListener { viewModel.setEditable(true) }
+            cancelButton.setOnClickListener { viewModel.setEditable(false) }
+            deleteButton.setOnClickListener { delete() }
+            saveButton.setOnClickListener { save() }
+            fabStart.setOnClickListener { startHabitStartedFragment() }
         }
     }
 
     override fun initViewModelObservables() {
-        viewModel.editable.observe(viewLifecycleOwner) {
-            if(it) setEditableView() else setNotEditableView()
-        }
+        viewModel.editable.observe(viewLifecycleOwner) { setEditableView(it) }
 
         viewModel.state.observe(viewLifecycleOwner) {
-            if(it.status == State.Status.REMOVED) {
-                Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
-                requireActivity().finish()
-            }
-            else if(it.status == State.Status.UPDATED) {
-                setNotEditableView()
-                job = CoroutineScope(Dispatchers.Main).launch {
-                    val habit = viewModel.getByIdSus(habitId)
-                    inflateViews(habit)
-                    Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
-                    this@HabitDetailsFragment.sessionLength = habit.sessionLength
+            when (it.status) {
+                State.Status.REMOVED -> {
+                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
+                    requireActivity().finish()
                 }
+                State.Status.UPDATED -> {
+                    setEditableView(false)
+                    job = CoroutineScope(Dispatchers.Main).launch {
+                        val habit = viewModel.getByIdSus(habitId)
+                        sessionLength = habit.sessionLength
+                        inflateViews(habit)
+                        Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                else -> Toast.makeText(activity, "Something else", Toast.LENGTH_SHORT).show()
             }
+
+            Log.i("STATE", "initViewModelObservables: ${it.message}")
         }
     }
 
@@ -168,21 +131,46 @@ class HabitDetailsFragment
         }
     }
 
-    private fun setEditableView() {
-        with(binding) {
-            ViewAnimations.hide(binding.deleteEditLayout)
-            ViewAnimations.show(binding.cancelSaveLayout)
-            toggleEditText(name, description)
-            timePicker.isEnabled = true
+    private fun save() {
+        val sessionLengthInSec =
+            (binding.timePicker.hour * 60 * 60 + binding.timePicker.minute * 60).toLong()
+
+        val habit = Habit().apply {
+            this.name = binding.name.text.toString()
+            this.description = binding.description.text.toString()
+            this.sessionLength = sessionLengthInSec
+        }
+
+        viewModel.update(habit, habitId!!)
+    }
+
+    private fun delete() {
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val habit = viewModel.getByIdSus(habitId)
+            viewModel.delete(habit)
         }
     }
 
-    private fun setNotEditableView() {
-        with(binding) {
-            ViewAnimations.hide(binding.cancelSaveLayout)
-            ViewAnimations.show(binding.deleteEditLayout)
-            toggleEditText(name, description)
-            timePicker.isEnabled = false
+    private fun startHabitStartedFragment() {
+        val fragment = HabitStartedFragment.newInstance(habitId!!)
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                android.R.anim.fade_in,
+                android.R.anim.fade_out,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            )
+            .replace(R.id.add_fragment_container, fragment, "habitStartedFragment")
+            .addToBackStack("habitStartedFragment")
+            .commit()
+    }
+
+    private fun setEditableView(isEditable: Boolean) {
+        with (binding) {
+            ViewAnimations.hide(if (isEditable) deleteEditLayout else cancelSaveLayout)
+            ViewAnimations.show(if (isEditable) cancelSaveLayout else deleteEditLayout)
+            toggleEditText(isEditable, name, description)
+            timePicker.isEnabled = isEditable
         }
     }
 

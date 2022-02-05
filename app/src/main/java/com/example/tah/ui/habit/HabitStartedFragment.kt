@@ -71,18 +71,18 @@ class HabitStartedFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (habitId != null) {
-            activity?.findViewById<AppBarLayout>(R.id.app_bar)?.visibility = View.GONE
-            getHabit(habitId!!)
-            (activity as AddAndDetailsActivity).setTitle("")
-            initViewModelObservables()
-            initOnClickListeners()
-            viewModel.startStop()
-        }
-        else {
+
+        if (habitId == null) {
             Toast.makeText(requireActivity(), "Habit not found", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.popBackStack()
         }
+
+        activity?.findViewById<AppBarLayout>(R.id.app_bar)?.visibility = View.GONE
+        getHabit(habitId!!)
+        (activity as AddAndDetailsActivity).setTitle("")
+        initViewModelObservables()
+        initOnClickListeners()
+        viewModel.startStop()
     }
 
     override fun onDestroyView() {
@@ -93,28 +93,21 @@ class HabitStartedFragment
     }
 
     override fun initViewModelObservables() {
-        viewModel.isStarted.observe(viewLifecycleOwner) { bool ->
-            if(bool) {
+        viewModel.isStarted.observe(viewLifecycleOwner) { isStarted ->
+            if(isStarted) {
                 val timeMap = getTimeStrings(sessionLength)
                 val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
                 binding.timeText.text = timeText
-                mainHandler.postDelayed(decreaseTime, 0)
+                mainHandler.postDelayed(decreaseTime, 1000)
             } else {
                 mainHandler.removeCallbacks(decreaseTime)
-
-                job = CoroutineScope(Dispatchers.Main).launch {
-                    val habit = viewModel.getByIdSus(habitId)
-                    habit.sessionLength = this@HabitStartedFragment.sessionLength
-                    viewModel.update(habit)
-                }
+                updateHabit()
             }
         }
     }
 
     override fun initOnClickListeners() {
-        binding.fabStarted.setOnClickListener {
-            viewModel.startStop()
-        }
+        binding.fabStarted.setOnClickListener { viewModel.startStop() }
     }
 
     @SuppressLint("CheckResult")
@@ -125,16 +118,13 @@ class HabitStartedFragment
             val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
             this@HabitStartedFragment.sessionLength = habit.sessionLength
             binding.timeText.text = timeText
-            binding.habitName.text = habit.name }
+            binding.habitName.text = habit.name
+        }
     }
 
 
     private fun updateHabit() {
-        job = CoroutineScope(Dispatchers.Main).launch {
-            val habit = viewModel.getByIdSus(habitId)
-            habit.sessionLength = this@HabitStartedFragment.sessionLength
-            viewModel.update(habit)
-        }
+        viewModel.updateSessionLength(sessionLength, habitId!!)
     }
 
     private val decreaseTime = object : Runnable {

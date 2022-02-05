@@ -21,6 +21,6 @@ interface HabitDao : BaseDao<Habit> {
     fun deleteSelected(idList: List<Int>): Single<Int>
 
     @Query( "DELETE FROM habits")
-    fun deleteAll(): Single<Int>
+    fun deleteAll(): Int
 
 }

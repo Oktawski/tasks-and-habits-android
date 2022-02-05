@@ -1,78 +1,49 @@
 package com.example.tah.dao.habit
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import com.example.tah.models.Habit
 import com.example.tah.utilities.PropertiesTrimmer
-import com.example.tah.utilities.State
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class HabitRepository @Inject constructor(
     private val dao: HabitDao
-) : PropertiesTrimmer {
+) : PropertiesTrimmer
+{
+    fun getAll(): LiveData<List<Habit>> = dao.getAll()
 
-    val state = MutableLiveData<State>()
-
-    private val disposable = CompositeDisposable()
-
-    fun getAll() = dao.getAll()
-
-    suspend fun getById(id: Long?): Habit {
-        return dao.getById(id)
-    }
+    suspend fun getById(id: Long?): Habit = dao.getById(id)
 
     suspend fun add(t: Habit): Long {
-        state.value = State.loading()
-
-        var habitId = -1L
-
         trimLeadingAndTrailingWhitespaces(t)
-        CoroutineScope(Dispatchers.Main).launch {
-            habitId = dao.insert(t)
-            state.value = State.added("Habit added")
+        return dao.insert(t)
+    }
+
+    suspend fun delete(t: Habit) = dao.delete(t)
+
+    suspend fun update(t: Habit) {
+        trimLeadingAndTrailingWhitespaces(t)
+        dao.updateS(t)
+    }
+
+    suspend fun update(t: Habit, id: Long) {
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            val habit = getById(id)
+            habit.name = t.name
+            habit.description = t.description
+            habit.sessionLength = t.sessionLength
+            trimLeadingAndTrailingWhitespaces(habit)
+            dao.updateS(habit)
         }
-
-        return habitId
-/*
-        disposable.add(dao.insert(t)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({state.value = State.added("Habit added")},
-                {state.value = State.error("Error")}))*/
     }
 
-    suspend fun delete(t: Habit) {
-        state.value = State.loading()
-        dao.delete(t)
-        state.value = State.removed("Habit removed")
+    suspend fun updateSessionLength(sessionLength: Long, id: Long) {
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            val habit = getById(id)
+            habit.sessionLength = sessionLength
+            dao.updateS(habit)
+        }
     }
-
-    fun deleteAll() {
-        disposable.add(dao.deleteAll()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ state.value = State.removed("All habits removed") },
-                { state.value = State.error("Error") }))
-    }
-
-    fun deleteSelected() {
-
-    }
-
-    fun update(t: Habit) {
-        trimLeadingAndTrailingWhitespaces(t)
-
-        disposable.add(dao.update(t)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ state.value = State.updated("Habit updated") },
-                { state.value = State.error("Error") }))
-    }
-
 }

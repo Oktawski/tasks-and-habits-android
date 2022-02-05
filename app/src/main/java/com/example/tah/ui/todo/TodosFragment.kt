@@ -106,7 +106,7 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
             adapter.differ.submitList(it)
 
             // Without notifying about whole data set the UI is not always updating the icon
-            // If anyone knows better way I would appreciate if you told me <
+            // If anyone knows better way I would appreciate if you told me <3
             adapter.notifyDataSetChanged()
         }
 
