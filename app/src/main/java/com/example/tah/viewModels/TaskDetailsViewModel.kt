@@ -39,16 +39,30 @@ class TaskDetailsViewModel @Inject constructor(
     }
 
     fun update() {
-        taskRepository.update(task.value!!)
+        state.value = State.loading()
+        viewModelScope.launch {
+            taskRepository.update(task.value!!)
+            state.value = State.updated("Task updated")
+        }
     }
 
-    suspend fun deleteTaskWithTodos()  {
+    fun update(name: String, description: String) {
+        state.value = State.loading()
+        task.value?.name = name
+        task.value?.description = description
         viewModelScope.launch {
-            withContext(Dispatchers.Main) {
-                todoRepository.deleteTodosByTaskId(task.value?.taskId!!)
-                taskRepository.delete(task.value!!)
-            }
+            taskRepository.update(task.value!!)
+            state.value = State.updated("Task udpated")
         }
+    }
 
+    fun deleteTaskWithTodos()  {
+        state.value = State.loading()
+        viewModelScope.launch {
+            todoRepository.deleteTodosByTaskId(task.value?.taskId!!)
+            val removedCount = taskRepository.delete(task.value!!)
+            state.value = if (removedCount == 1) State.removed("Task removed")
+                            else State.error("Error lol")
+        }
     }
 }

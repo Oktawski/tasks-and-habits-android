@@ -20,15 +20,10 @@ class TaskRepository @Inject constructor(
 
     val state: MutableLiveData<State> = MutableLiveData()
     internal val checkedItemsLD = MutableLiveData<List<Long>>(mutableListOf())
-    private val disposable = CompositeDisposable()
 
-    suspend fun add(t: Task): Long{
-        state.value = State.loading()
+    suspend fun add(t: Task): Long {
         trimLeadingAndTrailingWhitespaces(t)
-
-        val taskId = taskDao.insert(t)
-        state.value = State.added("Task added")
-        return taskId
+        return taskDao.insert(t)
     }
 
     fun getAll(): LiveData<List<Task>> {
@@ -43,35 +38,28 @@ class TaskRepository @Inject constructor(
         return taskDao.getTaskById(id)
     }
 
-    suspend fun delete(t: Task) {
-        if (taskDao.delete(t) == 1) state.value = State.removed("Task removed")
-        else state.value = State.error("Error")
+    suspend fun delete(t: Task): Int {
+        return taskDao.delete(t)
     }
 
     suspend fun deleteAll() {
         taskDao.deleteAll()
     }
 
+    // TODO move liveData to viewModel and remove state changes
     suspend fun deleteSelected() {
         val deletedCount = taskDao.deleteSelected(checkedItemsLD.value!!)
         if(deletedCount > 1) state.value = State.removed("Tasks removed")
         else state.value = State.removed("Task removed")
     }
 
-    fun update(t: Task) {
+    suspend fun update(t: Task) {
         trimLeadingAndTrailingWhitespaces(t)
-
-        disposable.add(taskDao.update(t)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({state.value = State.updated("Task updated")},
-                {state.value = State.error("Task not updated")}))
+        taskDao.updateS(t)
     }
 
-    suspend fun getTaskWithTodosByTaskId(id: Long) = taskDao.getTaskWithTodosByTaskId(id)
-
     suspend fun addTaskWithTodos(taskWithTodos: TaskWithTodos): Long {
-        val taskId = taskDao.insert(taskWithTodos.task!!)
+        val taskId = taskDao.insert(taskWithTodos.task)
         for (todo in taskWithTodos.todos!!) {
             todo.taskId = taskId
             todoDao.insert(todo)

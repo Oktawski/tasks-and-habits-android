@@ -3,6 +3,7 @@ package com.example.tah.viewModels
 import androidx.lifecycle.viewModelScope
 import com.example.tah.dao.todo.TodoRepository
 import com.example.tah.models.Todo
+import com.example.tah.utilities.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,8 +27,12 @@ class TodoViewModel @Inject constructor(
 
     fun getCompletedByTaskId(taskId: Long) = repository.getCompletedByTaskId(taskId)
 
-    override suspend fun add(t: Todo): Long {
-        return repository.add(t)
+    override fun add(t: Todo) {
+        state.value = State.loading()
+        viewModelScope.launch {
+            repository.add(t)
+            state.value = State.added("")
+        }
     }
 
     override fun delete(t: Todo) {

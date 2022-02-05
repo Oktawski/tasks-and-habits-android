@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.tah.R
 import com.example.tah.databinding.DetailsTaskBinding
+import com.example.tah.models.Task
 import com.example.tah.models.TaskType
 import com.example.tah.ui.todo.TodosFragment
 import com.example.tah.utilities.State
@@ -58,40 +59,28 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
 
     override fun initOnClickListeners() {
         binding.saveButton.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                taskDetailsViewModel.task.value.apply {
-                    this?.name = binding.name.text.toString()
-                    this?.description = binding.description.text.toString()
-                }
-                taskDetailsViewModel.update()
-            }
+            taskDetailsViewModel.update(
+                binding.name.text.toString(),
+                binding.description.text.toString()
+            )
         }
 
         binding.deleteButton.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                //taskDetailsViewModel.delete()
-                taskDetailsViewModel.deleteTaskWithTodos()
-            }
+            taskDetailsViewModel.deleteTaskWithTodos()
         }
     }
 
     override fun initViewModelObservables() {
         taskDetailsViewModel.task.observe(viewLifecycleOwner) {
-            binding.name.setText(it.name)
-            binding.description.setText(it.description)
-
-            val task = it
-
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.name.setText(task.name)
-                binding.description.setText(task.description)
-
-                if(task.type == TaskType.SHOPPING) {
-                    binding.descriptionLayout.visibility = View.GONE
+            with (binding) {
+                name.setText(it.name)
+                description.setText(it.description)
+                if (it.type == TaskType.SHOPPING) {
+                    descriptionLayout.visibility = View.GONE
                     parentFragmentManager
                         .beginTransaction()
                         .replace(R.id.fragment_container,
-                            TodosFragment.newInstance(task.taskId!!))
+                            TodosFragment.newInstance(it.taskId!!))
                         .commit()
                 }
             }
@@ -105,7 +94,7 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
                 State.Status.UPDATED -> {
                     requireActivity().finish()
                 }
-                else -> TODO()
+                else -> toast("Else? idk lol")
             }
             toast(it.message)
         }

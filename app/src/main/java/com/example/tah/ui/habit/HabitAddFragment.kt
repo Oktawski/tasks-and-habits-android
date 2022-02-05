@@ -63,15 +63,14 @@ class HabitAddFragment
                         timePicker.minute
                     )
 
-                    if (habit.sessionLength == 0L) Toast.makeText(
-                        requireActivity(),
-                        "Session length cannot be less than 1 minute",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    if (habit.sessionLength == 0L)
+                        Toast.makeText(
+                            requireActivity(),
+                            "Session length cannot be less than 1 minute",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     else {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            viewModel.add(habit)
-                        }
+                        viewModel.add(habit)
                     }
                 }
             }

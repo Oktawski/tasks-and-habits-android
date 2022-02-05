@@ -17,7 +17,6 @@ import com.example.tah.models.Task
 import com.example.tah.models.TaskType
 import com.example.tah.models.TaskWithTodos
 import com.example.tah.ui.main.AddAndDetailsActivity
-import com.example.tah.ui.todo.TodosAddFragment
 import com.example.tah.utilities.Converters
 import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewHelper
@@ -76,39 +75,35 @@ class TaskAddFragment
             val descriptionText = binding.description.text.toString()
             val type = binding.typeLayout.editText?.text.toString()
 
-            if(nameText.isNotEmpty() && type.isNotEmpty()){
-                if (Converters.toType(type) == TaskType.SHOPPING) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val id = withContext(Dispatchers.Default) {
-                            viewModel.addTaskWithTodos(
-                                TaskWithTodos(
-                                    Task(nameText,
-                                        descriptionText,
-                                        TaskType.SHOPPING,
-                                        false
-                                    ),
-                                    mutableListOf()
-                                )
+            if (nameText.isEmpty() && type.isEmpty()) {
+                showErrorMessages(binding.name, binding.typeLayout)
+            }
+
+            if (Converters.toType(type) == TaskType.SHOPPING) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val id = withContext(Dispatchers.Default) {
+                        viewModel.addTaskWithTodos(
+                            TaskWithTodos(
+                                Task(
+                                    nameText,
+                                    descriptionText,
+                                    TaskType.SHOPPING,
+                                    false
+                                ),
+                                mutableListOf()
                             )
-                        }
-
-                        requireActivity().finish()
-
-                        val intent = Intent(requireActivity(), AddAndDetailsActivity::class.java)
-                        intent.putExtra("fragmentId", Task.getDetailsView())
-                        intent.putExtra("taskId", id)
-                        requireActivity().startActivity(intent)
-                    }
-                } else {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        viewModel.add(
-                            Task(nameText, descriptionText, Converters.toType(type), false)
                         )
                     }
+                    requireActivity().finish()
+                    val intent = Intent(requireActivity(), AddAndDetailsActivity::class.java)
+                    intent.putExtra("fragmentId", Task.getDetailsView())
+                    intent.putExtra("taskId", id)
+                    requireActivity().startActivity(intent)
                 }
-            }
-            else{
-                showErrorMessages(binding.name, binding.typeLayout)
+            } else {
+                viewModel.add(
+                    Task(nameText, descriptionText, Converters.toType(type), false)
+                )
             }
         }
     }
@@ -145,16 +140,9 @@ class TaskAddFragment
     = AdapterView.OnItemClickListener { _, _, position, _ ->
         if (position == 2) {
             binding.descriptionLayout.visibility = View.GONE
- //           viewModel.state.removeObservers(viewLifecycleOwner)
-/*
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, TodosAddFragment())
-                .addToBackStack("todoFragment")
-                .commit()*/
         } else {
             initViewModelObservables()
             binding.descriptionLayout.visibility = View.VISIBLE
-            //parentFragmentManager.popBackStack("todoFragment", -1)
         }
     }
 }

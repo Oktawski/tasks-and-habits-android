@@ -8,6 +8,7 @@ import com.example.tah.dao.task.TaskRepository
 import com.example.tah.models.Task
 import com.example.tah.models.TaskType
 import com.example.tah.models.TaskWithTodos
+import com.example.tah.utilities.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,25 +43,26 @@ class TaskViewModel @Inject constructor(
         itemsLD = repository.getFiltered(type)
     }
 
-    override suspend fun add(t: Task) = repository.add(t)
+    override fun add(t: Task) {
+        state.value = State.loading()
+        viewModelScope.launch {
+            repository.add(t)
+        }
+        state.value = State.added("Task added")
+    }
 
-    //suspend fun addGetId(t: Task): Long = repository.add(t)
-
-    //suspend fun getTaskWithTodosByTaskId(id: Int) = repository.getTaskWithTodosByTaskId(id)
-
-    suspend fun addTaskWithTodos(taskWithTodos: TaskWithTodos): Long = repository.addTaskWithTodos(taskWithTodos)
-
-    /*fun getById(id: Int?): Single<Task> {
-        return repository.getById(id)
-    }*/
+    suspend fun addTaskWithTodos(taskWithTodos: TaskWithTodos): Long =
+        repository.addTaskWithTodos(taskWithTodos)
 
     suspend fun getTaskById(id: Long): Task {
         return repository.getTaskById(id)
     }
 
     override fun delete(t: Task) {
+        state.value = State.loading()
         viewModelScope.launch {
             repository.delete(t)
+            state.value = State.removed("Task removed")
         }
     }
 
@@ -77,7 +79,11 @@ class TaskViewModel @Inject constructor(
     }
 
     override fun update(t: Task) {
-        repository.update(t)
+        state.value = State.loading()
+        viewModelScope.launch {
+            repository.update(t)
+        }
+        state.value = State.updated("Task updated")
     }
 
 }

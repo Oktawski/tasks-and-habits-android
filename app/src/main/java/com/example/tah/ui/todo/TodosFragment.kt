@@ -2,7 +2,6 @@ package com.example.tah.ui.todo
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,19 +11,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tah.R
 import com.example.tah.databinding.FragmentTodosBinding
 import com.example.tah.models.Task
-import com.example.tah.models.TaskType
-import com.example.tah.models.TaskWithTodos
 import com.example.tah.models.Todo
 import com.example.tah.ui.main.AddAndDetailsActivity
 import com.example.tah.utilities.State
 import com.example.tah.viewModels.TaskViewModel
-import com.example.tah.viewModels.TaskWithTodosViewModel
 import com.example.tah.viewModels.TodoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -73,9 +68,6 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
             if (arguments?.getLong("taskId") != -1L) {
                 taskId = arguments?.getLong("taskId")
                 task = taskViewModel.getTaskById(taskId!!)
-            } else {
-                task = Task("", "", TaskType.SHOPPING, false)
-                taskId = taskViewModel.add(task!!)
             }
 
             if(taskId != null) todoViewModel.getAllByTaskId(taskId!!)

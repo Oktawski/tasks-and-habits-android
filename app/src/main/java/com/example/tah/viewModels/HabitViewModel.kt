@@ -37,14 +37,12 @@ class HabitViewModel @Inject constructor(
         return repository.getById(id)
     }
 
-    override suspend fun add(t: Habit): Long {
+    override fun add(t: Habit) {
         state.value = State.loading()
-        var habitId = -1L
         viewModelScope.launch {
-            habitId = repository.add(t)
+            repository.add(t)
             state.value = State.added("Habit added")
         }
-        return habitId
     }
 
     override fun delete(t: Habit) {
