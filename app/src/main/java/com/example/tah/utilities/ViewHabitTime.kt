@@ -12,6 +12,7 @@ interface ViewHabitTime {
         val seconds: Long = minutes % 60
         minutes = (minutes - seconds) / 60
 
+        // TODO try te shit below
         // Cannot use below function, I don't know why, internet doesn't either
         //return mapOf("Hours" to hours, "Minutes" to minutes, "Seconds" to seconds)
 

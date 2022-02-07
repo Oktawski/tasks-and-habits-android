@@ -14,36 +14,36 @@ class HabitRepository @Inject constructor(
 {
     fun getAll(): LiveData<List<Habit>> = dao.getAll()
 
-    suspend fun getById(id: Long?): Habit = dao.getById(id)
+    suspend fun getById(habitId: Long?): Habit = dao.getById(habitId)
 
-    suspend fun add(t: Habit): Long {
-        trimLeadingAndTrailingWhitespaces(t)
-        return dao.insert(t)
+    suspend fun add(habit: Habit): Long {
+        trimLeadingAndTrailingWhitespaces(habit)
+        return dao.insert(habit)
     }
 
-    suspend fun delete(t: Habit) = dao.delete(t)
+    suspend fun delete(habit: Habit) = dao.delete(habit)
 
-    suspend fun update(t: Habit) {
-        trimLeadingAndTrailingWhitespaces(t)
-        dao.updateS(t)
+    suspend fun update(habit: Habit) {
+        trimLeadingAndTrailingWhitespaces(habit)
+        dao.updateS(habit)
     }
 
-    suspend fun update(t: Habit, id: Long) {
+    suspend fun update(habit: Habit, habitId: Long) {
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            val habit = getById(id)
-            habit.name = t.name
-            habit.description = t.description
-            habit.sessionLength = t.sessionLength
-            trimLeadingAndTrailingWhitespaces(habit)
-            dao.updateS(habit)
+            val habitToUpdate = getById(habitId)
+            habitToUpdate.name = habit.name
+            habitToUpdate.description = habit.description
+            habitToUpdate.sessionLength = habit.sessionLength
+            trimLeadingAndTrailingWhitespaces(habitToUpdate)
+            dao.updateS(habitToUpdate)
         }
     }
 
-    suspend fun updateSessionLength(sessionLength: Long, id: Long) {
+    suspend fun updateSessionLength(sessionLength: Long, habitId: Long) {
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            val habit = getById(id)
-            habit.sessionLength = sessionLength
-            dao.updateS(habit)
+            val habitToUpdate = getById(habitId)
+            habitToUpdate.sessionLength = sessionLength
+            dao.updateS(habitToUpdate)
         }
     }
 }

@@ -17,8 +17,8 @@ interface HabitDao : BaseDao<Habit> {
     @Query("SELECT * FROM Habits WHERE id=:habitId")
     suspend fun getById(habitId: Long?): Habit
 
-    @Query("DELETE FROM habits WHERE id in (:idList)")
-    fun deleteSelected(idList: List<Int>): Single<Int>
+    @Query("DELETE FROM habits WHERE id in (:selectedHabitsIds)")
+    fun deleteSelected(selectedHabitsIds: List<Int>): Single<Int>
 
     @Query( "DELETE FROM habits")
     fun deleteAll(): Int

@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.R
-import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 import dagger.hilt.android.AndroidEntryPoint

@@ -9,20 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.tah.R
 import com.example.tah.databinding.DetailsTaskBinding
-import com.example.tah.models.Task
 import com.example.tah.models.TaskType
 import com.example.tah.ui.todo.TodosFragment
-import com.example.tah.utilities.State
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
-
+class TaskDetailsFragment
+    : Fragment(R.layout.details_task),
+    ViewInitializable
+{
     private var _binding: DetailsTaskBinding? = null
     private val binding get() = _binding!!
 
@@ -72,32 +69,25 @@ class TaskDetailsFragment: Fragment(R.layout.details_task), ViewInitializable {
 
     override fun initViewModelObservables() {
         taskDetailsViewModel.task.observe(viewLifecycleOwner) {
-            with (binding) {
-                name.setText(it.name)
-                description.setText(it.description)
-                if (it.type == TaskType.SHOPPING) {
-                    descriptionLayout.visibility = View.GONE
-                    parentFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.fragment_container,
-                            TodosFragment.newInstance(it.taskId!!))
-                        .commit()
-                }
-            }
+            binding.name.setText(it.name)
+            binding.description.setText(it.description)
+
+            if (it.type == TaskType.SHOPPING) showTodos(it.taskId!!)
         }
 
         taskDetailsViewModel.state.observe(viewLifecycleOwner) {
-            when(it.status){
-                State.Status.REMOVED -> {
-                    requireActivity().finish()
-                }
-                State.Status.UPDATED -> {
-                    requireActivity().finish()
-                }
-                else -> toast("Else? idk lol")
-            }
             toast(it.message)
+            requireActivity().finish()
         }
+    }
+
+    private fun showTodos(taskId: Long) {
+        binding.descriptionLayout.visibility = View.GONE
+        parentFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container,
+                TodosFragment.newInstance(taskId))
+            .commit()
     }
 
     private fun toast(message: String?){

@@ -16,9 +16,6 @@ import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint

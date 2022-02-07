@@ -3,7 +3,7 @@ package com.example.tah.utilities
 data class State(
         val status: Status,
         val message: String?
-){
+) {
     enum class Status{
         LOADING,
         SUCCESS,

@@ -23,8 +23,8 @@ interface TaskDao : BaseDao<Task> {
     @Query("SELECT * FROM tasks WHERE type = :taskType ORDER BY taskId ASC")
     fun getFilteredTasks(taskType: TaskType): LiveData<List<Task>>
 
-    @Query("DELETE FROM tasks WHERE taskId in (:idList)")
-    suspend fun deleteSelected(idList: List<Long>): Int
+    @Query("DELETE FROM tasks WHERE taskId in (:selectedTasksIds)")
+    suspend fun deleteSelected(selectedTasksIds: List<Long>): Int
 
     @Query("DELETE FROM tasks")
     suspend fun deleteAll()

@@ -71,38 +71,19 @@ class TaskAddFragment
 
     override fun initOnClickListeners() {
         binding.add.setOnClickListener{
-            val nameText = binding.name.text.toString()
-            val descriptionText = binding.description.text.toString()
+            val name = binding.name.text.toString()
+            val description = binding.description.text.toString()
             val type = binding.typeLayout.editText?.text.toString()
 
-            if (nameText.isEmpty() && type.isEmpty()) {
+            if (name.isEmpty() && type.isEmpty()) {
                 showErrorMessages(binding.name, binding.typeLayout)
             }
 
             if (Converters.toType(type) == TaskType.SHOPPING) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val id = withContext(Dispatchers.Default) {
-                        viewModel.addTaskWithTodos(
-                            TaskWithTodos(
-                                Task(
-                                    nameText,
-                                    descriptionText,
-                                    TaskType.SHOPPING,
-                                    false
-                                ),
-                                mutableListOf()
-                            )
-                        )
-                    }
-                    requireActivity().finish()
-                    val intent = Intent(requireActivity(), AddAndDetailsActivity::class.java)
-                    intent.putExtra("fragmentId", Task.getDetailsView())
-                    intent.putExtra("taskId", id)
-                    requireActivity().startActivity(intent)
-                }
+                startTaskWithTodosDetailsFragment()
             } else {
                 viewModel.add(
-                    Task(nameText, descriptionText, Converters.toType(type), false)
+                    Task(name, description, Converters.toType(type), false)
                 )
             }
         }
@@ -112,7 +93,6 @@ class TaskAddFragment
         viewModel.state.observe(viewLifecycleOwner){
             when(it.status){
                 State.Status.LOADING -> viewsLoading()
-                State.Status.SUCCESS -> viewsNotLoading()
                 State.Status.ADDED -> requireActivity().finish()
                 else -> viewsNotLoading()
             }
@@ -120,14 +100,35 @@ class TaskAddFragment
         }
     }
 
+    private fun startTaskWithTodosDetailsFragment() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val id = withContext(Dispatchers.Default) {
+                viewModel.addTaskWithTodos(
+                    TaskWithTodos(
+                        Task(
+                            binding.name.text.toString(),
+                            binding.description.text.toString(),
+                            TaskType.SHOPPING,
+                            false
+                        ),
+                        mutableListOf()
+                    )
+                )
+            }
+            requireActivity().finish()
+            val intent = Intent(requireActivity(), AddAndDetailsActivity::class.java)
+            intent.putExtra("fragmentId", Task.getDetailsView())
+            intent.putExtra("taskId", id)
+            requireActivity().startActivity(intent)
+        }
+    }
+
     private fun viewsLoading(){
         binding.add.hide()
-        // show progressBar
     }
 
     private fun viewsNotLoading(){
         binding.add.show()
-        // hide progressBar
     }
 
     private fun toast(message: String?){
@@ -138,7 +139,7 @@ class TaskAddFragment
 
     private val spinnerAdapter: AdapterView.OnItemClickListener
     = AdapterView.OnItemClickListener { _, _, position, _ ->
-        if (position == 2) {
+        if (position == TaskType.SHOPPING.ordinal) {
             binding.descriptionLayout.visibility = View.GONE
         } else {
             initViewModelObservables()

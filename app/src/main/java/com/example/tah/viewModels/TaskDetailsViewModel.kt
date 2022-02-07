@@ -10,9 +10,7 @@ import com.example.tah.models.Task
 import com.example.tah.models.Todo
 import com.example.tah.utilities.State
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,7 +21,6 @@ class TaskDetailsViewModel @Inject constructor(
 {
     var task = MutableLiveData<Task>()
     lateinit var todos: LiveData<List<Todo>>
-
 
     val state: MutableLiveData<State> = taskRepository.state
 
@@ -38,21 +35,13 @@ class TaskDetailsViewModel @Inject constructor(
         taskRepository.delete(task.value!!)
     }
 
-    fun update() {
-        state.value = State.loading()
-        viewModelScope.launch {
-            taskRepository.update(task.value!!)
-            state.value = State.updated("Task updated")
-        }
-    }
-
     fun update(name: String, description: String) {
         state.value = State.loading()
         task.value?.name = name
         task.value?.description = description
         viewModelScope.launch {
             taskRepository.update(task.value!!)
-            state.value = State.updated("Task udpated")
+            state.value = State.updated("Task updated")
         }
     }
 
