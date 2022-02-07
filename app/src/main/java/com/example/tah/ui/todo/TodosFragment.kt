@@ -23,8 +23,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TodosFragment: Fragment(R.layout.fragment_todos) {
-
+class TodosFragment
+    : Fragment(R.layout.fragment_todos)
+{
     private lateinit var todoViewModel: TodoViewModel
     private lateinit var taskViewModel: TaskViewModel
     private var taskId: Long? = null
@@ -52,11 +53,9 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentTodosBinding.inflate(inflater, container, false)
         todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
         taskViewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
-
         return binding.root
     }
 
@@ -65,12 +64,9 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
         initAdapter()
 
         CoroutineScope(Dispatchers.Main).launch {
-            if (arguments?.getLong("taskId") != -1L) {
-                taskId = arguments?.getLong("taskId")
-                task = taskViewModel.getTaskById(taskId!!)
-            }
-
-            if(taskId != null) todoViewModel.getAllByTaskId(taskId!!)
+            taskId = arguments?.getLong("taskId", -1L)
+            task = taskViewModel.getTaskById(taskId!!)
+            todoViewModel.getTodosByTaskId(taskId!!)
 
             initOnClickListeners()
             initViewModelObservables()
@@ -90,8 +86,10 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
     @SuppressLint("NotifyDataSetChanged")
     private fun initViewModelObservables(){
         todoViewModel.getCompletedByTaskId(taskId!!).observe(viewLifecycleOwner) {
-            if(it.isNotEmpty()) (activity as AddAndDetailsActivity).setDeleteIconVisibility(View.VISIBLE)
-            else (activity as AddAndDetailsActivity).setDeleteIconVisibility(View.GONE)
+            if(it.isNotEmpty())
+                    (activity as AddAndDetailsActivity).setDeleteIconVisibility(View.VISIBLE)
+            else
+                    (activity as AddAndDetailsActivity).setDeleteIconVisibility(View.GONE)
         }
 
         todoViewModel.itemsLD!!.observe(requireActivity()){
@@ -106,20 +104,16 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
             with(binding) {
                 when (it.status) {
                     State.Status.LOADING -> addIcon.visibility = View.GONE
-
-                    State.Status.SUCCESS -> {
-                        addText.setText("")
-                        addIcon.visibility = View.VISIBLE
-                    }
-
                     State.Status.ADDED -> {
                         addText.setText("")
                         addIcon.visibility = View.VISIBLE
-                        todoViewModel.getAllByTaskId(taskId!!)
+                        todoViewModel.getTodosByTaskId(taskId!!)
                         todosRecyclerView.smoothScrollToPosition(todosRecyclerView.bottom)
                     }
-
-                    else -> addIcon.visibility = View.VISIBLE
+                    else -> {
+                        addText.setText("")
+                        addIcon.visibility = View.VISIBLE
+                    }
                 }
             }
         }
@@ -130,19 +124,13 @@ class TodosFragment: Fragment(R.layout.fragment_todos) {
             todoViewModel.deleteCompletedByTaskId(taskId!!)
         }
 
-        with(binding) {
-            addIcon.setOnClickListener {
-                val name: String = addText.text.toString()
+        binding.addIcon.setOnClickListener {
+            val name: String = binding.addText.text.toString()
 
-                if (name.isNotEmpty()) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        todoViewModel.add(
-                            Todo(null, name, false, taskId)
-                        )
-                    }
-                } else {
-                    addText.error = "Cannot be blank"
-                }
+            if (name.isNotEmpty()) {
+                todoViewModel.add(Todo(null, name, false, taskId))
+            } else {
+                binding.addText.error = "Cannot be blank"
             }
         }
     }

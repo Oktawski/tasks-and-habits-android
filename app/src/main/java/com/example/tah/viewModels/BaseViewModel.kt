@@ -8,8 +8,8 @@ import com.example.tah.utilities.State
 abstract class BaseViewModel<T>
     : ViewModel()
 {
+    val state: MutableLiveData<State> = MutableLiveData()
     var itemsLD: LiveData<List<T>>? = null
-    lateinit var state: MutableLiveData<State>
     var checkedItemsLD: MutableLiveData<List<Long>> = MutableLiveData(emptyList())
 
     abstract fun add(t: T)

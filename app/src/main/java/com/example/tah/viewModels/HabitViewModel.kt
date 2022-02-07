@@ -19,13 +19,11 @@ class HabitViewModel @Inject constructor(
 
     init {
         itemsLD = repository.getAll()
-        state = MutableLiveData<State>()
     }
 
     fun setEditable(isEditable: Boolean) {
         editable.value = isEditable
     }
-
 
     fun startStop(){
         isStarted.value = !(isStarted.value!!)
@@ -53,10 +51,10 @@ class HabitViewModel @Inject constructor(
         }
     }
 
-    fun update(t: Habit, id: Long) {
+    override fun update(t: Habit) {
         state.value = State.loading()
         viewModelScope.launch {
-            repository.update(t, id)
+            repository.update(t)
             state.value = State.updated("Habit updated")
         }
     }
@@ -74,10 +72,6 @@ class HabitViewModel @Inject constructor(
     }
 
     override fun deleteSelected() {
-        TODO("Not yet implemented")
-    }
-
-    override fun update(t: Habit) {
         TODO("Not yet implemented")
     }
 }

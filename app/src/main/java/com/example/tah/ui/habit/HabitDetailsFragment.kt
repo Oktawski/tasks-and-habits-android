@@ -33,6 +33,7 @@ class HabitDetailsFragment
     private val viewModel: HabitViewModel by viewModels()
     private var job: Job? = null
 
+    private lateinit var habit: Habit
     private var habitId: Long? = -1L
     private var sessionLength: Long? = null
 
@@ -117,15 +118,16 @@ class HabitDetailsFragment
 
     private fun getHabit() {
         job = CoroutineScope(Dispatchers.Main).launch {
-            inflateViews(viewModel.getByIdSus(habitId))
+            habit = viewModel.getByIdSus(habitId)
+            inflateViews(habit)
         }
     }
 
-    private fun inflateViews(it: Habit) {
+    private fun inflateViews(habit: Habit) {
         with (binding) {
-            name.setText(it.name)
-            description.setText(it.description)
-            val timeMap = getTimeStrings(it.sessionLength)
+            name.setText(habit.name)
+            description.setText(habit.description)
+            val timeMap = getTimeStrings(habit.sessionLength)
             timePicker.hour = timeMap["Hours"]?.toInt()!!
             timePicker.minute = timeMap["Minutes"]?.toInt()!!
         }
@@ -135,13 +137,13 @@ class HabitDetailsFragment
         val sessionLengthInSec =
             (binding.timePicker.hour * 60 * 60 + binding.timePicker.minute * 60).toLong()
 
-        val habit = Habit().apply {
+        habit.apply {
             this.name = binding.name.text.toString()
             this.description = binding.description.text.toString()
             this.sessionLength = sessionLengthInSec
         }
 
-        viewModel.update(habit, habitId!!)
+        viewModel.update(habit)
     }
 
     private fun delete() {

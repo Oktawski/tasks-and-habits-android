@@ -21,22 +21,9 @@ class HabitRepository @Inject constructor(
         return dao.insert(habit)
     }
 
-    suspend fun delete(habit: Habit) = dao.delete(habit)
-
     suspend fun update(habit: Habit) {
         trimLeadingAndTrailingWhitespaces(habit)
         dao.updateS(habit)
-    }
-
-    suspend fun update(habit: Habit, habitId: Long) {
-        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            val habitToUpdate = getById(habitId)
-            habitToUpdate.name = habit.name
-            habitToUpdate.description = habit.description
-            habitToUpdate.sessionLength = habit.sessionLength
-            trimLeadingAndTrailingWhitespaces(habitToUpdate)
-            dao.updateS(habitToUpdate)
-        }
     }
 
     suspend fun updateSessionLength(sessionLength: Long, habitId: Long) {
@@ -46,4 +33,6 @@ class HabitRepository @Inject constructor(
             dao.updateS(habitToUpdate)
         }
     }
+
+    suspend fun delete(habit: Habit) = dao.delete(habit)
 }

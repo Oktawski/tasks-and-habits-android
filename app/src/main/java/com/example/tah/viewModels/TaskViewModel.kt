@@ -11,6 +11,7 @@ import com.example.tah.models.TaskWithTodos
 import com.example.tah.utilities.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -24,7 +25,6 @@ class TaskViewModel @Inject constructor(
     init {
         itemsLD =  repository.getAll()
         checkedItemsLD = repository.checkedItemsLD
-        state = repository.state
     }
 
     fun setCheckBoxVisibility(visibility: Int){

@@ -2,8 +2,8 @@ package com.example.tah.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.tah.dao.habit.HabitDao
-import com.example.tah.dao.habit.HabitDatabase
+import com.example.tah.dao.task.TaskDao
+import com.example.tah.dao.task.TaskDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,18 +13,21 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object HabitModule {
+object TaskDatabaseModule {
 
     @Provides
     @Singleton
-    fun provideHabitDatabase(@ApplicationContext appContext: Context): HabitDatabase {
+    fun provideTaskDatabase(@ApplicationContext appContext: Context): TaskDatabase {
         return Room.databaseBuilder(
             appContext,
-            HabitDatabase::class.java,
-            "habit_database"
-        ).build()
+            TaskDatabase::class.java,
+            "task_database"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
-    fun provideHabitDao(habitDatabase: HabitDatabase): HabitDao = habitDatabase.habitDao()
+    fun provideTaskDao(taskDatabase: TaskDatabase): TaskDao = taskDatabase.taskDao()
+
 }

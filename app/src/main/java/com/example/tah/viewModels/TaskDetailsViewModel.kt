@@ -27,7 +27,7 @@ class TaskDetailsViewModel @Inject constructor(
     fun init(taskId: Long) {
         viewModelScope.launch {
             task.value = taskRepository.getTaskById(taskId)
-            todos = todoRepository.getAll(taskId)
+            todos = todoRepository.getAllByTaskId(taskId)
         }
     }
 

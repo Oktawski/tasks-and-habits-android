@@ -2,8 +2,8 @@ package com.example.tah.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.tah.dao.task.TaskDao
-import com.example.tah.dao.task.TaskDatabase
+import com.example.tah.dao.todo.TodoDao
+import com.example.tah.dao.todo.TodoDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,21 +13,21 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object TaskModule {
+object TodoDatabaseModule {
 
     @Provides
     @Singleton
-    fun provideTaskDatabase(@ApplicationContext appContext: Context): TaskDatabase {
+    fun provideTodoDatabase(@ApplicationContext appContext: Context): TodoDatabase {
         return Room.databaseBuilder(
             appContext,
-            TaskDatabase::class.java,
-            "task_database"
+            TodoDatabase::class.java,
+            "todo_database"
         )
             .fallbackToDestructiveMigration()
             .build()
     }
 
     @Provides
-    fun provideTaskDao(taskDatabase: TaskDatabase): TaskDao = taskDatabase.taskDao()
+    fun provideTodoDao(todoDatabase: TodoDatabase): TodoDao = todoDatabase.todoDao()
 
 }
