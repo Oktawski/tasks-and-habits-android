@@ -12,10 +12,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HabitViewModel @Inject constructor(
     private val repository: HabitRepository
-) : BaseViewModel<Habit>() {
-
+) : BaseViewModel<Habit>()
+{
     val editable = MutableLiveData(false)
-    val isStarted = MutableLiveData(false)
 
     init {
         itemsLD = repository.getAll()
@@ -23,10 +22,6 @@ class HabitViewModel @Inject constructor(
 
     fun setEditable(isEditable: Boolean) {
         editable.value = isEditable
-    }
-
-    fun startStop(){
-        isStarted.value = !(isStarted.value!!)
     }
 
     fun getAll() = repository.getAll()
@@ -55,14 +50,6 @@ class HabitViewModel @Inject constructor(
         state.value = State.loading()
         viewModelScope.launch {
             repository.update(t)
-            state.value = State.updated("Habit updated")
-        }
-    }
-
-    fun updateSessionLength(sessionLength: Long, id: Long) {
-        state.value = State.loading()
-        viewModelScope.launch {
-            repository.updateSessionLength(sessionLength, id)
             state.value = State.updated("Habit updated")
         }
     }

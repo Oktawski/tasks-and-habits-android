@@ -18,8 +18,8 @@ import com.example.tah.viewModels.TodoViewModel
 class TodoRecyclerViewAdapter(
         private val context: Context,
         private val viewModel: TodoViewModel
-) : RecyclerView.Adapter<TodoRecyclerViewAdapter.ViewHolder>() {
-
+) : RecyclerView.Adapter<TodoRecyclerViewAdapter.ViewHolder>()
+{
     private val differCallback = object : DiffUtil.ItemCallback<Todo>() {
         override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
             return oldItem == newItem
@@ -83,7 +83,6 @@ class TodoRecyclerViewAdapter(
             input.inputType = InputType.TYPE_CLASS_TEXT
             input.setText(todo?.name)
             builder.setView(input)
-
 
             builder.apply {
                 setPositiveButton("OK") { _, _ ->

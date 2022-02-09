@@ -56,11 +56,14 @@ class TodosAddFragment
             addIcon.setOnClickListener {
                 val name = addText.text.toString()
                 if (name.isNotEmpty()) {
-                    taskWithTodosViewModel.addTodo(Todo(
-                        todoId = null,
-                        name = name,
-                        isComplete = false,
-                        taskId = null))
+                    taskWithTodosViewModel.addTodo(
+                        Todo(
+                            todoId = null,
+                            name = name,
+                            isComplete = false,
+                            taskId = null
+                        )
+                    )
                 } else {
                     addText.error = "Cannot be blank"
                 }

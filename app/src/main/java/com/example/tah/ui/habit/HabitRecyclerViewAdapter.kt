@@ -11,15 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tah.databinding.ItemHabitBinding
 import com.example.tah.models.Habit
 import com.example.tah.ui.main.AddAndDetailsActivity
-import com.example.tah.utilities.ViewHabitTime
+import com.example.tah.utilities.TimeConverter
 import java.util.*
 
 class HabitRecyclerViewAdapter(
     private val context: Context,
 ) : RecyclerView.Adapter<HabitRecyclerViewAdapter.ViewHolder>(),
-    ViewHabitTime
+    TimeConverter
 {
-
     private val differCallback = object : DiffUtil.ItemCallback<Habit>() {
         override fun areItemsTheSame(oldItem: Habit, newItem: Habit): Boolean {
             return oldItem == newItem
@@ -47,14 +46,14 @@ class HabitRecyclerViewAdapter(
 
     inner class ViewHolder(
         private val binding: ItemHabitBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-
+    ) : RecyclerView.ViewHolder(binding.root)
+    {
         private lateinit var habit: Habit
 
         fun bind(habit: Habit){
             this.habit = habit
 
-            val timeMap = getTimeStrings(habit.sessionLength)
+            val timeMap = getTimeUnitsToValuesAsStrings(habit.sessionLength)
             val timeText = String.format(Locale.ENGLISH,
                     "Time left: %s:%s:%s",
                     timeMap["Hours"],

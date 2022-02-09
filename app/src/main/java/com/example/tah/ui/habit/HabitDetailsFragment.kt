@@ -13,7 +13,7 @@ import com.example.tah.databinding.DetailsHabitBinding
 import com.example.tah.models.Habit
 import com.example.tah.ui.animations.ViewAnimations
 import com.example.tah.utilities.State
-import com.example.tah.utilities.ViewHabitTime
+import com.example.tah.utilities.TimeConverter
 import com.example.tah.utilities.ViewHelper
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.HabitViewModel
@@ -25,7 +25,7 @@ import kotlinx.coroutines.*
 class HabitDetailsFragment
 : Fragment(R.layout.details_habit),
     ViewInitializable,
-    ViewHabitTime,
+    TimeConverter,
     ViewHelper
 {
     private var _binding: DetailsHabitBinding? = null
@@ -127,7 +127,7 @@ class HabitDetailsFragment
         with (binding) {
             name.setText(habit.name)
             description.setText(habit.description)
-            val timeMap = getTimeStrings(habit.sessionLength)
+            val timeMap = getTimeUnitsToValuesAsStrings(habit.sessionLength)
             timePicker.hour = timeMap["Hours"]?.toInt()!!
             timePicker.minute = timeMap["Minutes"]?.toInt()!!
         }

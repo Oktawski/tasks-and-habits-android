@@ -1,6 +1,5 @@
 package com.example.tah.ui.habit
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,21 +12,18 @@ import androidx.fragment.app.viewModels
 import com.example.tah.R
 import com.example.tah.databinding.DetailsHabitStartedBinding
 import com.example.tah.ui.main.AddAndDetailsActivity
-import com.example.tah.utilities.ViewHabitTime
+import com.example.tah.utilities.TimeConverter
 import com.example.tah.utilities.ViewInitializable
-import com.example.tah.viewModels.HabitViewModel
+import com.example.tah.viewModels.HabitStartedViewModel
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class HabitStartedFragment
     : Fragment(R.layout.details_habit_started),
-    ViewHabitTime,
+    TimeConverter,
     ViewInitializable
 {
     private var _binding: DetailsHabitStartedBinding? = null
@@ -38,7 +34,7 @@ class HabitStartedFragment
     private lateinit var mainHandler: Handler
     private var job: Job? = null
 
-    private val viewModel: HabitViewModel by viewModels()
+    private val viewModel: HabitStartedViewModel by viewModels()
 
     companion object {
         fun newInstance(id: Long): HabitStartedFragment {
@@ -74,8 +70,8 @@ class HabitStartedFragment
         }
 
         activity?.findViewById<AppBarLayout>(R.id.app_bar)?.visibility = View.GONE
-        getHabit(habitId!!)
         (activity as AddAndDetailsActivity).setTitle("")
+        getHabit(habitId!!)
         initViewModelObservables()
         initOnClickListeners()
         viewModel.startStop()
@@ -86,18 +82,23 @@ class HabitStartedFragment
         _binding = null
         mainHandler.removeCallbacks(decreaseTime)
         job?.cancel()
+        updateHabit(sessionLength)
     }
 
     override fun initViewModelObservables() {
+        viewModel.habit.observe(viewLifecycleOwner) {
+            sessionLength = it.sessionLength
+            binding.habitName.text = it.name
+            setRemainingTimeText()
+        }
+
         viewModel.isStarted.observe(viewLifecycleOwner) { isStarted ->
             if(isStarted) {
-                val timeMap = getTimeStrings(sessionLength)
-                val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
-                binding.timeText.text = timeText
-                mainHandler.postDelayed(decreaseTime, 1000)
+                setRemainingTimeText()
+                mainHandler.postDelayed(decreaseTime, 1)
             } else {
                 mainHandler.removeCallbacks(decreaseTime)
-                updateHabit()
+                updateHabit(sessionLength)
             }
         }
     }
@@ -106,35 +107,25 @@ class HabitStartedFragment
         binding.fabStarted.setOnClickListener { viewModel.startStop() }
     }
 
-    @SuppressLint("CheckResult")
-    private fun getHabit(id: Long) {
-        job = CoroutineScope(Dispatchers.Main).launch {
-            val habit = viewModel.getByIdSus(id)
-            val timeMap = getTimeStrings(habit.sessionLength)
-            val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
-            this@HabitStartedFragment.sessionLength = habit.sessionLength
-            binding.timeText.text = timeText
-            binding.habitName.text = habit.name
-        }
-    }
+    private fun getHabit(id: Long) = viewModel.getById(id)
 
+    private fun updateHabit(sessionLength: Long) = viewModel.updateSessionLength(sessionLength)
 
-    private fun updateHabit() {
-        viewModel.updateSessionLength(sessionLength, habitId!!)
+    private fun setRemainingTimeText() {
+        val timeMap = getTimeUnitsToValuesAsStrings(sessionLength)
+        val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
+        binding.timeText.text = timeText
     }
 
     private val decreaseTime = object : Runnable {
         override fun run() {
-            val timeMap = getTimeStrings(sessionLength)
-            val timeText = "${timeMap["Hours"]}:${timeMap["Minutes"]}:${timeMap["Seconds"]}"
-            binding.timeText.text = timeText
+            setRemainingTimeText()
             if (sessionLength > 0) {
                 sessionLength--
             } else {
                 viewModel.startStop()
                 Toast.makeText(activity, "Time's up", Toast.LENGTH_SHORT).show()
             }
-            updateHabit()
             mainHandler.postDelayed(this, 1000)
         }
     }

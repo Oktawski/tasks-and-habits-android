@@ -1,11 +1,10 @@
 package com.example.tah.ui.main
 
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tah.R
+import com.example.tah.databinding.ActivityAddAndDetailsBinding
 import com.example.tah.models.Habit
 import com.example.tah.models.Task
 import com.example.tah.ui.habit.HabitAddFragment
@@ -23,17 +22,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class AddAndDetailsActivity :
     AppCompatActivity(R.layout.activity_add_and_details),
-    ViewInitializable {
+    ViewInitializable
+{
+    private var _binding: ActivityAddAndDetailsBinding? = null
+    private val binding get() = _binding!!
 
-    private lateinit var backArrow: ImageView
-    private lateinit var deleteButton: ImageView
-    private lateinit var title: TextView
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-        backArrow = findViewById(R.id.back_arrow)
-        deleteButton = findViewById(R.id.delete_icon)
-        title = findViewById(R.id.title)
+
+        _binding = ActivityAddAndDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val fragment = when(intent.getIntExtra("fragmentId", R.layout.fragment_habits)){
             Task.getAddView() -> TaskAddFragment()
@@ -57,8 +56,13 @@ class AddAndDetailsActivity :
         else supportFragmentManager.popBackStack()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     override fun initOnClickListeners() {
-        backArrow.setOnClickListener { onBackPressed() }
+        binding.backArrow.setOnClickListener { onBackPressed() }
     }
 
     override fun initViewModelObservables() {
@@ -66,11 +70,10 @@ class AddAndDetailsActivity :
     }
 
     internal fun setDeleteIconVisibility(@LayoutRes visibility: Int) {
-        deleteButton.visibility = visibility
+        binding.deleteIcon.visibility = visibility
     }
 
     internal fun setTitle(title: String){
-        this.title.text = title
+        binding.title.text = title
     }
-
 }

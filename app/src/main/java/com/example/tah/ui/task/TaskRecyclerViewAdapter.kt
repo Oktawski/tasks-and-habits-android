@@ -17,8 +17,8 @@ class TaskRecyclerViewAdapter(
     private val context: Context,
     private val viewModel: TaskViewModel,
     private val checkedTasks: MutableList<Long> = mutableListOf()
-) : RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder>() {
-
+) : RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder>()
+{
     private val differCallback = object : DiffUtil.ItemCallback<Task>() {
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
             return oldItem == newItem
@@ -46,8 +46,8 @@ class TaskRecyclerViewAdapter(
 
     inner class ViewHolder(
         private val binding: ItemTaskBinding
-    ) : RecyclerView.ViewHolder(binding.root){
-
+    ) : RecyclerView.ViewHolder(binding.root)
+    {
         private lateinit var task: Task
 
         fun bind(task: Task){

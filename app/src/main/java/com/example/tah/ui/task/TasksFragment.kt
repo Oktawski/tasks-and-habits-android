@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,8 +21,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TasksFragment
     : Fragment(R.layout.fragment_tasks),
-    ViewInitializable {
-
+    ViewInitializable
+{
     private lateinit var viewModel: TaskViewModel
 
     @Inject
@@ -34,7 +35,7 @@ class TasksFragment
 
         viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
 
-        if(view is RecyclerView){
+        if (view is RecyclerView) {
             val context = view.context
             view.layoutManager = LinearLayoutManager(context)
             view.adapter = adapter
@@ -50,7 +51,6 @@ class TasksFragment
     override fun onPause() {
         super.onPause()
         viewModel.clearCheckedItems()
-        //adapter.notifyDataSetChanged()
         (activity as MainActivity).setDeleteIconVisibility(View.GONE)
     }
 
@@ -76,7 +76,9 @@ class TasksFragment
     }
 
     override fun initOnClickListeners() {
-        TODO("Not yet implemented")
+        activity?.findViewById<ImageView>(R.id.delete_icon)?.setOnClickListener {
+            viewModel.deleteSelected()
+        }
     }
 
 }
