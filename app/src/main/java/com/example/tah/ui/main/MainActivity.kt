@@ -82,28 +82,27 @@ class MainActivity
                 addAndDetailsIntent.putExtra("fragmentId", sectionsPagerAdapter.getTabTitleId(position))
                 var layoutRes: Int? = null
 
-                // Hide soft keyboard
-                val view: View? = currentFocus
-                if(view != null) {
-                    val imm: InputMethodManager =
-                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(view.windowToken, 0)
-                }
+                hideSoftKeyboard()
 
                 when(position) {
-                    0 -> {
-                        binding.fabAdd.show()
-                        layoutRes = Task.getAddView()
-                    }
+                    0 -> layoutRes = Task.getAddView()
                     1 -> {
-                        binding.fabAdd.show()
                         layoutRes = Habit.getAddView()
                         taskViewModel.setCheckBoxVisibility(View.GONE)
                     }
                 }
 
+                binding.fabAdd.show()
                 if(layoutRes != null) addAndDetailsIntent.putExtra("fragmentId", layoutRes)
             }
         }
 
+    private fun hideSoftKeyboard() {
+        val view: View? = currentFocus
+        if (view != null) {
+            val imm: InputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
 }
