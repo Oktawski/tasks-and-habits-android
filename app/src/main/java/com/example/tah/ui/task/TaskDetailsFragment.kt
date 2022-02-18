@@ -13,6 +13,7 @@ import com.example.tah.models.TaskType
 import com.example.tah.ui.todo.TodosFragment
 import com.example.tah.utilities.ViewInitializable
 import com.example.tah.viewModels.TaskDetailsViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,7 +64,11 @@ class TaskDetailsFragment
         }
 
         binding.deleteButton.setOnClickListener {
-            taskDetailsViewModel.deleteTaskWithTodos()
+            //taskDetailsViewModel.deleteTaskWithTodos()
+            Snackbar.make(it, "Do you want to delete this item?", Snackbar.LENGTH_LONG)
+                .setAction("Delete") {
+                    taskDetailsViewModel.deleteTaskWithTodos()
+                }.show()
         }
     }
 
