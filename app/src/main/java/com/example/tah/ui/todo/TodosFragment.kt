@@ -92,8 +92,8 @@ class TodosFragment
                     (activity as AddAndDetailsActivity).setDeleteIconVisibility(View.GONE)
         }
 
-        todoViewModel.itemsLD!!.observe(requireActivity()){
-            adapter.differ.submitList(it)
+        todoViewModel.itemsLD!!.observe(requireActivity()){ todos ->
+            adapter.differ.submitList(todos.sortedWith(compareBy({it.isComplete}, {it.name})))
 
             // Without notifying about whole data set the UI is not always updating the icon
             // If anyone knows better way I would appreciate if you told me <3
